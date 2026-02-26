@@ -42,6 +42,45 @@ When you update the plugin, you'll receive:
 - Improvements to existing skills
 - Bug fixes and enhancements
 
+## Available Skills
+
+### Android Translation Sync
+
+Synchronize Android project multilingual resources from Excel spreadsheet.
+
+**Usage:**
+
+```
+Please sync translations from excel: /path/to/translations.xlsx
+```
+
+**Features:**
+- Read Excel file with translations (English + other languages)
+- Generate unique keys (10-20 chars) based on English text
+- Avoid conflicts with existing keys in strings.xml
+- Update all language files (values, values-zh, values-es, etc.)
+- New entries appended at bottom, existing keys updated
+
+**Example:**
+
+```
+你：请帮我同步多语言翻译，Excel 文件是 ./translations/strings.xlsx
+
+Claude：好的，我来处理...
+- Reading Excel file...
+- Checking existing strings.xml...
+- Generating new keys...
+- Updating all language files...
+```
+
+**Trigger phrases:**
+- `sync translations from excel`
+- `update android strings from excel`
+- `多语言翻译同步`
+- `更新strings.xml`
+
+---
+
 ## Adding Skills
 
 Create your skills in the `skills/` directory:
@@ -58,24 +97,6 @@ Each skill requires a `SKILL.md` file with:
 - **When to use** - Guidance on when the skill applies
 - **Content** - The actual knowledge/patterns
 
-## Example Skill Structure
-
-```markdown
-# Your Skill Name
-
-> Brief description of what this skill does.
-
-## When to Use
-
-**Trigger phrases:**
-- "keyword 1"
-- "keyword 2"
-
-## Content
-
-Your skill content here...
-```
-
 ## Project Structure
 
 ```
@@ -83,7 +104,9 @@ android-claude-code-skills/
 ├── .claude-plugin/
 │   ├── plugin.json         # Plugin manifest
 │   └── marketplace.json    # Marketplace configuration
-├── skills/                 # Add your skills here
+├── skills/                 # Available skills
+│   ├── android-translation-sync/
+│   │   └── SKILL.md
 │   └── template/
 │       └── SKILL.md        # Skill template
 ├── CLAUDE.md               # Project overview (English)

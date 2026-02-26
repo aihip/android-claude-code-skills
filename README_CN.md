@@ -42,6 +42,45 @@
 - 现有技能的改进
 - Bug 修复和功能增强
 
+## 可用技能
+
+### Android 多语言翻译同步
+
+从 Excel 表格同步 Android 项目多语言资源到 strings.xml。
+
+**使用方法：**
+
+```
+请帮我同步多语言翻译，Excel 文件是：/path/to/translations.xlsx
+```
+
+**功能特性：**
+- 读取 Excel 表格（英文 + 其他语言）
+- 根据英文生成唯一 key（10-20 字符）
+- 避免与 strings.xml 中现有 key 冲突
+- 更新所有语言文件（values、values-zh、values-es 等）
+- 新增内容添加到底部，已存在的 key 则更新
+
+**使用示例：**
+
+```
+你：请帮我同步多语言翻译，Excel 文件是 ./translations/strings.xlsx
+
+Claude：好的，我来处理...
+- 正在读取 Excel 文件...
+- 正在检查现有 strings.xml...
+- 正在生成新的 key...
+- 正在更新所有语言文件...
+```
+
+**触发词：**
+- `sync translations from excel`
+- `update android strings from excel`
+- `多语言翻译同步`
+- `更新strings.xml`
+
+---
+
 ## 添加技能
 
 在 `skills/` 目录下创建你的技能：
@@ -58,24 +97,6 @@ skills/
 - **何时使用** - 指导何时应用该技能
 - **内容** - 实际的知识/模式
 
-## 技能结构示例
-
-```markdown
-# 你的技能名称
-
-> 简要描述这个技能的作用。
-
-## 何时使用
-
-**触发短语：**
-- "关键词 1"
-- "关键词 2"
-
-## 内容
-
-你的技能内容在这里...
-```
-
 ## 项目结构
 
 ```
@@ -83,7 +104,9 @@ android-claude-code-skills/
 ├── .claude-plugin/
 │   ├── plugin.json         # 插件清单
 │   └── marketplace.json    # 市场配置
-├── skills/                 # 在这里添加你的技能
+├── skills/                 # 可用技能
+│   ├── android-translation-sync/
+│   │   └── SKILL.md
 │   └── template/
 │       └── SKILL.md        # 技能模板
 ├── CLAUDE.md               # Project overview (English)
