@@ -22,20 +22,17 @@
 
 ## 更新插件
 
-当仓库中有新技能添加时，更新已安装的插件：
+**重要：只有以下方法才能成功更新：**
 
 ```bash
-# 方法 1：更新插件（推荐）
-/plugin update android-claude-code-skills
-
-# 方法 2：重新安装插件
-/plugin uninstall android-claude-code-skills
-/plugin install android-claude-code-skills@android-claude-code-skills
-
-# 方法 3：先更新市场，再更新插件
+# 步骤 1：更新市场
 /plugin marketplace update aihip/android-claude-code-skills
+
+# 步骤 2：更新插件
 /plugin update android-claude-code-skills
 ```
+
+**注意：** 其他更新方法可能无法获取最新版本。请务必先使用 `marketplace update`。
 
 ### 更新内容包括
 

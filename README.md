@@ -22,20 +22,17 @@
 
 ## Updating Plugin
 
-When new skills are added to this repository, update your installed plugin:
+**IMPORTANT: Only this method works for updating:**
 
 ```bash
-# Method 1: Update the plugin (recommended)
-/plugin update android-claude-code-skills
-
-# Method 2: Reinstall the plugin
-/plugin uninstall android-claude-code-skills
-/plugin install android-claude-code-skills@android-claude-code-skills
-
-# Method 3: Update marketplace first, then plugin
+# Step 1: Update marketplace
 /plugin marketplace update aihip/android-claude-code-skills
+
+# Step 2: Update plugin
 /plugin update android-claude-code-skills
 ```
+
+**Note:** Other update methods may not fetch the latest version. Always use `marketplace update` first.
 
 ### What Gets Updated
 

@@ -21,10 +21,7 @@ All skills are located in the `skills/` directory. Each skill is a subdirectory 
 /plugin marketplace add aihip/android-claude-code-skills
 /plugin install android-claude-code-skills@android-claude-code-skills
 
-# Update plugin (when new skills are added)
-/plugin update android-claude-code-skills
-
-# Update marketplace first, then plugin
+# Update plugin (REQUIRED METHOD)
 /plugin marketplace update aihip/android-claude-code-skills
 /plugin update android-claude-code-skills
 
@@ -32,6 +29,8 @@ All skills are located in the `skills/` directory. Each skill is a subdirectory 
 /plugin uninstall android-claude-code-skills
 /plugin install android-claude-code-skills@android-claude-code-skills
 ```
+
+**Note:** Always use `marketplace update` first, then `plugin update` to get the latest version.
 
 ## Adding New Skills
 

@@ -21,10 +21,7 @@
 /plugin marketplace add aihip/android-claude-code-skills
 /plugin install android-claude-code-skills@android-claude-code-skills
 
-# 更新插件（当有新技能添加时）
-/plugin update android-claude-code-skills
-
-# 先更新市场，再更新插件
+# 更新插件（必需的方法）
 /plugin marketplace update aihip/android-claude-code-skills
 /plugin update android-claude-code-skills
 
@@ -32,6 +29,8 @@
 /plugin uninstall android-claude-code-skills
 /plugin install android-claude-code-skills@android-claude-code-skills
 ```
+
+**注意：** 务必先使用 `marketplace update`，然后再 `plugin update` 才能获取最新版本。
 
 ## 添加新技能
 
