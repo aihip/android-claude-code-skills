@@ -1,0 +1,7 @@
+interface:
+  display_name: "Android Change Review"
+  short_description: "Review staged/commit Android changes for crash risks"
+  default_prompt: "Use $android-change-review to review my staged changes or a specific commit for crash risks, boundary conditions, and regressions."
+
+policy:
+  allow_implicit_invocation: true

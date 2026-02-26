@@ -102,6 +102,45 @@ Claude：好的，我来处理...
 
 ---
 
+### Android Change Review
+
+Review Android code changes after coding to catch crash risks, boundary-condition bugs, and regressions.
+
+**Usage (staged changes):**
+
+```bash
+git add .
+```
+
+Then ask:
+
+```text
+Review my staged changes for crash risks and boundary conditions.
+```
+
+**Usage (specific commit):**
+
+```text
+Please review commit abc1234 for crash risks and regressions.
+```
+
+**Features:**
+- Review staged changes (`git diff --cached`) after `git add .`
+- Review a specific commit (`git show <commit-id>`)
+- Focus on crash paths, boundary conditions, and regressions
+- Android-focused checks (lifecycle, nullability, threading, permission gating)
+- Findings-first output with file/line references
+
+**Trigger phrases:**
+- `review staged changes`
+- `review commit-id`
+- `code review after coding`
+- `检查当前修改代码`
+- `边界条件检查`
+- `崩溃风险检查`
+
+---
+
 ## Adding Skills
 
 Create your skills in the `skills/` directory:

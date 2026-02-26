@@ -102,6 +102,45 @@ Claude：好的，我来处理...
 
 ---
 
+### Android 代码变更审查（Android Change Review）
+
+在代码写完后，对 Android 代码变更做风险审查，重点检查崩溃风险、边界条件问题和回归风险。
+
+**用法（检查当前已暂存修改）**
+
+```bash
+git add .
+```
+
+然后提问：
+
+```text
+请检查我当前修改代码（已 git add .），重点看边界条件和会不会 crash。
+```
+
+**用法（检查指定 commit-id）**
+
+```text
+请检查 commit abc1234，看看会不会导致新的 crash 或回归。
+```
+
+**功能特性：**
+- 审查 `git add .` 后的暂存代码（`git diff --cached`）
+- 审查指定 `commit-id`（`git show <commit-id>`）
+- 聚焦崩溃路径、边界条件和行为回归
+- Android 重点检查（生命周期、空指针、线程、权限闸门）
+- 按严重度输出问题，并附文件/行号定位
+
+**触发词：**
+- `review staged changes`
+- `review commit-id`
+- `code review after coding`
+- `检查当前修改代码`
+- `边界条件检查`
+- `崩溃风险检查`
+
+---
+
 ## 添加技能
 
 在 `skills/` 目录下创建你的技能：
