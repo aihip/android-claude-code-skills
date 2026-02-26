@@ -1,0 +1,35 @@
+{
+  "name": "android-claude-code-skills",
+  "owner": {
+    "name": "aihip"
+  },
+  "metadata": {
+    "description": "Collection of Android development skills for Claude Code"
+  },
+  "plugins": [
+    {
+      "name": "android-claude-code-skills",
+      "source": "./",
+      "description": "Android development skills for Claude Code - Customize with your own skills",
+      "author": {
+        "name": "aihip"
+      },
+      "homepage": "https://github.com/aihip/android-claude-code-skills",
+      "repository": "https://github.com/aihip/android-claude-code-skills",
+      "license": "MIT",
+      "keywords": [
+        "android",
+        "kotlin",
+        "jetpack",
+        "compose"
+      ],
+      "category": "mobile",
+      "tags": [
+        "android",
+        "kotlin",
+        "jetpack",
+        "compose"
+      ]
+    }
+  ]
+}
