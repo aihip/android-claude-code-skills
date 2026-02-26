@@ -1,7 +1,7 @@
 {
   "name": "android-claude-code-skills",
-  "version": "1.0.0",
-  "description": "Android development skills for Claude Code - Add your own skills to customize",
+  "version": "1.1.0",
+  "description": "Android development skills for Claude Code - Translation sync and more",
   "author": {
     "name": "aihip"
   },
@@ -12,7 +12,12 @@
     "android",
     "kotlin",
     "jetpack",
-    "compose"
+    "compose",
+    "translation",
+    "strings",
+    "multilingual"
   ],
-  "skills": []
+  "skills": [
+    "./skills/android-translation-sync/"
+  ]
 }

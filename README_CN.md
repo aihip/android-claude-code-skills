@@ -7,6 +7,8 @@
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
 - **作者**: aihip
 - **许可证**: MIT
+- **当前版本**: 1.1.0
+- **更新日志**: [CHANGELOG.md](CHANGELOG.md)
 
 ## 安装
 
@@ -41,6 +43,20 @@
 - 仓库中新增的技能
 - 现有技能的改进
 - Bug 修复和功能增强
+
+### 验证更新成功
+
+更新后，检查版本号：
+
+```bash
+# 查看已安装的插件和版本
+/plugin list
+
+# 您应该看到：
+# android-claude-code-skills  v1.1.0
+```
+
+与 GitHub 上的最新版本对比：https://github.com/aihip/android-claude-code-skills/blob/main/.claude-plugin/plugin.json
 
 ## 可用技能
 

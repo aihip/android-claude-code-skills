@@ -7,6 +7,8 @@
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
 - **Author**: aihip
 - **License**: MIT
+- **Current Version**: 1.1.0
+- **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 
 ## Installation
 
@@ -41,6 +43,20 @@ When you update the plugin, you'll receive:
 - New skills added to the repository
 - Improvements to existing skills
 - Bug fixes and enhancements
+
+### Verify Update Success
+
+After updating, check the version:
+
+```bash
+# View installed plugins and versions
+/plugin list
+
+# You should see:
+# android-claude-code-skills  v1.1.0
+```
+
+Compare with the latest version on GitHub: https://github.com/aihip/android-claude-code-skills/blob/main/.claude-plugin/plugin.json
 
 ## Available Skills
 
