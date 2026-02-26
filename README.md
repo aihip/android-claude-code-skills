@@ -18,6 +18,30 @@
 /plugin install android-claude-code-skills@android-claude-code-skills
 ```
 
+## Updating Plugin
+
+When new skills are added to this repository, update your installed plugin:
+
+```bash
+# Method 1: Update the plugin (recommended)
+/plugin update android-claude-code-skills
+
+# Method 2: Reinstall the plugin
+/plugin uninstall android-claude-code-skills
+/plugin install android-claude-code-skills@android-claude-code-skills
+
+# Method 3: Update marketplace first, then plugin
+/plugin marketplace update aihip/android-claude-code-skills
+/plugin update android-claude-code-skills
+```
+
+### What Gets Updated
+
+When you update the plugin, you'll receive:
+- New skills added to the repository
+- Improvements to existing skills
+- Bug fixes and enhancements
+
 ## Adding Skills
 
 Create your skills in the `skills/` directory:
@@ -66,17 +90,6 @@ android-claude-code-skills/
 ├── CLAUDE_CN.md            # 项目概述（中文）
 ├── README.md               # This file (English)
 └── README_CN.md            # 说明文档（中文）
-```
-
-## Updating Plugin
-
-```bash
-# Update installed plugin
-/plugin update android-claude-code-skills
-
-# Or reinstall
-/plugin uninstall android-claude-code-skills
-/plugin install android-claude-code-skills@android-claude-code-skills
 ```
 
 ## Contributing

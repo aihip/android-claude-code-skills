@@ -18,6 +18,30 @@
 /plugin install android-claude-code-skills@android-claude-code-skills
 ```
 
+## 更新插件
+
+当仓库中有新技能添加时，更新已安装的插件：
+
+```bash
+# 方法 1：更新插件（推荐）
+/plugin update android-claude-code-skills
+
+# 方法 2：重新安装插件
+/plugin uninstall android-claude-code-skills
+/plugin install android-claude-code-skills@android-claude-code-skills
+
+# 方法 3：先更新市场，再更新插件
+/plugin marketplace update aihip/android-claude-code-skills
+/plugin update android-claude-code-skills
+```
+
+### 更新内容包括
+
+更新插件后，您将获得：
+- 仓库中新增的技能
+- 现有技能的改进
+- Bug 修复和功能增强
+
 ## 添加技能
 
 在 `skills/` 目录下创建你的技能：
@@ -66,17 +90,6 @@ android-claude-code-skills/
 ├── CLAUDE_CN.md            # 项目概述（中文）
 ├── README.md               # This file (English)
 └── README_CN.md            # 说明文档（中文）
-```
-
-## 更新插件
-
-```bash
-# 更新已安装的插件
-/plugin update android-claude-code-skills
-
-# 或重新安装
-/plugin uninstall android-claude-code-skills
-/plugin install android-claude-code-skills@android-claude-code-skills
 ```
 
 ## 贡献

@@ -14,6 +14,25 @@
 
 所有技能位于 `skills/` 目录下，每个技能是一个包含 `SKILL.md` 的子目录。
 
+## 常用命令
+
+```bash
+# 安装插件
+/plugin marketplace add aihip/android-claude-code-skills
+/plugin install android-claude-code-skills@android-claude-code-skills
+
+# 更新插件（当有新技能添加时）
+/plugin update android-claude-code-skills
+
+# 先更新市场，再更新插件
+/plugin marketplace update aihip/android-claude-code-skills
+/plugin update android-claude-code-skills
+
+# 重新安装插件
+/plugin uninstall android-claude-code-skills
+/plugin install android-claude-code-skills@android-claude-code-skills
+```
+
 ## 添加新技能
 
 在 `skills/` 目录创建新子目录并添加 `SKILL.md` 文件：
@@ -38,17 +57,6 @@ skills/your-skill-name/SKILL.md
 ## 内容
 
 你的技能内容...
-```
-
-## 常用命令
-
-```bash
-# 安装插件
-/plugin marketplace add aihip/android-claude-code-skills
-/plugin install android-claude-code-skills@android-claude-code-skills
-
-# 更新插件
-/plugin update android-claude-code-skills
 ```
 
 ## 项目结构

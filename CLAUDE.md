@@ -14,6 +14,25 @@ This is an Android development skills plugin repository for Claude Code. Contain
 
 All skills are located in the `skills/` directory. Each skill is a subdirectory containing a `SKILL.md` file.
 
+## Common Commands
+
+```bash
+# Install plugin
+/plugin marketplace add aihip/android-claude-code-skills
+/plugin install android-claude-code-skills@android-claude-code-skills
+
+# Update plugin (when new skills are added)
+/plugin update android-claude-code-skills
+
+# Update marketplace first, then plugin
+/plugin marketplace update aihip/android-claude-code-skills
+/plugin update android-claude-code-skills
+
+# Reinstall plugin
+/plugin uninstall android-claude-code-skills
+/plugin install android-claude-code-skills@android-claude-code-skills
+```
+
 ## Adding New Skills
 
 Create a new subdirectory in `skills/` and add a `SKILL.md` file:
@@ -38,17 +57,6 @@ skills/your-skill-name/SKILL.md
 ## Content
 
 Your skill content here...
-```
-
-## Common Commands
-
-```bash
-# Install plugin
-/plugin marketplace add aihip/android-claude-code-skills
-/plugin install android-claude-code-skills@android-claude-code-skills
-
-# Update plugin
-/plugin update android-claude-code-skills
 ```
 
 ## Project Structure
