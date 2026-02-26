@@ -17,7 +17,5 @@
     "strings",
     "multilingual"
   ],
-  "skills": [
-    "./skills/android-translation-sync/"
-  ]
+  "skills": ["./skills/"]
 }
