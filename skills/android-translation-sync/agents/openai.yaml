@@ -1,0 +1,7 @@
+interface:
+  display_name: "Android Translation Sync"
+  short_description: "Sync Android strings.xml translations from Excel"
+  default_prompt: "Use $android-translation-sync to sync an Excel translation sheet into Android values*/strings.xml files and write generated keys back to Excel."
+
+policy:
+  allow_implicit_invocation: true

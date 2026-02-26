@@ -1,0 +1,7 @@
+interface:
+  display_name: "Android Skill Template"
+  short_description: "Template for Codex-compatible Android skill files"
+  default_prompt: "Use $template as a starting point to create a new Android development skill with Codex-compatible SKILL.md metadata."
+
+policy:
+  allow_implicit_invocation: true

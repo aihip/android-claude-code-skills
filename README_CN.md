@@ -1,14 +1,22 @@
 # Android Claude Code Skills
 
-> Android 开发技能集合 - 用于 Claude Code，可根据需要自定义添加技能。
+> Android 开发技能集合 - 同时支持 Claude Code 与 OpenAI Codex，可根据需要自定义添加技能。
 
 ## 仓库信息
 
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
 - **作者**: aihip
 - **许可证**: MIT
-- **当前版本**: 1.2.1
+- **当前版本**: 1.3.0
 - **更新日志**: [CHANGELOG.md](CHANGELOG.md)
+
+## OpenAI Codex 兼容性
+
+本仓库现在将技能文件维护为兼容 OpenAI Codex skills 的格式：
+
+- `skills/<skill-name>/SKILL.md` 包含 YAML frontmatter（`name` 和 `description`）
+- 可选 `skills/<skill-name>/agents/openai.yaml`，用于 Codex UI 元数据
+- 同时保留现有 Claude 插件结构（`.claude-plugin/`），实现双兼容
 
 ## 安装
 
@@ -50,7 +58,7 @@
 /plugin list
 
 # 您应该看到：
-# android-claude-code-skills  v1.1.0
+# android-claude-code-skills  v1.3.0
 ```
 
 与 GitHub 上的最新版本对比：https://github.com/aihip/android-claude-code-skills/blob/main/.claude-plugin/plugin.json
@@ -101,14 +109,48 @@ Claude：好的，我来处理...
 ```
 skills/
 └── your-skill-name/
-    └── SKILL.md
+    ├── SKILL.md
+    └── agents/
+        └── openai.yaml   # 可选（推荐，用于 Codex UI）
 ```
 
 每个技能需要一个 `SKILL.md` 文件，包含以下内容：
 
-- **触发短语** - 激活该技能的关键词
-- **何时使用** - 指导何时应用该技能
-- **内容** - 实际的知识/模式
+- **YAML frontmatter** - `name` 和 `description`（Codex 触发所必需）
+- **技能正文** - 工作流程、规则与可复用知识
+- **可选元数据** - `agents/openai.yaml`（Codex UI 展示名称/描述/默认提示词）
+
+最小 `SKILL.md` 示例：
+
+```markdown
+---
+name: your-skill-name
+description: 描述技能做什么，以及在什么场景下使用，方便 Codex 正确触发。
+---
+
+# 技能名称
+
+技能说明内容...
+```
+
+## 校验
+
+本地校验（检查 Codex 兼容的 `SKILL.md` + `agents/openai.yaml`）：
+
+```bash
+python3 -m pip install --user PyYAML
+python3 scripts/validate_skills.py
+```
+
+Pre-commit 钩子（提交前自动执行校验）：
+
+```bash
+python3 -m pip install --user pre-commit
+pre-commit install
+pre-commit run --all-files
+```
+
+仓库还提供 GitHub Actions CI：`.github/workflows/validate-skills.yml`，会在 push / pull request 时自动执行同样的校验。
 
 ## 项目结构
 
@@ -119,9 +161,11 @@ android-claude-code-skills/
 │   └── marketplace.json    # 市场配置
 ├── skills/                 # 可用技能
 │   ├── android-translation-sync/
-│   │   └── SKILL.md
+│   │   ├── SKILL.md
+│   │   └── agents/openai.yaml
 │   └── template/
-│       └── SKILL.md        # 技能模板
+│       ├── SKILL.md        # 兼容 Codex 的技能模板
+│       └── agents/openai.yaml
 ├── CLAUDE.md               # Project overview (English)
 ├── CLAUDE_CN.md            # 项目概述（中文）
 ├── README.md               # This file (English)

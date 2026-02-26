@@ -1,0 +1,11 @@
+repos:
+  - repo: local
+    hooks:
+      - id: validate-codex-skills
+        name: Validate Codex Skills
+        entry: python scripts/validate_skills.py
+        language: python
+        additional_dependencies:
+          - PyYAML==6.0.3
+        pass_filenames: false
+        files: ^(skills/.*|scripts/validate_skills\.py|\.github/workflows/validate-skills\.yml)$

@@ -1,14 +1,22 @@
 # Android Claude Code Skills
 
-> Android development skills for Claude Code - A customizable collection of Android development skills.
+> Android development skills for Claude Code and OpenAI Codex - A customizable collection of Android development skills.
 
 ## Repository Information
 
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
 - **Author**: aihip
 - **License**: MIT
-- **Current Version**: 1.2.1
+- **Current Version**: 1.3.0
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
+
+## OpenAI Codex Compatibility
+
+This repository now keeps skills in a format that is compatible with OpenAI Codex skills:
+
+- `skills/<skill-name>/SKILL.md` includes YAML frontmatter with `name` and `description`
+- Optional `skills/<skill-name>/agents/openai.yaml` provides Codex UI metadata
+- Existing Claude plugin structure (`.claude-plugin/`) is preserved for dual compatibility
 
 ## Installation
 
@@ -50,7 +58,7 @@ After updating, check the version:
 /plugin list
 
 # You should see:
-# android-claude-code-skills  v1.1.0
+# android-claude-code-skills  v1.3.0
 ```
 
 Compare with the latest version on GitHub: https://github.com/aihip/android-claude-code-skills/blob/main/.claude-plugin/plugin.json
@@ -101,14 +109,48 @@ Create your skills in the `skills/` directory:
 ```
 skills/
 └── your-skill-name/
-    └── SKILL.md
+    ├── SKILL.md
+    └── agents/
+        └── openai.yaml   # Optional (recommended for Codex UI)
 ```
 
 Each skill requires a `SKILL.md` file with:
 
-- **Trigger phrases** - Keywords that activate the skill
-- **When to use** - Guidance on when the skill applies
-- **Content** - The actual knowledge/patterns
+- **YAML frontmatter** - `name` and `description` (required for Codex skill triggering)
+- **Description body** - Workflow, rules, and reusable knowledge for the skill
+- **Optional agent metadata** - `agents/openai.yaml` for Codex UI display name/description/prompt
+
+Minimal `SKILL.md` example:
+
+```markdown
+---
+name: your-skill-name
+description: Describe what the skill does and when to use it so Codex can trigger it.
+---
+
+# Your Skill Name
+
+Skill instructions...
+```
+
+## Validation
+
+Local validation (Codex-compatible `SKILL.md` + `agents/openai.yaml`):
+
+```bash
+python3 -m pip install --user PyYAML
+python3 scripts/validate_skills.py
+```
+
+Pre-commit hook (run validation automatically before commit):
+
+```bash
+python3 -m pip install --user pre-commit
+pre-commit install
+pre-commit run --all-files
+```
+
+This repository also includes GitHub Actions CI at `.github/workflows/validate-skills.yml` to run the same checks on push/pull request.
 
 ## Project Structure
 
@@ -119,9 +161,11 @@ android-claude-code-skills/
 │   └── marketplace.json    # Marketplace configuration
 ├── skills/                 # Available skills
 │   ├── android-translation-sync/
-│   │   └── SKILL.md
+│   │   ├── SKILL.md
+│   │   └── agents/openai.yaml
 │   └── template/
-│       └── SKILL.md        # Skill template
+│       ├── SKILL.md        # Codex-compatible skill template
+│       └── agents/openai.yaml
 ├── CLAUDE.md               # Project overview (English)
 ├── CLAUDE_CN.md            # 项目概述（中文）
 ├── README.md               # This file (English)

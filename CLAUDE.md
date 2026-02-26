@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This is an Android development skills plugin repository for Claude Code. Contains a customizable collection of Android development skills.
+This is an Android development skills repository for Claude Code and OpenAI Codex. It contains a customizable collection of Android development skills while preserving the Claude plugin layout.
 
 ## Repository Information
 
@@ -12,7 +12,7 @@ This is an Android development skills plugin repository for Claude Code. Contain
 
 ## Skills Description
 
-All skills are located in the `skills/` directory. Each skill is a subdirectory containing a `SKILL.md` file.
+All skills are located in the `skills/` directory. Each skill is a subdirectory containing a `SKILL.md` file. For Codex compatibility, `SKILL.md` should start with YAML frontmatter (`name`, `description`), and `agents/openai.yaml` is recommended for UI metadata.
 
 ## Common Commands
 
@@ -34,7 +34,7 @@ All skills are located in the `skills/` directory. Each skill is a subdirectory 
 
 ## Adding New Skills
 
-Create a new subdirectory in `skills/` and add a `SKILL.md` file:
+Create a new subdirectory in `skills/` and add a `SKILL.md` file (plus optional `agents/openai.yaml` for Codex UI):
 
 ```
 skills/your-skill-name/SKILL.md
@@ -43,6 +43,11 @@ skills/your-skill-name/SKILL.md
 ### SKILL.md Template
 
 ```markdown
+---
+name: your-skill-name
+description: Describe what the skill does and when Codex should use it.
+---
+
 # Skill Name
 
 > Skill description
@@ -67,7 +72,8 @@ android-claude-code-skills/
 │   └── marketplace.json    # Marketplace config
 ├── skills/                 # Skills directory
 │   └── template/
-│       └── SKILL.md        # Skill template
+│       ├── SKILL.md        # Codex-compatible skill template
+│       └── agents/openai.yaml
 ├── CLAUDE.md               # This file (English)
 ├── CLAUDE_CN.md            # 项目概述（中文）
 ├── README.md               # Documentation (English)

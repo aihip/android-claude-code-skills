@@ -2,7 +2,7 @@
 
 ## 项目概述
 
-这是一个 Android 开发技能插件仓库，用于 Claude Code。包含可自定义的 Android 开发技能集合。
+这是一个同时支持 Claude Code 与 OpenAI Codex 的 Android 开发技能仓库。它保留 Claude 插件结构，同时提供兼容 Codex 的技能文件格式。
 
 ## 仓库信息
 
@@ -12,7 +12,7 @@
 
 ## 技能说明
 
-所有技能位于 `skills/` 目录下，每个技能是一个包含 `SKILL.md` 的子目录。
+所有技能位于 `skills/` 目录下，每个技能是一个包含 `SKILL.md` 的子目录。为兼容 Codex，`SKILL.md` 需要以 YAML frontmatter（`name`、`description`）开头，并建议添加 `agents/openai.yaml` 作为 UI 元数据。
 
 ## 常用命令
 
@@ -34,7 +34,7 @@
 
 ## 添加新技能
 
-在 `skills/` 目录创建新子目录并添加 `SKILL.md` 文件：
+在 `skills/` 目录创建新子目录并添加 `SKILL.md` 文件（Codex UI 可再加 `agents/openai.yaml`）：
 
 ```
 skills/your-skill-name/SKILL.md
@@ -43,6 +43,11 @@ skills/your-skill-name/SKILL.md
 ### SKILL.md 模板
 
 ```markdown
+---
+name: your-skill-name
+description: 描述技能的作用以及 Codex 应在何种场景触发它。
+---
+
 # 技能名称
 
 > 技能描述
@@ -67,7 +72,8 @@ android-claude-code-skills/
 │   └── marketplace.json    # 市场配置
 ├── skills/                 # 技能目录
 │   └── template/
-│       └── SKILL.md        # 技能模板
+│       ├── SKILL.md        # 兼容 Codex 的技能模板
+│       └── agents/openai.yaml
 ├── CLAUDE.md               # 本文件（英文版）
 ├── CLAUDE_CN.md            # 项目概述（中文版）
 ├── README.md               # Documentation (English)
