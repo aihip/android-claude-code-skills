@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.1] - 2025-02-26
+
+### Fixed
+- **Skill loading issue** - Correct skills path in plugin.json
+  - Change from `./skills/android-translation-sync/` to `./skills/`
+  - This ensures all SKILL.md files are properly loaded
+  - Fixes wrong skill being triggered
+
 ## [1.2.0] - 2025-02-26
 
 ### Changed
