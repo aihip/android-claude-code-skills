@@ -78,6 +78,58 @@ Else:
 
 ### 4. Update strings.xml Files
 
+**CRITICAL: Minimize Code Changes**
+
+When updating strings.xml, **ONLY modify the string values that need updating**:
+
+| Preserve | Don't Touch |
+|----------|-------------|
+| ✅ Empty lines | ❌ Don't remove blank lines |
+| ✅ Comments (`<!-- ... -->`) | ❌ Don't remove comments |
+| ✅ Original formatting | ❌ Don't reformat code |
+| ✅ Original indentation | ❌ Don't change spacing |
+| ✅ `translatable="false"` | ❌ Don't modify attributes |
+
+**What to change:**
+- ✅ Update the **value content** between `<string>` tags
+- ✅ Append **new entries** at the bottom
+
+**Example - ONLY update the value:**
+
+```xml
+<!-- BEFORE -->
+<string name="login_title">Sign In</string>
+
+<!-- AFTER - value updated, nothing else changed -->
+<string name="login_title">登录</string>
+```
+
+**Example - Preserve everything else:**
+
+```xml
+<!-- Keep this structure intact -->
+    <string name="both">الجميع</string>
+
+    <string name="permission_open">السماح بالأذونات</string>
+    <string name="permission_new_prompt">للاستمتاع بأفضل تجربة...</string>
+
+    <string name="new_permission_settings">اذهب إلى الإعدادات</string>
+
+    <string name="bind_tips">نصائح</string>
+    <!--2018.12.27-->
+    <string name="discount_percent" translatable="false">%1$d%%</string>
+
+    <string name="remove_friend">حذف الرسائل؟</string>
+
+    <string name="filter_company_price">/توافق</string>
+
+    <!-- 新文案 20181228 -->
+    <string name="register_go">انتقل</string>
+    <string name="dialog_yes">نعم</string>
+
+<!-- Only update the translated text, keep all empty lines and comments -->
+```
+
 **File locations:**
 - `app/src/main/res/values/strings.xml` (English)
 - `app/src/main/res/values-zh/strings.xml` (Chinese)
@@ -88,8 +140,8 @@ Else:
 
 | Scenario | Action |
 |----------|--------|
-| Key exists in ALL language files | Update ALL values |
-| Key doesn't exist | Append to bottom of ALL language files |
+| Key exists | Update ONLY the value content, preserve everything else |
+| Key doesn't exist | Append to bottom of file |
 | File doesn't exist | Create new file in appropriate values directory |
 
 **All languages synchronized from Excel:**
@@ -183,11 +235,14 @@ Required columns:
 
 ## Important Notes
 
-1. **Excel is modified** - Keys are written to first column
-2. **Key preservation** - If key exists in Excel, it won't be regenerated
-3. **English is updated** - values/strings.xml is synced from Excel English column
-4. **All languages synced** - Every language column updates its corresponding strings.xml
-5. **Excel is source of truth** - All strings.xml files are updated from Excel
+1. **MINIMIZE CODE CHANGES** - Only update string values, preserve all formatting
+2. **Preserve empty lines** - Don't remove blank lines in strings.xml
+3. **Preserve comments** - Keep all `<!-- ... -->` comments intact
+4. **Excel is modified** - Keys are written to first column
+5. **Key preservation** - If key exists in Excel, it won't be regenerated
+6. **English is updated** - values/strings.xml is synced from Excel English column
+7. **All languages synced** - Every language column updates its corresponding strings.xml
+8. **Excel is source of truth** - All strings.xml files are updated from Excel
 
 ## Code Pattern
 
