@@ -1,6 +1,6 @@
 # Android Translation Sync
 
-> Synchronize Android project multilingual resources from Excel spreadsheet. Update strings.xml files for ALL languages including English.
+> Synchronize Android project multilingual resources from Excel spreadsheet. Update strings.xml files for ALL languages including English. Write generated keys to Excel first column.
 
 ## When to Use
 
@@ -24,93 +24,110 @@ Please update translations from: /path/to/translations.xlsx
 ### 1. Read Excel Spreadsheet
 
 - Parse the Excel file provided
-- First row contains language headers (e.g., English, zh, es, fr)
-- **English column is the SOURCE - it will be updated to values/strings.xml**
-- Other language columns are translations - updated to respective values-xx/strings.xml
+- First row contains language headers
+- **First column: "key"** (generated key for each translation)
+- **Second column: "English"** (source language)
+- Following columns: target languages (zh, es, fr, etc.)
+
+**Excel format example:**
+
+| key | English | zh | es |
+|-----|---------|-----|-----|
+| | Sign In | 登录 | Iniciar |
+| | Welcome | 欢迎 | Bienvenido |
 
 ### 2. Generate Keys for English Text
 
-For new translations (key doesn't exist):
+**Key generation logic:**
 
-```
-Key generation rules:
+| First Column (key) | Action |
+|--------------------|--------|
+| **Empty** | Generate new key (10-20 chars, based on English) |
+| **Has value** | Use existing key (don't regenerate) |
+
+**Key generation rules:**
 - Length: 10-20 characters
 - Based on English text meaning
 - Format: lowercase_with_underscores
 - Must not conflict with existing keys in strings.xml
-```
 
 Examples:
 - "Sign In" → "sign_in_button"
 - "Welcome to our app" → "welcome_message"
 - "Settings" → "settings_title"
 
-### 3. Update strings.xml Files
+### 3. Write Keys to Excel First Column
 
-**IMPORTANT: English (values/strings.xml) is also updated from Excel!**
+**For each row:**
+
+```
+If first column (key) is empty:
+    Generate key from English text
+    Write key to first column
+Else:
+    Use existing key from first column
+```
+
+**Excel after processing:**
+
+| key | English | zh | es |
+|-----|---------|-----|-----|
+| sign_in_button | Sign In | 登录 | Iniciar |
+| welcome_message | Welcome | 欢迎 | Bienvenido |
+| settings_title | Settings | 设置 | Configura |
+
+### 4. Update strings.xml Files
 
 **File locations:**
-- `app/src/main/res/values/strings.xml` (English - **UPDATED from Excel English column**)
-- `app/src/main/res/values-zh/strings.xml` (Chinese - updated from Excel zh column)
-- `app/src/main/res/values-es/strings.xml` (Spanish - updated from Excel es column)
+- `app/src/main/res/values/strings.xml` (English)
+- `app/src/main/res/values-zh/strings.xml` (Chinese)
+- `app/src/main/res/values-es/strings.xml` (Spanish)
 - etc.
 
 **Update rules:**
 
 | Scenario | Action |
 |----------|--------|
-| Key exists in ALL language files | Update ALL values (including English) |
+| Key exists in ALL language files | Update ALL values |
 | Key doesn't exist | Append to bottom of ALL language files |
 | File doesn't exist | Create new file in appropriate values directory |
 
-**Key Point:**
-- English text from Excel → values/strings.xml
-- Chinese text from Excel → values-zh/strings.xml
-- Spanish text from Excel → values-es/strings.xml
-- **ALL languages are synchronized from Excel**
-
-### 4. Output Format
-
-```xml
-<!-- values/strings.xml - Updated with English from Excel -->
-<resources>
-    <!-- existing entries... -->
-
-    <!-- New/Updated translation from Excel -->
-    <string name="generated_key">English text from Excel</string>
-</resources>
-
-<!-- values-zh/strings.xml - Updated with Chinese from Excel -->
-<resources>
-    <!-- existing entries... -->
-
-    <!-- New/Updated translation from Excel -->
-    <string name="generated_key">中文翻译</string>
-</resources>
-```
+**All languages synchronized from Excel:**
+- English column → values/strings.xml
+- zh column → values-zh/strings.xml
+- es column → values-es/strings.xml
 
 ## Example Workflow
 
 ```bash
-# User provides Excel path
+# Step 1: User provides Excel path
 Please sync translations from: ./translations/strings_v1.2.xlsx
 
-# Excel content example:
-| English              | zh           | es         |
-|----------------------|--------------|------------|
-| Sign In              | 登录         | Iniciar    |
-| Welcome to our app   | 欢迎使用     | Bienvenido |
-| Settings             | 设置         | Configura  |
+# Step 2: Excel BEFORE processing (key column empty):
+| key | English              | zh           | es         |
+|-----|----------------------|--------------|------------|
+|     | Sign In              | 登录         | Iniciar    |
+|     | Welcome to our app   | 欢迎使用     | Bienvenido |
+|     | Settings             | 设置         | Configura  |
 
-# Skill will:
-# 1. Read Excel file
-# 2. Check existing strings.xml for duplicate keys
-# 3. Generate new keys for untranslated items
-# 4. Update ALL language files including English:
-#    - values/strings.xml       ← English column
-#    - values-zh/strings.xml    ← zh column
-#    - values-es/strings.xml    ← es column
-# 5. Report changes made
+# Step 3: Skill processes:
+# 1. Read Excel
+# 2. Check if key column is empty
+# 3. Generate keys for empty rows
+# 4. Write keys to Excel first column
+# 5. Update all strings.xml files
+
+# Step 4: Excel AFTER processing (keys generated):
+| key              | English              | zh           | es         |
+|------------------|----------------------|--------------|------------|
+| sign_in_button   | Sign In              | 登录         | Iniciar    |
+| welcome_message  | Welcome to our app   | 欢迎使用     | Bienvenido |
+| settings_title   | Settings             | 设置         | Configura  |
+
+# Step 5: strings.xml updated:
+# values/strings.xml       <- English column
+# values-zh/strings.xml    <- zh column
+# values-es/strings.xml    <- es column
 ```
 
 ## Output Summary
@@ -119,32 +136,39 @@ After processing, the skill reports:
 
 ```
 Translation Sync Summary:
-- Processed: translations.xlsx
-- Total entries: 45
-- New keys added: 12
-- Updated keys: 28
-- Skipped (unchanged): 5
+- Excel file: translations.xlsx
+- Total rows: 45
+- Keys generated: 12 (written to Excel)
+- Keys existed: 28 (kept from Excel)
+- New keys added to strings.xml: 12
+- Updated keys in strings.xml: 28
 
+Excel updated: /path/to/translations.xlsx
 Files updated:
-- values/strings.xml       (+12 new, -28 updated)  ← English updated
+- values/strings.xml       (+12 new, -28 updated)
 - values-zh/strings.xml    (+12 new, -28 updated)
 - values-es/strings.xml    (+12 new, -28 updated)
 ```
 
 ## Key Generation Strategy
 
-1. **Analyze English text meaning**
+1. **Check Excel first column**
+   - If empty → generate new key
+   - If has value → use existing key
+
+2. **Analyze English text meaning**
    - Identify if it's a button, label, message, title
    - Extract key concepts
 
-2. **Generate candidate key**
+3. **Generate candidate key**
    - Convert to lowercase
    - Replace spaces with underscores
    - Remove special characters
    - Add suffix (button, title, message, label)
 
-3. **Validate uniqueness**
+4. **Validate uniqueness**
    - Check against existing keys in values/strings.xml
+   - Check against other keys in Excel
    - Append number if conflict exists
 
 ## Supported Excel Formats
@@ -153,38 +177,42 @@ Files updated:
 - `.xls` (Excel 97-2003)
 
 Required columns:
-- **English** (source language - will be synced to values/strings.xml)
-- At least one target language (zh, es, fr, de, ja, etc.)
+- **First column: "key"** (will be generated if empty)
+- **Second column: "English"** (source language)
+- Following columns: target languages (zh, es, fr, de, ja, etc.)
 
 ## Important Notes
 
-1. **English is NOT static** - It will be updated from Excel just like other languages
-2. **Excel is the source of truth** - All strings.xml files are updated from Excel
-3. **If key exists** - Update the value in ALL language files
-4. **If key is new** - Append to bottom of ALL language files
-5. **First row = language headers** - Must include "English" and target languages
+1. **Excel is modified** - Keys are written to first column
+2. **Key preservation** - If key exists in Excel, it won't be regenerated
+3. **English is updated** - values/strings.xml is synced from Excel English column
+4. **All languages synced** - Every language column updates its corresponding strings.xml
+5. **Excel is source of truth** - All strings.xml files are updated from Excel
 
 ## Code Pattern
 
 ```python
-# Sync all languages from Excel
-def sync_translations(excel_data, existing_keys):
-    results = {}
+# Process Excel and sync translations
+def sync_translations(excel_file, existing_keys):
+    for row in excel_file:
+        # Check if key column is empty
+        if row['key'].empty():
+            # Generate key from English text
+            english_text = row['English']
+            key = generate_key(english_text, existing_keys)
+            # Write key to Excel first column
+            row['key'] = key
+        else:
+            # Use existing key from Excel
+            key = row['key']
 
-    for row in excel_data:
-        # Generate key from English text
-        english_text = row['English']
-        key = generate_key(english_text, existing_keys)
+        # Update ALL language files from Excel columns
+        update_strings_xml('values/strings.xml', key, row['English'])
+        update_strings_xml('values-zh/strings.xml', key, row['zh'])
+        update_strings_xml('values-es/strings.xml', key, row['es'])
 
-        # Update ALL languages
-        results[key] = {
-            'values/strings.xml': row['English'],      # ← English updated!
-            'values-zh/strings.xml': row['zh'],
-            'values-es/strings.xml': row['es'],
-            # ... other languages
-        }
-
-    return results
+    # Save updated Excel file
+    excel_file.save()
 ```
 
 ## Android Project Structure
