@@ -1,6 +1,6 @@
 {
   "name": "android-claude-code-skills",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Reusable Android development skills compatible with OpenAI Codex and Claude Code",
   "author": {
     "name": "aihip"

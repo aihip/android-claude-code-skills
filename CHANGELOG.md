@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - 2026-02-26
+
+### Added
+- **Android Change Review** skill
+  - Add `skills/android-change-review/SKILL.md` and `agents/openai.yaml`
+  - Support reviewing staged changes after `git add .` using `git diff --cached`
+  - Support reviewing a specific `commit-id` using `git show <commit-id>`
+  - Focus on Android crash risks, boundary conditions, and regression detection
+  - Include Android-specific hotspots: Fragment/Activity lifecycle, Compose recomposition, coroutines/Flow, permissions, WorkManager, Room, navigation, RecyclerView/Paging, Manifest/resource config
+  - Recommend findings-first output with file/line references and severity ordering
+
+### Changed
+- **Documentation (EN/CN)**
+  - Add `Android Change Review` skill usage examples and trigger phrases to `README.md` / `README_CN.md`
+
+### Fixed
+- **YAML compatibility for desktop upload**
+  - Quote `description` values in `SKILL.md` frontmatter where needed to improve YAML parsing compatibility
+
+### Validation
+- `quick_validate.py` passes for all skills
+- `scripts/validate_skills.py` passes for all skills
+
 ## [1.3.0] - 2026-02-26
 
 ### Added

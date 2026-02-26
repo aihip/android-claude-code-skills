@@ -7,7 +7,7 @@
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
 - **作者**: aihip
 - **许可证**: MIT
-- **当前版本**: 1.3.0
+- **当前版本**: 1.4.0
 - **更新日志**: [CHANGELOG.md](CHANGELOG.md)
 
 ## OpenAI Codex 兼容性
@@ -58,7 +58,7 @@
 /plugin list
 
 # 您应该看到：
-# android-claude-code-skills  v1.3.0
+# android-claude-code-skills  v1.4.0
 ```
 
 与 GitHub 上的最新版本对比：https://github.com/aihip/android-claude-code-skills/blob/main/.claude-plugin/plugin.json

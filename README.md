@@ -7,7 +7,7 @@
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
 - **Author**: aihip
 - **License**: MIT
-- **Current Version**: 1.3.0
+- **Current Version**: 1.4.0
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 
 ## OpenAI Codex Compatibility
@@ -58,7 +58,7 @@ After updating, check the version:
 /plugin list
 
 # You should see:
-# android-claude-code-skills  v1.3.0
+# android-claude-code-skills  v1.4.0
 ```
 
 Compare with the latest version on GitHub: https://github.com/aihip/android-claude-code-skills/blob/main/.claude-plugin/plugin.json
