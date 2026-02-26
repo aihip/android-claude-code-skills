@@ -1,6 +1,6 @@
 ---
 name: template
-description: Template skill for creating new Android development skills with Codex-compatible `SKILL.md` frontmatter and optional `agents/openai.yaml` metadata. Use when starting a new skill in this repository.
+description: "Template skill for creating new Android development skills with Codex-compatible SKILL.md frontmatter and optional agents/openai.yaml metadata. Use when starting a new skill in this repository."
 ---
 
 # Skill Template

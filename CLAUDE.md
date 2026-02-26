@@ -45,7 +45,7 @@ skills/your-skill-name/SKILL.md
 ```markdown
 ---
 name: your-skill-name
-description: Describe what the skill does and when Codex should use it.
+description: "Describe what the skill does and when Codex should use it."
 ---
 
 # Skill Name

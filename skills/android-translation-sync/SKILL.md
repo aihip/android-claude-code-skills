@@ -1,6 +1,6 @@
 ---
 name: android-translation-sync
-description: Synchronize Android multilingual `strings.xml` resources from an Excel spreadsheet, generate or preserve translation keys in the first column, write generated keys back to Excel, and update `app/src/main/res/values*/strings.xml` files with precise value-only replacements. Use when asked to sync Android translations from Excel, update strings.xml from a translation sheet, or perform 多语言翻译同步 / 更新strings.xml tasks.
+description: "Synchronize Android multilingual strings.xml resources from an Excel spreadsheet, generate or preserve translation keys in the first column, write generated keys back to Excel, and update app/src/main/res/values strings.xml files with precise value-only replacements. Use when asked to sync Android translations from Excel, update strings.xml from a translation sheet, or perform Android 多语言翻译同步 tasks."
 ---
 
 # Android Translation Sync
