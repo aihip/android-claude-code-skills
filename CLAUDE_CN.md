@@ -2,7 +2,7 @@
 
 ## 项目概述
 
-这是一个同时支持 Claude Code 与 OpenAI Codex 的 Android 开发技能仓库。它保留 Claude 插件结构，同时提供兼容 Codex 的技能文件格式。
+这是一个面向 Android 开发场景的可复用技能仓库，兼容 OpenAI Codex 与 Claude Code。它保留 Claude 插件结构，同时提供兼容 Codex 的技能文件格式。
 
 ## 仓库信息
 

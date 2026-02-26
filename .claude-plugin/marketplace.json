@@ -4,13 +4,13 @@
     "name": "aihip"
   },
   "metadata": {
-    "description": "Collection of Android development skills for Claude Code"
+    "description": "Reusable Android development skills compatible with OpenAI Codex and Claude Code"
   },
   "plugins": [
     {
       "name": "android-claude-code-skills",
       "source": "./",
-      "description": "Android development skills for Claude Code - Customize with your own skills",
+      "description": "Reusable Android development skills for OpenAI Codex and Claude Code",
       "author": {
         "name": "aihip"
       },

@@ -1,6 +1,6 @@
 # Android Claude Code Skills
 
-> Android 开发技能集合 - 同时支持 Claude Code 与 OpenAI Codex，可根据需要自定义添加技能。
+> 面向 Android 开发场景的可复用 Skills 仓库，兼容 OpenAI Codex 与 Claude Code。
 
 ## 仓库信息
 
@@ -12,7 +12,7 @@
 
 ## OpenAI Codex 兼容性
 
-本仓库现在将技能文件维护为兼容 OpenAI Codex skills 的格式：
+本项目主要提供 Android 开发相关 skills，并将技能文件维护为同时兼容 OpenAI Codex 与 Claude Code 的格式：
 
 - `skills/<skill-name>/SKILL.md` 包含 YAML frontmatter（`name` 和 `description`）
 - 可选 `skills/<skill-name>/agents/openai.yaml`，用于 Codex UI 元数据

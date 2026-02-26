@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This is an Android development skills repository for Claude Code and OpenAI Codex. It contains a customizable collection of Android development skills while preserving the Claude plugin layout.
+This is a repository of reusable Android development skills, compatible with OpenAI Codex and Claude Code. It preserves the Claude plugin layout while keeping skill files Codex-compatible.
 
 ## Repository Information
 

@@ -1,6 +1,6 @@
 # Android Claude Code Skills
 
-> Android development skills for Claude Code and OpenAI Codex - A customizable collection of Android development skills.
+> A repository of reusable Android development skills, compatible with OpenAI Codex and Claude Code.
 
 ## Repository Information
 
@@ -12,7 +12,7 @@
 
 ## OpenAI Codex Compatibility
 
-This repository now keeps skills in a format that is compatible with OpenAI Codex skills:
+This project primarily provides Android development skills, and the skill files are maintained in a format compatible with both OpenAI Codex and Claude Code:
 
 - `skills/<skill-name>/SKILL.md` includes YAML frontmatter with `name` and `description`
 - Optional `skills/<skill-name>/agents/openai.yaml` provides Codex UI metadata
