@@ -78,57 +78,74 @@ Else:
 
 ### 4. Update strings.xml Files
 
-**CRITICAL: Minimize Code Changes**
+**CRITICAL: Precise Value Replacement Only**
 
-When updating strings.xml, **ONLY modify the string values that need updating**:
+**RULE: Replace ONLY the text content between `<string>` and `</string>` tags.**
 
-| Preserve | Don't Touch |
-|----------|-------------|
-| ✅ Empty lines | ❌ Don't remove blank lines |
-| ✅ Comments (`<!-- ... -->`) | ❌ Don't remove comments |
-| ✅ Original formatting | ❌ Don't reformat code |
-| ✅ Original indentation | ❌ Don't change spacing |
-| ✅ `translatable="false"` | ❌ Don't modify attributes |
+**ABSOLUTE RULES:**
+- ✅ Find `<string name="xxx">existing_value</string>`
+- ✅ Replace ONLY `existing_value` with new value
+- ✅ Result: `<string name="xxx">new_value</string>`
+- ❌ DO NOT add any new lines
+- ❌ DO NOT remove any existing lines
+- ❌ DO NOT modify anything else
 
-**What to change:**
-- ✅ Update the **value content** between `<string>` tags
-- ✅ Append **new entries** at the bottom
+**Preserve EVERYTHING:**
+| Preserve | Example |
+|----------|---------|
+| ✅ All empty lines | Don't add or remove blank lines |
+| ✅ All comments | `<!--2018.12.27-->` stays exactly as is |
+| ✅ All formatting | Keep exact indentation |
+| ✅ All attributes | `translatable="false"` preserved |
 
-**Example - ONLY update the value:**
+**Example - EXACT replacement only:**
 
 ```xml
 <!-- BEFORE -->
-<string name="login_title">Sign In</string>
+<string name="skip">Skip</string>
 
-<!-- AFTER - value updated, nothing else changed -->
-<string name="login_title">登录</string>
+<string name="quit">Quit</string>
+
+<!-- AFTER - ONLY value changed, nothing else -->
+<string name="skip">تخطى</string>
+
+<string name="quit">خروج</string>
 ```
 
-**Example - Preserve everything else:**
-
+**WRONG - Don't do this (adds extra empty lines):**
 ```xml
-<!-- Keep this structure intact -->
-    <string name="both">الجميع</string>
+<string name="skip">تخطى</string>
 
-    <string name="permission_open">السماح بالأذونات</string>
-    <string name="permission_new_prompt">للاستمتاع بأفضل تجربة...</string>
 
-    <string name="new_permission_settings">اذهب إلى الإعدادات</string>
 
-    <string name="bind_tips">نصائح</string>
+<string name="quit">خروج</string>
+```
+
+**CORRECT - Exactly as original, only value changed:**
+```xml
+<string name="skip">تخطى</string>
+
+<string name="quit">خروج</string>
+```
+
+**Preserve comments example:**
+```xml
+<!-- Keep this exactly as is -->
     <!--2018.12.27-->
     <string name="discount_percent" translatable="false">%1$d%%</string>
 
-    <string name="remove_friend">حذف الرسائل؟</string>
-
-    <string name="filter_company_price">/توافق</string>
-
     <!-- 新文案 20181228 -->
     <string name="register_go">انتقل</string>
-    <string name="dialog_yes">نعم</string>
 
-<!-- Only update the translated text, keep all empty lines and comments -->
+<!-- Only update values, comments stay in place -->
 ```
+
+**How to update - Step by step:**
+
+1. Read the exact line: `<string name="key">OLD_VALUE</string>`
+2. Replace ONLY the value: `<string name="key">NEW_VALUE</string>`
+3. Keep the line structure identical
+4. Keep surrounding lines identical
 
 **File locations:**
 - `app/src/main/res/values/strings.xml` (English)
@@ -235,14 +252,22 @@ Required columns:
 
 ## Important Notes
 
-1. **MINIMIZE CODE CHANGES** - Only update string values, preserve all formatting
-2. **Preserve empty lines** - Don't remove blank lines in strings.xml
-3. **Preserve comments** - Keep all `<!-- ... -->` comments intact
-4. **Excel is modified** - Keys are written to first column
-5. **Key preservation** - If key exists in Excel, it won't be regenerated
-6. **English is updated** - values/strings.xml is synced from Excel English column
-7. **All languages synced** - Every language column updates its corresponding strings.xml
-8. **Excel is source of truth** - All strings.xml files are updated from Excel
+1. **PRECISE VALUE REPLACEMENT ONLY**
+   - Replace ONLY the content between `<string>` and `</string>` tags
+   - DO NOT add any new lines
+   - DO NOT remove any existing lines
+   - Every original line must remain unchanged except the value content
+
+2. **Preserve EVERYTHING**
+   - All empty lines (don't add or remove)
+   - All comments (keep exactly as is)
+   - All formatting and indentation
+
+3. **Excel is modified** - Keys are written to first column
+4. **Key preservation** - If key exists in Excel, it won't be regenerated
+5. **English is updated** - values/strings.xml is synced from Excel English column
+6. **All languages synced** - Every language column updates its corresponding strings.xml
+7. **Excel is source of truth** - All strings.xml files are updated from Excel
 
 ## Code Pattern
 

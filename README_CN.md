@@ -7,7 +7,7 @@
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
 - **作者**: aihip
 - **许可证**: MIT
-- **当前版本**: 1.1.0
+- **当前版本**: 1.2.0
 - **更新日志**: [CHANGELOG.md](CHANGELOG.md)
 
 ## 安装
