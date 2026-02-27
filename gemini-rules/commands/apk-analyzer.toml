@@ -1,0 +1,46 @@
+# Gemini CLI custom slash command: /apk-analyzer
+# Place this file in ~/.gemini/commands/ (global) or .gemini/commands/ (project)
+
+[command]
+name = "apk-analyzer"
+description = "Analyze an Android APK file: extract metadata, classify permissions, verify signature, audit security"
+
+[prompt]
+template = """
+Please perform a comprehensive APK analysis.
+
+{{#if args}}
+APK file path: {{args}}
+{{else}}
+Please provide the APK file path (e.g. ./build/outputs/apk/release/app-release.apk).
+{{/if}}
+
+Follow the APK Analyzer workflow:
+
+1. Extract basic metadata using aapt:
+   aapt dump badging <apk> | grep -E "^package:|^sdkVersion:|^targetSdkVersion:|^application-label:"
+
+2. List and classify all permissions into three tiers:
+   - DANGEROUS: CAMERA, READ_CONTACTS, ACCESS_FINE_LOCATION, RECORD_AUDIO, READ_SMS, READ_PHONE_STATE, etc.
+   - HIGH-RISK: RECEIVE_BOOT_COMPLETED, SYSTEM_ALERT_WINDOW, BIND_ACCESSIBILITY_SERVICE, INSTALL_PACKAGES, etc.
+   - NORMAL: INTERNET, ACCESS_NETWORK_STATE, ACCESS_WIFI_STATE, etc.
+
+3. Verify signature with apksigner:
+   apksigner verify --verbose --print-certs <apk>
+   Report: V1/V2/V3 scheme, subject, issuer, SHA-256 fingerprint, expiry.
+   Flag debug keystore (SHA-1: 61:ED:37:7E:85:D3:86:A8:DF:EE:6B:86:4B:D8:5B:27:44:9D:42:1D).
+
+4. Decode manifest and inspect components:
+   apktool d <apk> -o apk_out --no-src -f
+   - Find exported activities/services/receivers/providers without android:permission
+   - Check: debuggable, allowBackup, usesCleartextTraffic flags
+
+5. List native libraries and detect frameworks:
+   unzip -l <apk> | grep "\.so$"
+   Detect: libflutter.so (Flutter), libreactnativejni.so (React Native), libweexjss.so (Weex)
+
+6. Scan for hardcoded secrets:
+   unzip -p <apk> "res/values/strings.xml" | grep -iE "(api_key|secret|token|password)"
+
+7. Produce a structured security report with findings at severity: CRITICAL / HIGH / MEDIUM / INFO
+"""

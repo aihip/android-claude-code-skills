@@ -1,0 +1,171 @@
+---
+description: Analyze Android APK files to extract metadata, classify permissions by risk level, verify signatures, inspect exported components, detect native libraries and third-party SDKs, and produce a security audit report. Apply when the user asks to analyze APK, inspect permissions, check APK signature, parse AndroidManifest, audit Android app security, apk信息提取, apk权限分析, apk签名检查, or apk安全审计.
+globs: ["**/*.apk"]
+alwaysApply: false
+---
+
+# APK Analyzer
+
+Comprehensive APK file analysis: metadata extraction, permission auditing, signature verification, component inspection, library detection, and security assessment.
+
+## Step 1 — Basic Metadata
+
+```bash
+APK="path/to/your.apk"
+aapt dump badging "$APK" | grep -E "^package:|^sdkVersion:|^targetSdkVersion:|^application-label:"
+```
+
+Extract: package name, version code/name, min SDK, target SDK, app label.
+
+## Step 2 — Permission Audit
+
+```bash
+aapt dump permissions "$APK"
+```
+
+Classify every permission into one of three tiers:
+
+| Tier | Examples |
+|------|---------|
+| **Dangerous** | CAMERA, READ_CONTACTS, ACCESS_FINE_LOCATION, RECORD_AUDIO, READ_SMS, READ_PHONE_STATE |
+| **High-Risk** | RECEIVE_BOOT_COMPLETED, SYSTEM_ALERT_WINDOW, BIND_ACCESSIBILITY_SERVICE, INSTALL_PACKAGES |
+| **Normal** | INTERNET, ACCESS_NETWORK_STATE, ACCESS_WIFI_STATE |
+
+Output format:
+```
+[DANGEROUS] (N)  ✗ READ_CONTACTS  ✗ CAMERA  ...
+[HIGH-RISK] (N)  ⚠ RECEIVE_BOOT_COMPLETED  ...
+[NORMAL]    (N)  ✓ INTERNET  ...
+```
+
+## Step 3 — Signature Verification
+
+```bash
+apksigner verify --verbose --print-certs "$APK" 2>&1 | \
+  grep -E "Verified|Signer|Subject|Issuer|SHA-256|Expir"
+```
+
+Check:
+- Schemes used: V1 (JAR) / V2 (APK) / V3
+- Certificate subject, issuer, expiry date
+- SHA-256 fingerprint — compare against known debug keystore:
+  `61:ED:37:7E:85:D3:86:A8:DF:EE:6B:86:4B:D8:5B:27:44:9D:42:1D` (SHA-1 of debug cert)
+
+## Step 4 — Manifest Component Analysis
+
+```bash
+apktool d "$APK" -o apk_out --no-src -f 2>/dev/null
+```
+
+For each component type (activity / service / receiver / provider), identify:
+- `exported="true"` without a `android:permission` — unprotected entry point
+- Sensitive implicit intent filters (BOOT_COMPLETED, NEW_OUTGOING_CALL, etc.)
+
+Security flags to check:
+```bash
+grep -E "debuggable|allowBackup|cleartext|usesCleartextTraffic" apk_out/AndroidManifest.xml
+```
+
+## Step 5 — DEX & MultiDex
+
+```bash
+unzip -l "$APK" | grep "\.dex"           # count DEX files
+dexdump -f "$APK" | grep -E "class_defs_size|method_ids_size"
+```
+
+Note class count and whether multidex is used (> 1 DEX file).
+
+## Step 6 — Native Libraries & SDK Detection
+
+```bash
+unzip -l "$APK" | grep "\.so$"           # list native libs
+```
+
+Report supported ABIs (`armeabi-v7a`, `arm64-v8a`, `x86`, `x86_64`).
+
+Detect common frameworks from lib names:
+
+| Pattern | Framework |
+|---------|-----------|
+| `libflutter.so` | Flutter |
+| `libreactnativejni.so` | React Native |
+| `libweexjss.so` | Weex |
+| `libxamarin*.so` | Xamarin |
+
+Detect SDKs from DEX class prefixes (via jadx or dexdump):
+`com.google.firebase`, `com.facebook.`, `io.branch.`, `com.appsflyer.`, `com.adjust.sdk`, `io.sentry.`
+
+## Step 7 — Security Audit
+
+Check each item; flag with severity:
+
+| Check | Risk |
+|-------|------|
+| `debuggable="true"` | CRITICAL — must not ship in release |
+| Signed with debug keystore | HIGH — not for production |
+| Exported component without `android:permission` | HIGH |
+| `allowBackup="true"` | MEDIUM — sensitive data may be extracted |
+| Cleartext traffic permitted | MEDIUM |
+| No V2/V3 signature | MEDIUM |
+| No SSL pinning detected | INFO |
+
+```bash
+# Hardcoded secrets scan
+unzip -p "$APK" "res/values/strings.xml" | \
+  grep -iE "(api_key|secret|token|password|apikey)" | head -20
+```
+
+## Output Report Format
+
+```
+============================================
+APK Analysis Report
+============================================
+File:           app-release.apk
+Package:        com.example.app
+Version:        1.0.0 (100)
+Min SDK:        21 (Android 5.0)
+Target SDK:     34 (Android 14)
+App Name:       Example App
+File Size:      45.2 MB
+
+--- Signature ---
+Scheme:         V1 + V2 + V3
+Subject:        CN=Example Corp, O=Example, C=US
+SHA-256:        AA:BB:CC:...
+Valid Until:    2030-01-01
+Debug Cert:     NO ✓
+
+--- Permissions (24 total) ---
+Dangerous (8):  CAMERA, READ_CONTACTS, ACCESS_FINE_LOCATION, ...
+High-Risk (2):  RECEIVE_BOOT_COMPLETED, SYSTEM_ALERT_WINDOW
+Normal (14):    INTERNET, ACCESS_NETWORK_STATE, ...
+
+--- Components ---
+Activities:     12 (2 exported)
+Services:        5 (1 exported without permission ⚠)
+Receivers:       3 (2 exported)
+Providers:       1 (not exported ✓)
+
+--- Libraries ---
+Native ABIs:    armeabi-v7a, arm64-v8a
+SDKs detected: Firebase, AppsFlyer, Sentry
+
+--- Security Findings ---
+[HIGH]    Exported service without permission: .MyService
+[MEDIUM]  allowBackup=true
+[INFO]    debuggable=false ✓
+[INFO]    No cleartext traffic permitted ✓
+============================================
+```
+
+## Checklist
+
+- [ ] Metadata extracted (package, version, SDK levels)
+- [ ] Permissions classified by tier
+- [ ] Signature schemes and certificate details shown
+- [ ] Debug keystore check done
+- [ ] Exported components assessed
+- [ ] Security flags checked (debuggable, allowBackup, cleartext)
+- [ ] Native libraries and SDKs listed
+- [ ] Security report produced with severity levels

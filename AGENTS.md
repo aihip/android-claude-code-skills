@@ -35,6 +35,24 @@ Review Android code changes after implementation to catch crash risks, boundary-
 3. Checks crash paths, boundary conditions, regressions, and Android component hotspots
 4. Reports findings ordered by severity (High / Medium / Low) with file/line references
 
+### $apk-analyzer
+
+Analyze an Android APK file to extract metadata, audit permissions, verify signatures, inspect components, detect libraries, and produce a security report.
+
+**Use when:**
+- User provides an `.apk` file path and asks to analyze, inspect, or audit it
+- Trigger phrases: "analyze apk", "check apk permissions", "verify apk signature", "audit apk security", "apk信息提取", "apk权限分析", "apk签名检查", "apk安全审计"
+
+**What it does:**
+1. Extracts metadata via `aapt` (package name, version, min/target SDK)
+2. Lists and classifies all permissions as Dangerous / High-Risk / Normal
+3. Verifies V1/V2/V3 signature and prints certificate subject, SHA-256 fingerprint, expiry; detects debug keystore
+4. Decodes `AndroidManifest.xml` via `apktool` and flags exported components without `android:permission`
+5. Checks security flags: `debuggable`, `allowBackup`, cleartext traffic
+6. Lists native library ABIs and detects third-party SDKs (Firebase, Flutter, React Native, etc.)
+7. Scans for hardcoded secrets in string resources
+8. Produces a structured security report with CRITICAL / HIGH / MEDIUM / INFO findings
+
 ## Skill Files
 
 Skills are located in `skills/` and follow the standard SKILL.md format:
@@ -44,7 +62,10 @@ skills/
 ├── android-translation-sync/
 │   ├── SKILL.md            ← Full workflow instructions + YAML frontmatter
 │   └── agents/openai.yaml  ← Codex UI metadata
-└── android-change-review/
+├── android-change-review/
+│   ├── SKILL.md
+│   └── agents/openai.yaml
+└── apk-analyzer/
     ├── SKILL.md
     └── agents/openai.yaml
 ```
@@ -56,11 +77,13 @@ skills/
 mkdir -p ~/.agents/skills
 cp -r skills/android-translation-sync ~/.agents/skills/
 cp -r skills/android-change-review ~/.agents/skills/
+cp -r skills/apk-analyzer ~/.agents/skills/
 
 # Project-level — this project only
 mkdir -p .agents/skills
 cp -r skills/android-translation-sync .agents/skills/
 cp -r skills/android-change-review .agents/skills/
+cp -r skills/apk-analyzer .agents/skills/
 ```
 
-After installing, invoke explicitly with `$android-translation-sync` or `$android-change-review`, or let Codex auto-select based on your task description.
+After installing, invoke explicitly with `$android-translation-sync`, `$android-change-review`, or `$apk-analyzer`, or let Codex auto-select based on your task description.

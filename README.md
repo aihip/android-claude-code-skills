@@ -13,6 +13,7 @@
 - [Available Skills](#available-skills)
   - [Android Translation Sync](#android-translation-sync)
   - [Android Change Review](#android-change-review)
+  - [APK Analyzer](#apk-analyzer)
 - [Third-Party Skills](#third-party-skills)
   - [review-loop — Automated Code Review Loop](#review-loop--automated-code-review-loop)
   - [claude-codex — Multi-AI Orchestration Pipeline](#claude-codex--multi-ai-orchestration-pipeline)
@@ -30,7 +31,7 @@
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
 - **Author**: aihip
 - **License**: MIT
-- **Current Version**: 1.5.0
+- **Current Version**: 1.6.0
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 
 ## OpenAI Codex Compatibility
@@ -161,6 +162,39 @@ Please review commit abc1234 for crash risks and regressions.
 - `检查当前修改代码`
 - `边界条件检查`
 - `崩溃风险检查`
+
+---
+
+### APK Analyzer
+
+Parse and audit Android APK files: extract metadata, classify permissions by risk, verify signatures, inspect exported components, detect native libraries and third-party SDKs, and produce a security report.
+
+**Usage:**
+
+```
+Analyze this APK: /path/to/your.apk
+```
+
+**Features:**
+- Extract package name, version code/name, min/target SDK from APK
+- Classify all permissions as Dangerous / High-Risk / Normal
+- Verify V1/V2/V3 signature schemes and print certificate details
+- Detect debug keystore by SHA-1 fingerprint
+- Identify exported Activities, Services, Receivers, and Providers
+- Check security flags: `debuggable`, `allowBackup`, cleartext traffic
+- Detect native library ABIs and third-party SDKs (Flutter, React Native, Firebase, etc.)
+- Includes a full shell script (`apk-analyze.sh`) and Python (androguard) analysis path
+- Produces a structured security audit report with CRITICAL / HIGH / MEDIUM / INFO findings
+
+**Trigger phrases:**
+- `analyze apk`
+- `check apk permissions`
+- `verify apk signature`
+- `audit apk security`
+- `apk信息提取`
+- `apk权限分析`
+- `apk签名检查`
+- `apk安全审计`
 
 ---
 
@@ -353,6 +387,7 @@ Codex discovers skills from `.agents/skills/` directories. Copy the skills to ei
 mkdir -p ~/.agents/skills
 cp -r skills/android-translation-sync ~/.agents/skills/
 cp -r skills/android-change-review ~/.agents/skills/
+cp -r skills/apk-analyzer ~/.agents/skills/
 ```
 
 ```bash
@@ -360,6 +395,7 @@ cp -r skills/android-change-review ~/.agents/skills/
 mkdir -p .agents/skills
 cp -r skills/android-translation-sync .agents/skills/
 cp -r skills/android-change-review .agents/skills/
+cp -r skills/apk-analyzer .agents/skills/
 ```
 
 Or use symlinks to always stay in sync with repo updates:
@@ -367,6 +403,7 @@ Or use symlinks to always stay in sync with repo updates:
 ```bash
 ln -s "$(pwd)/skills/android-translation-sync" ~/.agents/skills/
 ln -s "$(pwd)/skills/android-change-review" ~/.agents/skills/
+ln -s "$(pwd)/skills/apk-analyzer" ~/.agents/skills/
 ```
 
 ### Usage
@@ -377,6 +414,8 @@ ln -s "$(pwd)/skills/android-change-review" ~/.agents/skills/
 $android-translation-sync  ./translations/strings.xlsx
 
 $android-change-review  review my staged changes
+
+$apk-analyzer  ./build/outputs/apk/release/app-release.apk
 ```
 
 **Implicit invocation** — Codex auto-selects the skill based on your description (`allow_implicit_invocation: true`):
@@ -385,6 +424,8 @@ $android-change-review  review my staged changes
 Sync translations from Excel: ./translations/strings.xlsx
 
 Review my staged changes for Android crash risks and boundary conditions.
+
+Analyze this APK for permissions and security issues: ./app-release.apk
 ```
 
 ### Verify Installation
@@ -392,7 +433,7 @@ Review my staged changes for Android crash risks and boundary conditions.
 ```bash
 # In a Codex CLI session
 /skills
-# Should list: android-translation-sync, android-change-review
+# Should list: android-translation-sync, android-change-review, apk-analyzer
 ```
 
 ---
@@ -407,6 +448,7 @@ The skills in this repository are natively designed for **Claude Code CLI**. For
 |---|---|
 | `cursor-rules/android-translation-sync.mdc` | Android Translation Sync |
 | `cursor-rules/android-change-review.mdc` | Android Change Review |
+| `cursor-rules/apk-analyzer.mdc` | APK Analyzer |
 
 ### Installation
 
@@ -421,6 +463,9 @@ curl -o .cursor/rules/android-translation-sync.mdc \
 
 curl -o .cursor/rules/android-change-review.mdc \
   https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/android-change-review.mdc
+
+curl -o .cursor/rules/apk-analyzer.mdc \
+  https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/apk-analyzer.mdc
 ```
 
 Or clone this repo and copy manually:
@@ -431,7 +476,7 @@ cp android-claude-code-skills/cursor-rules/*.mdc your-android-project/.cursor/ru
 
 ### Usage in Cursor
 
-Both rules are **Agent-requested** type — Cursor's AI automatically activates them when it detects a matching request. You can also trigger them explicitly:
+All rules are **Agent-requested** type — Cursor's AI automatically activates them when it detects a matching request. You can also trigger them explicitly:
 
 ```text
 # Translation sync
@@ -439,6 +484,9 @@ Sync translations from Excel: ./translations/strings.xlsx
 
 # Code review
 Review my staged changes for Android crash risks and boundary conditions.
+
+# APK analysis
+Analyze this APK for permissions and security issues: ./build/outputs/apk/release/app-release.apk
 ```
 
 > **Note:** Cursor rules are static prompt injection and do not support hooks, slash commands, or multi-agent orchestration. The workflow knowledge is fully preserved, but automated triggers (e.g. Stop Hook in `review-loop`) are not available.
@@ -463,6 +511,7 @@ cat >> GEMINI.md << 'EOF'
 # Android Skills
 @/path/to/android-claude-code-skills/gemini-rules/android-translation-sync.md
 @/path/to/android-claude-code-skills/gemini-rules/android-change-review.md
+@/path/to/android-claude-code-skills/gemini-rules/apk-analyzer.md
 EOF
 ```
 
@@ -476,6 +525,7 @@ cp android-claude-code-skills/gemini-rules/*.md .gemini/skills/
 cat >> GEMINI.md << 'EOF'
 @.gemini/skills/android-translation-sync.md
 @.gemini/skills/android-change-review.md
+@.gemini/skills/apk-analyzer.md
 EOF
 ```
 
@@ -485,11 +535,13 @@ Once added, simply describe your task naturally:
 Sync translations from Excel: ./translations/strings.xlsx
 
 Review my staged changes for Android crash risks.
+
+Analyze this APK: ./build/outputs/apk/release/app-release.apk
 ```
 
 ### Method 2 — Custom Slash Commands
 
-Install the `.toml` command files to get `/translation-sync` and `/change-review` slash commands:
+Install the `.toml` command files to get `/translation-sync`, `/change-review`, and `/apk-analyzer` slash commands:
 
 ```bash
 # Global install (available in all projects)
@@ -512,6 +564,9 @@ Then use directly in Gemini CLI:
 
 # Review a specific commit
 /change-review abc1234
+
+# Analyze an APK
+/apk-analyzer ./build/outputs/apk/release/app-release.apk
 ```
 
 ### Capability Comparison
@@ -587,6 +642,12 @@ android-claude-code-skills/
 │   └── marketplace.json    # Marketplace configuration
 ├── skills/                 # Available skills
 │   ├── android-translation-sync/
+│   │   ├── SKILL.md
+│   │   └── agents/openai.yaml
+│   ├── android-change-review/
+│   │   ├── SKILL.md
+│   │   └── agents/openai.yaml
+│   ├── apk-analyzer/
 │   │   ├── SKILL.md
 │   │   └── agents/openai.yaml
 │   └── template/

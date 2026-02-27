@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.0] - 2026-02-27
+
+### Added
+- **APK Analyzer** skill (`skills/apk-analyzer/`)
+  - Add `SKILL.md` and `agents/openai.yaml`
+  - Extract APK metadata: package name, version code/name, min SDK, target SDK, app label
+  - Classify all declared permissions into Dangerous / High-Risk / Normal tiers with annotated reference lists
+  - Verify APK signature schemes (V1/V2/V3) via `apksigner`; print certificate subject, issuer, SHA-256 fingerprint, and expiry; detect debug keystore by known SHA-1
+  - Decode `AndroidManifest.xml` via `apktool` and audit exported Activities, Services, Receivers, and Providers for missing permission protection
+  - Check security flags: `debuggable`, `allowBackup`, cleartext traffic (`usesCleartextTraffic`), and `network_security_config.xml`
+  - Detect native library ABIs (`armeabi-v7a`, `arm64-v8a`, `x86`, `x86_64`) and common third-party SDKs (Firebase, React Native, Flutter, AppsFlyer, Sentry, etc.)
+  - Scan for hardcoded secrets in `res/values/strings.xml` and decompiled Java sources
+  - Include a complete `apk-analyze.sh` shell script covering all 7 analysis phases
+  - Include a Python analysis path using `androguard` for programmatic/batch use
+  - Produce a structured report with CRITICAL / HIGH / MEDIUM / INFO severity findings
+
+### Changed
+- **Cursor support** — Add `cursor-rules/apk-analyzer.mdc`
+  - Agent-requested rule; auto-activates on "analyze apk", "apk权限分析", "apk签名检查", etc.
+  - Covers: metadata extraction, permission tier table, signature check, manifest component audit, native library detection, security flag checklist, structured report format
+- **Gemini CLI support** — Add `gemini-rules/apk-analyzer.md` and `gemini-rules/commands/apk-analyzer.toml`
+  - `apk-analyzer.md`: GEMINI.md-compatible `@import` skill with condensed workflow
+  - `apk-analyzer.toml`: `/apk-analyzer <path>` slash command with step-by-step prompt template
+- **Codex CLI support** — `agents/openai.yaml` already included with `SKILL.md`
+- **`AGENTS.md`** — Add `$apk-analyzer` skill entry with trigger phrases, use-when guide, and 8-step capability description; update skill directory listing and install commands
+- **Documentation (EN)**
+  - Add `APK Analyzer` entry to TOC and Available Skills section in `README.md`
+  - Update Cursor rules table to include `apk-analyzer.mdc`
+  - Update Gemini Method 1 `@import` examples and Method 2 slash command list to include `/apk-analyzer`
+  - Update Codex CLI installation, explicit/implicit usage examples, and `/skills` verify list
+  - Update Project Structure listing to include `apk-analyzer/`
+- **Version**: bump to `1.6.0`
+
 ## [1.5.0] - 2026-02-27
 
 ### Added
