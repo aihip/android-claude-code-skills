@@ -30,7 +30,7 @@
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
 - **Author**: aihip
 - **License**: MIT
-- **Current Version**: 1.4.0
+- **Current Version**: 1.5.0
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 
 ## OpenAI Codex Compatibility

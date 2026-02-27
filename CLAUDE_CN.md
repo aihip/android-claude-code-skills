@@ -74,6 +74,7 @@ android-claude-code-skills/
 │   └── template/
 │       ├── SKILL.md        # 兼容 Codex 的技能模板
 │       └── agents/openai.yaml
+├── AGENTS.md               # Agent 指令（OpenAI Codex）
 ├── CLAUDE.md               # 本文件（英文版）
 ├── CLAUDE_CN.md            # 项目概述（中文）
 ├── CLAUDE_JP.md            # プロジェクト概要（日本語）

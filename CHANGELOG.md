@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - 2026-02-27
+
+### Added
+- **Multi-platform skill support**
+  - **OpenAI Codex CLI** — Native support via `.agents/skills/` installation; skills trigger with `$skill-name` or implicit auto-detection; add `AGENTS.md` for project-level agent instructions
+  - **Cursor** — Add `cursor-rules/` with `.mdc` rule files for `android-translation-sync` and `android-change-review`; rules are Agent-requested type and auto-activate on matching requests
+  - **Gemini CLI** — Add `gemini-rules/` with GEMINI.md-compatible `.md` files and custom slash command `.toml` files (`/translation-sync`, `/change-review`)
+- **`AGENTS.md`** — Repository-level agent instructions file for OpenAI Codex CLI describing available skills, trigger phrases, and installation steps
+
+### Changed
+- **Documentation (EN/CN/JP)**
+  - Add "Using Skills in Codex CLI", "Using Skills in Cursor", "Using Skills in Gemini CLI" sections to all three README files
+  - Add 4-platform capability comparison table to all README files
+  - Update TOC in all README files
+- **`CLAUDE.md` / `CLAUDE_CN.md` / `CLAUDE_JP.md`**
+  - Add `AGENTS.md` to project structure listing
+- **`agents/openai.yaml`** (both skills)
+  - Add trigger example comments for improved implicit invocation matching
+
 ## [1.4.0] - 2026-02-26
 
 ### Added

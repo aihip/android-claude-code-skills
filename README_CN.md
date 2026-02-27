@@ -14,6 +14,9 @@
 - [第三方技能](#第三方技能)
   - [review-loop — 自动化代码审查循环](#review-loop--自动化代码审查循环)
   - [claude-codex — 多 AI 编排流水线](#claude-codex--多-ai-编排流水线)
+- [在 Codex CLI 中使用技能](#在-codex-cli-中使用技能)
+- [在 Cursor 中使用技能](#在-cursor-中使用技能)
+- [在 Gemini CLI 中使用技能](#在-gemini-cli-中使用技能)
 - [添加技能](#添加技能)
 - [校验](#校验)
 - [项目结构](#项目结构)
@@ -25,7 +28,7 @@
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
 - **作者**: aihip
 - **许可证**: MIT
-- **当前版本**: 1.4.0
+- **当前版本**: 1.5.0
 - **更新日志**: [CHANGELOG.md](CHANGELOG.md)
 
 ## OpenAI Codex 兼容性
@@ -332,6 +335,148 @@ echo ".task" >> .gitignore
 | 自动重试次数 | 3 次 |
 
 **许可证：** GPL-3.0，需注明来源（作者：Z-M-Huang）。
+
+---
+
+## 在 Codex CLI 中使用技能
+
+本仓库的技能与 **OpenAI Codex CLI 原生兼容** —— `SKILL.md` 文件已包含必要的 YAML frontmatter（`name`、`description`），每个技能也有对应的 `agents/openai.yaml` UI 元数据。
+
+### 安装
+
+Codex 从 `.agents/skills/` 目录发现技能，将技能复制到用户级或项目级：
+
+```bash
+# 用户级安装 —— 所有项目均可用（推荐）
+mkdir -p ~/.agents/skills
+cp -r skills/android-translation-sync ~/.agents/skills/
+cp -r skills/android-change-review ~/.agents/skills/
+```
+
+```bash
+# 项目级安装 —— 仅当前项目可用
+mkdir -p .agents/skills
+cp -r skills/android-translation-sync .agents/skills/
+cp -r skills/android-change-review .agents/skills/
+```
+
+或使用符号链接，自动跟随仓库更新：
+
+```bash
+ln -s "$(pwd)/skills/android-translation-sync" ~/.agents/skills/
+ln -s "$(pwd)/skills/android-change-review" ~/.agents/skills/
+```
+
+### 使用方法
+
+**显式调用**（输入 `$` 打开技能选择器）：
+
+```text
+$android-translation-sync  ./translations/strings.xlsx
+
+$android-change-review  review my staged changes
+```
+
+**隐式调用** —— Codex 根据描述自动匹配技能（`allow_implicit_invocation: true`）：
+
+```text
+请帮我同步多语言翻译，Excel 文件是 ./translations/strings.xlsx
+
+帮我检查当前已暂存的代码，重点看 Android 崩溃风险和边界条件。
+```
+
+### 验证安装
+
+```bash
+# 在 Codex CLI 会话中执行
+/skills
+# 应看到：android-translation-sync、android-change-review
+```
+
+---
+
+## 在 Cursor 中使用技能
+
+预转换好的 `.mdc` 规则文件位于 [`cursor-rules/`](cursor-rules/) 目录。
+
+### 安装
+
+```bash
+mkdir -p .cursor/rules
+cp android-claude-code-skills/cursor-rules/*.mdc .cursor/rules/
+```
+
+或通过 curl 下载：
+
+```bash
+mkdir -p .cursor/rules
+curl -o .cursor/rules/android-translation-sync.mdc \
+  https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/android-translation-sync.mdc
+curl -o .cursor/rules/android-change-review.mdc \
+  https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/android-change-review.mdc
+```
+
+### 使用方法
+
+两个规则均为 **Agent-requested** 类型，Cursor AI 会根据请求自动激活：
+
+```text
+请帮我同步多语言翻译，Excel 文件是 ./translations/strings.xlsx
+
+帮我检查已暂存的代码，重点看 Android 崩溃风险和边界条件。
+```
+
+---
+
+## 在 Gemini CLI 中使用技能
+
+预转换好的文件位于 [`gemini-rules/`](gemini-rules/) 目录，提供两种接入方式。
+
+### 方式一：GEMINI.md 注入（推荐）
+
+```bash
+mkdir -p .gemini/skills
+cp android-claude-code-skills/gemini-rules/*.md .gemini/skills/
+
+# 在 GEMINI.md 中添加引用
+cat >> GEMINI.md << 'EOF'
+@.gemini/skills/android-translation-sync.md
+@.gemini/skills/android-change-review.md
+EOF
+```
+
+添加后，自然语言描述任务即可：
+
+```text
+请帮我同步多语言翻译，Excel 文件是 ./translations/strings.xlsx
+
+帮我检查已暂存代码的崩溃风险。
+```
+
+### 方式二：自定义 Slash 命令
+
+```bash
+# 全局安装（所有项目可用）
+mkdir -p ~/.gemini/commands
+cp android-claude-code-skills/gemini-rules/commands/*.toml ~/.gemini/commands/
+```
+
+```text
+/translation-sync ./translations/strings.xlsx
+/change-review staged
+```
+
+### 四端能力对比
+
+| 功能 | Claude Code | Codex CLI | Gemini CLI | Cursor |
+|---|---|---|---|---|
+| 工作流知识 | ✅ 完整 | ✅ 完整 | ✅ 完整 | ✅ 完整 |
+| 技能格式 | SKILL.md | SKILL.md（原生）| GEMINI.md / `.md` | `.mdc` rules |
+| 技能触发 | `/plugin` + slash | `$skill-name` 或自动 | 自然语言 | 自然语言 |
+| 自动识别描述 | ✅ | ✅（`allow_implicit_invocation`）| ✅ | ✅ |
+| 上下文文件 | CLAUDE.md | AGENTS.md | GEMINI.md | `.cursor/rules/` |
+| Stop Hook / 生命周期钩子 | ✅ | ❌ | ❌ | ❌ |
+| 多 Agent 编排 | ✅ | ❌ | ❌ | ❌ |
 
 ---
 

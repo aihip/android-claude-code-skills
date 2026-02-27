@@ -2,6 +2,25 @@
 
 このプロジェクトの注目すべき変更はすべてこのファイルに記録されます。
 
+## [1.5.0] - 2026-02-27
+
+### 追加
+- **マルチプラットフォームスキルサポート**
+  - **OpenAI Codex CLI** — `.agents/skills/` インストールによるネイティブサポート。`$skill-name` または暗黙的な自動検出でスキルを起動。プロジェクトレベルのエージェント指示用に `AGENTS.md` を追加
+  - **Cursor** — `cursor-rules/` に `android-translation-sync` と `android-change-review` の `.mdc` ルールファイルを追加。ルールは Agent-requested タイプで、一致するリクエスト時に自動起動
+  - **Gemini CLI** — `gemini-rules/` に GEMINI.md 互換の `.md` ファイルとカスタム Slash コマンド `.toml` ファイル（`/translation-sync`、`/change-review`）を追加
+- **`AGENTS.md`** — OpenAI Codex CLI 向けのリポジトリレベルのエージェント指示ファイル。利用可能なスキル、トリガーフレーズ、インストール手順を記載
+
+### 変更
+- **ドキュメント（英語/中国語/日本語）**
+  - 3 つの README すべてに「Codex CLI でのスキルの使用」「Cursor でのスキルの使用」「Gemini CLI でのスキルの使用」セクションを追加
+  - 4 プラットフォーム能力比較表を全 README に追加
+  - 全 README の目次を更新
+- **`CLAUDE.md` / `CLAUDE_CN.md` / `CLAUDE_JP.md`**
+  - プロジェクト構成一覧に `AGENTS.md` を追加
+- **`agents/openai.yaml`**（両スキル）
+  - 暗黙的な呼び出しマッチング向けにトリガー例コメントを追加
+
 ## [1.4.0] - 2026-02-26
 
 ### 追加

@@ -14,6 +14,9 @@
 - [サードパーティスキル](#サードパーティスキル)
   - [review-loop — 自動コードレビューループ](#review-loop--自動コードレビューループ)
   - [claude-codex — マルチ AI オーケストレーションパイプライン](#claude-codex--マルチ-ai-オーケストレーションパイプライン)
+- [Codex CLI でのスキルの使用](#codex-cli-でのスキルの使用)
+- [Cursor でのスキルの使用](#cursor-でのスキルの使用)
+- [Gemini CLI でのスキルの使用](#gemini-cli-でのスキルの使用)
 - [スキルの追加](#スキルの追加)
 - [バリデーション](#バリデーション)
 - [プロジェクト構成](#プロジェクト構成)
@@ -25,7 +28,7 @@
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
 - **作者**: aihip
 - **ライセンス**: MIT
-- **現在のバージョン**: 1.4.0
+- **現在のバージョン**: 1.5.0
 - **変更履歴**: [CHANGELOG.md](CHANGELOG.md)
 
 ## OpenAI Codex 互換性
@@ -332,6 +335,148 @@ echo ".task" >> .gitignore
 | 自動リトライ回数 | 3 回 |
 
 **ライセンス:** GPL-3.0（帰属表示必須、著者：Z-M-Huang）。
+
+---
+
+## Codex CLI でのスキルの使用
+
+このリポジトリのスキルは **OpenAI Codex CLI とネイティブ互換** です —— `SKILL.md` ファイルには必須の YAML frontmatter（`name`、`description`）が含まれており、各スキルには `agents/openai.yaml` UI メタデータも用意されています。
+
+### インストール
+
+Codex は `.agents/skills/` ディレクトリからスキルを検出します。ユーザーレベルまたはプロジェクトレベルにコピーします：
+
+```bash
+# ユーザーレベル —— すべてのプロジェクトで利用可能（推奨）
+mkdir -p ~/.agents/skills
+cp -r skills/android-translation-sync ~/.agents/skills/
+cp -r skills/android-change-review ~/.agents/skills/
+```
+
+```bash
+# プロジェクトレベル —— このプロジェクトのみ
+mkdir -p .agents/skills
+cp -r skills/android-translation-sync .agents/skills/
+cp -r skills/android-change-review .agents/skills/
+```
+
+リポジトリの更新に自動的に追従するシンボリックリンクを使用することもできます：
+
+```bash
+ln -s "$(pwd)/skills/android-translation-sync" ~/.agents/skills/
+ln -s "$(pwd)/skills/android-change-review" ~/.agents/skills/
+```
+
+### 使い方
+
+**明示的な呼び出し**（`$` を入力してスキルセレクターを開く）：
+
+```text
+$android-translation-sync  ./translations/strings.xlsx
+
+$android-change-review  review my staged changes
+```
+
+**暗黙的な呼び出し** —— Codex が説明に基づいてスキルを自動選択（`allow_implicit_invocation: true`）：
+
+```text
+翻訳を Excel から同期してください: ./translations/strings.xlsx
+
+ステージされた変更を Android のクラッシュリスクと境界条件の観点でレビューしてください。
+```
+
+### インストールの確認
+
+```bash
+# Codex CLI セッション内で実行
+/skills
+# 以下が表示されるはずです: android-translation-sync, android-change-review
+```
+
+---
+
+## Cursor でのスキルの使用
+
+変換済みの `.mdc` ルールファイルが [`cursor-rules/`](cursor-rules/) ディレクトリに用意されています。
+
+### インストール
+
+```bash
+mkdir -p .cursor/rules
+cp android-claude-code-skills/cursor-rules/*.mdc .cursor/rules/
+```
+
+または curl でダウンロード：
+
+```bash
+mkdir -p .cursor/rules
+curl -o .cursor/rules/android-translation-sync.mdc \
+  https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/android-translation-sync.mdc
+curl -o .cursor/rules/android-change-review.mdc \
+  https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/android-change-review.mdc
+```
+
+### 使い方
+
+両方のルールは **Agent-requested** タイプ —— Cursor AI がリクエストに基づいて自動的に適用します：
+
+```text
+翻訳を Excel から同期してください: ./translations/strings.xlsx
+
+ステージされた変更を Android のクラッシュリスクと境界条件の観点でレビューしてください。
+```
+
+---
+
+## Gemini CLI でのスキルの使用
+
+変換済みのファイルが [`gemini-rules/`](gemini-rules/) ディレクトリにあります。2 つの統合方法を提供します。
+
+### 方法 1 — GEMINI.md（推奨）
+
+```bash
+mkdir -p .gemini/skills
+cp android-claude-code-skills/gemini-rules/*.md .gemini/skills/
+
+# GEMINI.md に参照を追加
+cat >> GEMINI.md << 'EOF'
+@.gemini/skills/android-translation-sync.md
+@.gemini/skills/android-change-review.md
+EOF
+```
+
+追加後は自然言語でタスクを説明するだけです：
+
+```text
+翻訳を Excel から同期してください: ./translations/strings.xlsx
+
+ステージされた変更のクラッシュリスクをレビューしてください。
+```
+
+### 方法 2 — カスタム Slash コマンド
+
+```bash
+# グローバルインストール（全プロジェクトで利用可能）
+mkdir -p ~/.gemini/commands
+cp android-claude-code-skills/gemini-rules/commands/*.toml ~/.gemini/commands/
+```
+
+```text
+/translation-sync ./translations/strings.xlsx
+/change-review staged
+```
+
+### 4 プラットフォーム比較
+
+| 機能 | Claude Code | Codex CLI | Gemini CLI | Cursor |
+|---|---|---|---|---|
+| ワークフロー知識 | ✅ 完全 | ✅ 完全 | ✅ 完全 | ✅ 完全 |
+| スキル形式 | SKILL.md | SKILL.md（ネイティブ）| GEMINI.md / `.md` | `.mdc` rules |
+| スキルトリガー | `/plugin` + slash | `$skill-name` または自動 | 自然言語 | 自然言語 |
+| 説明からの自動検出 | ✅ | ✅（`allow_implicit_invocation`）| ✅ | ✅ |
+| コンテキストファイル | CLAUDE.md | AGENTS.md | GEMINI.md | `.cursor/rules/` |
+| Stop Hook / ライフサイクルフック | ✅ | ❌ | ❌ | ❌ |
+| マルチエージェント orchestration | ✅ | ❌ | ❌ | ❌ |
 
 ---
 
