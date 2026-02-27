@@ -9,6 +9,7 @@
 - [安装](#安装)
 - [更新插件](#更新插件)
 - [可用技能](#可用技能)
+  - [Android 项目分析器](#android-项目分析器)
   - [Android 多语言翻译同步](#android-多语言翻译同步)
   - [Android 代码变更审查](#android-代码变更审查android-change-review)
   - [APK 分析器](#apk-分析器)
@@ -29,7 +30,7 @@
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
 - **作者**: aihip
 - **许可证**: MIT
-- **当前版本**: 1.6.0
+- **当前版本**: 1.7.0
 - **更新日志**: [CHANGELOG.md](CHANGELOG.md)
 
 ## OpenAI Codex 兼容性
@@ -80,12 +81,44 @@
 /plugin list
 
 # 您应该看到：
-# android-claude-code-skills  v1.4.0
+# android-claude-code-skills  v1.7.0
 ```
 
 与 GitHub 上的最新版本对比：https://github.com/aihip/android-claude-code-skills/blob/main/.claude-plugin/plugin.json
 
 ## 可用技能
+
+### Android 项目分析器
+
+分析 Android 项目代码库，生成涵盖结构、功能、架构、依赖、代码质量和潜在问题的完整技术报告。
+
+**使用方法：**
+
+```
+请分析当前目录下的 Android 项目。
+```
+
+**功能特性：**
+- 项目概况：applicationId、SDK 版本、模块结构、文件数量
+- 架构检测：MVVM / MVI / Clean Architecture 自动识别、DI 框架、导航方式、Compose vs View
+- 功能清单：从模块、包名、Activity/Screen 入口自动提取
+- 完整依赖列表，含版本，按分类分组（UI / 网络 / DI / 数据库 / 测试 / 其他）
+- 代码质量指标：测试文件数、TODO/FIXME 计数、`!!` 强制解包数量、大文件 Top 5
+- 潜在问题扫描：硬编码密钥、明文 HTTP、内存泄漏、崩溃风险、过时库
+- 按优先级排列的改进建议
+
+**触发词：**
+- `analyze android project`
+- `analyze this project`
+- `project architecture review`
+- `dependency audit`
+- `code quality review`
+- `分析安卓项目`
+- `项目架构分析`
+- `依赖审计`
+- `代码质量分析`
+
+---
 
 ### Android 多语言翻译同步
 
@@ -383,6 +416,7 @@ Codex 从 `.agents/skills/` 目录发现技能，将技能复制到用户级或�
 ```bash
 # 用户级安装 —— 所有项目均可用（推荐）
 mkdir -p ~/.agents/skills
+cp -r skills/android-project-analyzer ~/.agents/skills/
 cp -r skills/android-translation-sync ~/.agents/skills/
 cp -r skills/android-change-review ~/.agents/skills/
 cp -r skills/apk-analyzer ~/.agents/skills/
@@ -391,6 +425,7 @@ cp -r skills/apk-analyzer ~/.agents/skills/
 ```bash
 # 项目级安装 —— 仅当前项目可用
 mkdir -p .agents/skills
+cp -r skills/android-project-analyzer .agents/skills/
 cp -r skills/android-translation-sync .agents/skills/
 cp -r skills/android-change-review .agents/skills/
 cp -r skills/apk-analyzer .agents/skills/
@@ -399,6 +434,7 @@ cp -r skills/apk-analyzer .agents/skills/
 或使用符号链接，自动跟随仓库更新：
 
 ```bash
+ln -s "$(pwd)/skills/android-project-analyzer" ~/.agents/skills/
 ln -s "$(pwd)/skills/android-translation-sync" ~/.agents/skills/
 ln -s "$(pwd)/skills/android-change-review" ~/.agents/skills/
 ln -s "$(pwd)/skills/apk-analyzer" ~/.agents/skills/
@@ -409,6 +445,8 @@ ln -s "$(pwd)/skills/apk-analyzer" ~/.agents/skills/
 **显式调用**（输入 `$` 打开技能选择器）：
 
 ```text
+$android-project-analyzer  分析当前项目
+
 $android-translation-sync  ./translations/strings.xlsx
 
 $android-change-review  review my staged changes
@@ -419,6 +457,8 @@ $apk-analyzer  ./build/outputs/apk/release/app-release.apk
 **隐式调用** —— Codex 根据描述自动匹配技能（`allow_implicit_invocation: true`）：
 
 ```text
+分析这个 Android 项目的架构和依赖。
+
 请帮我同步多语言翻译，Excel 文件是 ./translations/strings.xlsx
 
 帮我检查当前已暂存的代码，重点看 Android 崩溃风险和边界条件。
@@ -431,7 +471,7 @@ $apk-analyzer  ./build/outputs/apk/release/app-release.apk
 ```bash
 # 在 Codex CLI 会话中执行
 /skills
-# 应看到：android-translation-sync、android-change-review、apk-analyzer
+# 应看到：android-project-analyzer、android-translation-sync、android-change-review、apk-analyzer
 ```
 
 ---
@@ -439,6 +479,15 @@ $apk-analyzer  ./build/outputs/apk/release/app-release.apk
 ## 在 Cursor 中使用技能
 
 预转换好的 `.mdc` 规则文件位于 [`cursor-rules/`](cursor-rules/) 目录。
+
+### 可用规则
+
+| 文件 | 技能 |
+|---|---|
+| `cursor-rules/android-project-analyzer.mdc` | Android 项目分析器 |
+| `cursor-rules/android-translation-sync.mdc` | Android 多语言翻译同步 |
+| `cursor-rules/android-change-review.mdc` | Android 代码变更审查 |
+| `cursor-rules/apk-analyzer.mdc` | APK 分析器 |
 
 ### 安装
 
@@ -451,6 +500,8 @@ cp android-claude-code-skills/cursor-rules/*.mdc .cursor/rules/
 
 ```bash
 mkdir -p .cursor/rules
+curl -o .cursor/rules/android-project-analyzer.mdc \
+  https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/android-project-analyzer.mdc
 curl -o .cursor/rules/android-translation-sync.mdc \
   https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/android-translation-sync.mdc
 curl -o .cursor/rules/android-change-review.mdc \
@@ -464,6 +515,8 @@ curl -o .cursor/rules/apk-analyzer.mdc \
 所有规则均为 **Agent-requested** 类型，Cursor AI 会根据请求自动激活：
 
 ```text
+分析这个 Android 项目的架构和依赖。
+
 请帮我同步多语言翻译，Excel 文件是 ./translations/strings.xlsx
 
 帮我检查已暂存的代码，重点看 Android 崩溃风险和边界条件。
@@ -485,6 +538,7 @@ cp android-claude-code-skills/gemini-rules/*.md .gemini/skills/
 
 # 在 GEMINI.md 中添加引用
 cat >> GEMINI.md << 'EOF'
+@.gemini/skills/android-project-analyzer.md
 @.gemini/skills/android-translation-sync.md
 @.gemini/skills/android-change-review.md
 @.gemini/skills/apk-analyzer.md
@@ -510,6 +564,7 @@ cp android-claude-code-skills/gemini-rules/commands/*.toml ~/.gemini/commands/
 ```
 
 ```text
+/project-analyzer
 /translation-sync ./translations/strings.xlsx
 /change-review staged
 /apk-analyzer ./build/outputs/apk/release/app-release.apk
@@ -586,7 +641,14 @@ android-claude-code-skills/
 ├── .claude-plugin/
 │   ├── plugin.json         # 插件清单
 │   └── marketplace.json    # 市场配置
+├── .github/
+│   └── workflows/
+│       ├── validate-skills.yml   # CI：推送时自动校验技能
+│       └── publish-npm.yml       # CI：打版本 tag 时自动发布 npm
 ├── skills/                 # 可用技能
+│   ├── android-project-analyzer/
+│   │   ├── SKILL.md
+│   │   └── agents/openai.yaml
 │   ├── android-translation-sync/
 │   │   ├── SKILL.md
 │   │   └── agents/openai.yaml
@@ -599,13 +661,31 @@ android-claude-code-skills/
 │   └── template/
 │       ├── SKILL.md        # 兼容 Codex 的技能模板
 │       └── agents/openai.yaml
-├── CLAUDE.md               # Project overview (English)
+├── cursor-rules/           # Cursor IDE 规则（.mdc）
+│   ├── android-project-analyzer.mdc
+│   ├── android-translation-sync.mdc
+│   ├── android-change-review.mdc
+│   └── apk-analyzer.mdc
+├── gemini-rules/           # Gemini CLI 规则
+│   ├── android-project-analyzer.md
+│   ├── android-translation-sync.md
+│   ├── android-change-review.md
+│   ├── apk-analyzer.md
+│   └── commands/           # Gemini slash 命令（.toml）
+│       ├── project-analyzer.toml
+│       ├── translation-sync.toml
+│       ├── change-review.toml
+│       └── apk-analyzer.toml
+├── llms.txt                # AI 爬虫可发现性文件
+├── package.json            # npm 注册表元数据
+├── AGENTS.md               # Agent 指令（OpenAI Codex）
+├── CLAUDE.md               # 项目概述（English）
 ├── CLAUDE_CN.md            # 项目概述（中文）
 ├── CLAUDE_JP.md            # プロジェクト概要（日本語）
-├── README.md               # Documentation (English)
+├── README.md               # 说明文档（English）
 ├── README_CN.md            # 说明文档（中文）
 ├── README_JP.md            # ドキュメント（日本語）
-├── CHANGELOG.md            # Changelog (English)
+├── CHANGELOG.md            # 更新日志（English）
 └── CHANGELOG_JP.md         # 変更履歴（日本語）
 ```
 

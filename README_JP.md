@@ -9,6 +9,7 @@
 - [インストール](#インストール)
 - [プラグインの更新](#プラグインの更新)
 - [利用可能なスキル](#利用可能なスキル)
+  - [Android プロジェクトアナライザー](#android-プロジェクトアナライザー)
   - [Android 多言語翻訳同期](#android-多言語翻訳同期)
   - [Android コード変更レビュー](#android-コード変更レビュー)
   - [APK アナライザー](#apk-アナライザー)
@@ -29,7 +30,7 @@
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
 - **作者**: aihip
 - **ライセンス**: MIT
-- **現在のバージョン**: 1.6.0
+- **現在のバージョン**: 1.7.0
 - **変更履歴**: [CHANGELOG.md](CHANGELOG.md)
 
 ## OpenAI Codex 互換性
@@ -80,12 +81,44 @@
 /plugin list
 
 # 以下のように表示されるはずです：
-# android-claude-code-skills  v1.4.0
+# android-claude-code-skills  v1.7.0
 ```
 
 GitHub 上の最新バージョンと比較: https://github.com/aihip/android-claude-code-skills/blob/main/.claude-plugin/plugin.json
 
 ## 利用可能なスキル
+
+### Android プロジェクトアナライザー
+
+Android プロジェクトのコードベースを解析し、構成・機能・アーキテクチャ・依存関係・コード品質・潜在的な問題を網羅した技術レポートを生成します。
+
+**使い方：**
+
+```
+現在のディレクトリの Android プロジェクトを分析してください。
+```
+
+**機能：**
+- プロジェクト概要：applicationId、SDK バージョン、モジュール構成、ファイル数
+- アーキテクチャ検出：MVVM / MVI / Clean Architecture の自動識別、DI フレームワーク、ナビゲーション、Compose vs View
+- 機能一覧：モジュール・パッケージ・Activity/Screen エントリポイントから自動抽出
+- 完全な依存関係リスト（バージョン付き、UI / ネットワーク / DI / データベース / テスト 等のカテゴリ別）
+- コード品質指標：テストファイル数、TODO/FIXME カウント、`!!` 強制アンラップ数、大規模ファイル Top 5
+- 潜在的な問題スキャン：ハードコードされた認証情報、平文 HTTP、メモリリーク、クラッシュリスク、レガシーライブラリ
+- 優先度付き改善提案
+
+**トリガーフレーズ：**
+- `analyze android project`
+- `analyze this project`
+- `project architecture review`
+- `dependency audit`
+- `code quality review`
+- `分析安卓项目`
+- `プロジェクト分析`
+- `アーキテクチャレビュー`
+- `依存関係の監査`
+
+---
 
 ### Android 多言語翻訳同期
 
@@ -383,6 +416,7 @@ Codex は `.agents/skills/` ディレクトリからスキルを検出します�
 ```bash
 # ユーザーレベル —— すべてのプロジェクトで利用可能（推奨）
 mkdir -p ~/.agents/skills
+cp -r skills/android-project-analyzer ~/.agents/skills/
 cp -r skills/android-translation-sync ~/.agents/skills/
 cp -r skills/android-change-review ~/.agents/skills/
 cp -r skills/apk-analyzer ~/.agents/skills/
@@ -391,6 +425,7 @@ cp -r skills/apk-analyzer ~/.agents/skills/
 ```bash
 # プロジェクトレベル —— このプロジェクトのみ
 mkdir -p .agents/skills
+cp -r skills/android-project-analyzer .agents/skills/
 cp -r skills/android-translation-sync .agents/skills/
 cp -r skills/android-change-review .agents/skills/
 cp -r skills/apk-analyzer .agents/skills/
@@ -399,6 +434,7 @@ cp -r skills/apk-analyzer .agents/skills/
 リポジトリの更新に自動的に追従するシンボリックリンクを使用することもできます：
 
 ```bash
+ln -s "$(pwd)/skills/android-project-analyzer" ~/.agents/skills/
 ln -s "$(pwd)/skills/android-translation-sync" ~/.agents/skills/
 ln -s "$(pwd)/skills/android-change-review" ~/.agents/skills/
 ln -s "$(pwd)/skills/apk-analyzer" ~/.agents/skills/
@@ -409,6 +445,8 @@ ln -s "$(pwd)/skills/apk-analyzer" ~/.agents/skills/
 **明示的な呼び出し**（`$` を入力してスキルセレクターを開く）：
 
 ```text
+$android-project-analyzer  現在のプロジェクトを分析する
+
 $android-translation-sync  ./translations/strings.xlsx
 
 $android-change-review  review my staged changes
@@ -419,6 +457,8 @@ $apk-analyzer  ./build/outputs/apk/release/app-release.apk
 **暗黙的な呼び出し** —— Codex が説明に基づいてスキルを自動選択（`allow_implicit_invocation: true`）：
 
 ```text
+この Android プロジェクトのアーキテクチャと依存関係を分析してください。
+
 翻訳を Excel から同期してください: ./translations/strings.xlsx
 
 ステージされた変更を Android のクラッシュリスクと境界条件の観点でレビューしてください。
@@ -431,7 +471,7 @@ $apk-analyzer  ./build/outputs/apk/release/app-release.apk
 ```bash
 # Codex CLI セッション内で実行
 /skills
-# 以下が表示されるはずです: android-translation-sync, android-change-review, apk-analyzer
+# 以下が表示されるはずです: android-project-analyzer, android-translation-sync, android-change-review, apk-analyzer
 ```
 
 ---
@@ -439,6 +479,15 @@ $apk-analyzer  ./build/outputs/apk/release/app-release.apk
 ## Cursor でのスキルの使用
 
 変換済みの `.mdc` ルールファイルが [`cursor-rules/`](cursor-rules/) ディレクトリに用意されています。
+
+### 利用可能なルール
+
+| ファイル | スキル |
+|---|---|
+| `cursor-rules/android-project-analyzer.mdc` | Android プロジェクトアナライザー |
+| `cursor-rules/android-translation-sync.mdc` | Android 多言語翻訳同期 |
+| `cursor-rules/android-change-review.mdc` | Android コード変更レビュー |
+| `cursor-rules/apk-analyzer.mdc` | APK アナライザー |
 
 ### インストール
 
@@ -451,6 +500,8 @@ cp android-claude-code-skills/cursor-rules/*.mdc .cursor/rules/
 
 ```bash
 mkdir -p .cursor/rules
+curl -o .cursor/rules/android-project-analyzer.mdc \
+  https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/android-project-analyzer.mdc
 curl -o .cursor/rules/android-translation-sync.mdc \
   https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/android-translation-sync.mdc
 curl -o .cursor/rules/android-change-review.mdc \
@@ -464,6 +515,8 @@ curl -o .cursor/rules/apk-analyzer.mdc \
 すべてのルールは **Agent-requested** タイプ —— Cursor AI がリクエストに基づいて自動的に適用します：
 
 ```text
+この Android プロジェクトのアーキテクチャと依存関係を分析してください。
+
 翻訳を Excel から同期してください: ./translations/strings.xlsx
 
 ステージされた変更を Android のクラッシュリスクと境界条件の観点でレビューしてください。
@@ -485,6 +538,7 @@ cp android-claude-code-skills/gemini-rules/*.md .gemini/skills/
 
 # GEMINI.md に参照を追加
 cat >> GEMINI.md << 'EOF'
+@.gemini/skills/android-project-analyzer.md
 @.gemini/skills/android-translation-sync.md
 @.gemini/skills/android-change-review.md
 @.gemini/skills/apk-analyzer.md
@@ -510,6 +564,7 @@ cp android-claude-code-skills/gemini-rules/commands/*.toml ~/.gemini/commands/
 ```
 
 ```text
+/project-analyzer
 /translation-sync ./translations/strings.xlsx
 /change-review staged
 /apk-analyzer ./build/outputs/apk/release/app-release.apk
@@ -586,7 +641,14 @@ android-claude-code-skills/
 ├── .claude-plugin/
 │   ├── plugin.json         # プラグインマニフェスト
 │   └── marketplace.json    # マーケットプレイス設定
+├── .github/
+│   └── workflows/
+│       ├── validate-skills.yml   # CI：プッシュ時にスキルを自動検証
+│       └── publish-npm.yml       # CI：バージョンタグ時に npm へ自動公開
 ├── skills/                 # 利用可能なスキル
+│   ├── android-project-analyzer/
+│   │   ├── SKILL.md
+│   │   └── agents/openai.yaml
 │   ├── android-translation-sync/
 │   │   ├── SKILL.md
 │   │   └── agents/openai.yaml
@@ -599,12 +661,32 @@ android-claude-code-skills/
 │   └── template/
 │       ├── SKILL.md        # Codex 互換スキルテンプレート
 │       └── agents/openai.yaml
+├── cursor-rules/           # Cursor IDE ルール（.mdc）
+│   ├── android-project-analyzer.mdc
+│   ├── android-translation-sync.mdc
+│   ├── android-change-review.mdc
+│   └── apk-analyzer.mdc
+├── gemini-rules/           # Gemini CLI ルール
+│   ├── android-project-analyzer.md
+│   ├── android-translation-sync.md
+│   ├── android-change-review.md
+│   ├── apk-analyzer.md
+│   └── commands/           # Gemini スラッシュコマンド（.toml）
+│       ├── project-analyzer.toml
+│       ├── translation-sync.toml
+│       ├── change-review.toml
+│       └── apk-analyzer.toml
+├── llms.txt                # AI クローラー向け発見性ファイル
+├── package.json            # npm レジストリメタデータ
+├── AGENTS.md               # エージェント指示（OpenAI Codex）
 ├── CLAUDE.md               # プロジェクト概要（英語）
 ├── CLAUDE_CN.md            # 项目概述（中文）
 ├── CLAUDE_JP.md            # プロジェクト概要（日本語）
 ├── README.md               # ドキュメント（英語）
 ├── README_CN.md            # 说明文档（中文）
-└── README_JP.md            # このファイル（日本語）
+├── README_JP.md            # このファイル（日本語）
+├── CHANGELOG.md            # 変更履歴（英語）
+└── CHANGELOG_JP.md         # 変更履歴（日本語）
 ```
 
 ## コントリビューション
