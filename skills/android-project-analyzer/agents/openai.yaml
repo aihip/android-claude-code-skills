@@ -1,0 +1,7 @@
+interface:
+  display_name: "Android Project Analyzer"
+  short_description: "Analyze an Android project: structure, features, architecture, dependencies, code quality, and potential issues. Produces a structured technical report."
+  default_prompt: "Analyze the Android project in the current directory. Produce a full report covering: project overview (SDK versions, language), module structure, feature inventory, architecture pattern, all dependencies with versions, code quality metrics, and potential issues grouped by severity."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,19 @@
+[command]
+name = "project-analyzer"
+description = "Analyze the Android project in the current directory and produce a full technical report: structure, features, architecture, dependencies, code quality, and potential issues."
+
+[prompt]
+template = """
+Analyze the Android project in the current directory using the android-project-analyzer skill.
+
+Produce a comprehensive technical report covering:
+1. Project overview (applicationId, SDK versions, language, module count)
+2. Architecture pattern and layer separation
+3. Feature inventory with entry points
+4. All dependencies with versions grouped by category
+5. Code quality metrics (test coverage surface, TODO count, force-unwrap count, large files)
+6. Potential issues grouped by severity (CRITICAL / HIGH / MEDIUM / INFO) with file:line references
+7. Top 5 prioritized recommendations
+
+Start by reading settings.gradle / settings.gradle.kts, then AndroidManifest.xml, then build files.
+"""

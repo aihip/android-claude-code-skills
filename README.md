@@ -19,6 +19,7 @@
 - [Installation](#installation)
 - [Updating Plugin](#updating-plugin)
 - [Available Skills](#available-skills)
+  - [Android Project Analyzer](#android-project-analyzer)
   - [Android Translation Sync](#android-translation-sync)
   - [Android Change Review](#android-change-review)
   - [APK Analyzer](#apk-analyzer)
@@ -96,6 +97,39 @@ After updating, check the version:
 Compare with the latest version on GitHub: https://github.com/aihip/android-claude-code-skills/blob/main/.claude-plugin/plugin.json
 
 ## Available Skills
+
+### Android Project Analyzer
+
+Analyze an Android project codebase and produce a comprehensive technical report covering structure, features, architecture, dependencies, code quality, and potential issues.
+
+**Usage:**
+
+```
+Analyze the Android project in the current directory.
+```
+
+**Features:**
+- Project overview: applicationId, SDK versions, module structure, file counts
+- Architecture detection: MVVM / MVI / Clean Architecture, DI framework, navigation, Compose vs View
+- Feature inventory: entry points, packages, deep links
+- Full dependency list with versions grouped by category (UI / Network / DI / Database / Testing)
+- Code quality metrics: test coverage surface, TODO/FIXME count, force-unwrap (`!!`) count, large files
+- Potential issues: hardcoded secrets, cleartext HTTP, memory leaks, crash risks, outdated libraries
+- Prioritized recommendations
+
+**Trigger phrases:**
+- `analyze android project`
+- `analyze this project`
+- `project architecture review`
+- `dependency audit`
+- `code quality review`
+- `project health check`
+- `分析安卓项目`
+- `项目架构分析`
+- `依赖审计`
+- `代码质量分析`
+
+---
 
 ### Android Translation Sync
 

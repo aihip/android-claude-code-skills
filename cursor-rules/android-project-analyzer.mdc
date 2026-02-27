@@ -1,0 +1,55 @@
+---
+description: Analyze an Android project codebase to produce a comprehensive technical report covering project structure, features, architecture pattern, all dependencies with versions, code quality indicators, and potential issues. Activate when asked to analyze an Android project, review its architecture, audit dependencies, assess code quality, or produce a project health report.
+globs: ["**/build.gradle", "**/build.gradle.kts", "**/settings.gradle", "**/settings.gradle.kts", "**/AndroidManifest.xml"]
+alwaysApply: false
+---
+
+# Android Project Analyzer
+
+Produce a full technical report by following these steps in order.
+
+## Step 1 — Locate Project Root
+
+Check for `settings.gradle`, `gradlew`, `build.gradle` / `build.gradle.kts` in the workspace root. If not found, ask the user to confirm the project root.
+
+## Step 2 — Project Structure & Modules
+
+Read `settings.gradle` or `settings.gradle.kts` to list all Gradle modules. Count `.kt` and `.java` source files. Map the top-level directory structure (2 levels, excluding `build/` and `.gradle/`).
+
+## Step 3 — App Metadata
+
+Read `app/src/main/AndroidManifest.xml`. Extract: `applicationId`, `minSdkVersion`, `targetSdkVersion`, `compileSdkVersion`, all permissions (classify Dangerous / Normal / Signature), exported components, `debuggable`, `allowBackup`, `usesCleartextTraffic`.
+
+## Step 4 — Build Configuration & Dependencies
+
+Read `gradle/libs.versions.toml` (version catalog), root `build.gradle[.kts]`, and `app/build.gradle[.kts]`. For every declared dependency extract: group, artifact, version, scope (implementation / api / testImplementation / etc.), and category (UI / Network / DI / Database / Testing / etc.). Also record: Kotlin version, AGP version, JVM target, build types, ProGuard/R8 status, buildFeatures (Compose, ViewBinding, DataBinding).
+
+## Step 5 — Architecture Detection
+
+Search source files for: ViewModel / StateFlow / LiveData (MVVM signals), UiState / Reducer / MVI signals, UseCase / Repository / DataSource (Clean Architecture layers), @HiltAndroidApp / startKoin / @Module (DI framework), NavController / NavHost (navigation), @Composable count (Compose vs View system).
+
+## Step 6 — Feature Inventory
+
+Identify features from: multi-module settings, feature-named packages, Activity subclasses, top-level Screen composables, deep link / route declarations.
+
+## Step 7 — Code Quality Indicators
+
+Count: unit test files, instrumented test files, TODO/FIXME markers, `!!` force-unwrap occurrences, files over 500 lines. List the 5 largest files.
+
+## Step 8 — Potential Issues
+
+Check for: hardcoded secrets/passwords, cleartext HTTP URLs, sensitive data in logs, unsafe WebView config, `!!` crash risks, `runBlocking` on main thread, static Context references (memory leaks), outdated/legacy libraries (RxJava, AsyncTask, support library instead of AndroidX).
+
+## Output Report Structure
+
+```
+## 📱 Project Overview         — SDK versions, language, file counts
+## 🏗️ Architecture             — pattern, layers, DI, navigation, async
+## ✨ Features                  — table: feature / entry point / package
+## 📦 Dependencies             — tables per category with versions
+## 📊 Code Quality             — metrics table + top 5 largest files
+## ⚠️ Potential Issues         — CRITICAL / HIGH / MEDIUM / INFO
+## 💡 Summary & Recommendations — top 5 prioritized action items
+```
+
+Always include file paths and line numbers for concrete findings. State "N/A — reason" for any metric that cannot be determined. Do not fabricate dependency versions.
