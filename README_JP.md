@@ -1,6 +1,6 @@
 # Android Claude Code Skills
 
-> OpenAI Codex と Claude Code に対応した、再利用可能な Android 開発スキルのリポジトリ。
+> **Claude Code**、**OpenAI Codex**、**Gemini CLI**、**Cursor** に対応した、再利用可能な Android 開発スキルのリポジトリ。
 
 ## 目次
 

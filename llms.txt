@@ -1,0 +1,23 @@
+# Android Claude Code Skills
+
+> Reusable Android development skills for AI coding assistants.
+> Compatible with Claude Code, OpenAI Codex, Gemini CLI, and Cursor.
+
+## Skills
+
+- [Android Translation Sync](skills/android-translation-sync/SKILL.md): Sync Android strings.xml translations from Excel spreadsheets across all language variants.
+- [Android Change Review](skills/android-change-review/SKILL.md): Review staged git changes or commits for Android crash risks, boundary conditions, and regressions.
+- [APK Analyzer](skills/apk-analyzer/SKILL.md): Parse and audit Android APK files — extract metadata, classify permissions by risk, verify signatures, detect SDKs, produce security report.
+
+## Platform Integration
+
+- [Claude Code](CLAUDE.md): Install via `/plugin marketplace add aihip/android-claude-code-skills`
+- [OpenAI Codex](AGENTS.md): Copy skills to `~/.agents/skills/` or `.agents/skills/`
+- [Gemini CLI](GEMINI.md): Import via `@path/to/gemini-rules/*.md` in `GEMINI.md`
+- [Cursor](cursor-rules/): Copy `.mdc` files to `.cursor/rules/`
+
+## Repository
+
+- GitHub: https://github.com/aihip/android-claude-code-skills
+- License: MIT
+- Author: aihip

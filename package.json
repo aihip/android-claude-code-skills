@@ -1,0 +1,55 @@
+{
+  "name": "android-claude-code-skills",
+  "version": "1.6.0",
+  "description": "Reusable Android development skills for Claude Code, OpenAI Codex, Gemini CLI, and Cursor — translation sync, code review, APK analyzer",
+  "keywords": [
+    "android",
+    "kotlin",
+    "jetpack-compose",
+    "claude-code",
+    "claude",
+    "anthropic",
+    "openai-codex",
+    "codex",
+    "gemini",
+    "gemini-cli",
+    "cursor",
+    "ai-tools",
+    "llm",
+    "ai-agent",
+    "skill",
+    "plugin",
+    "code-review",
+    "apk",
+    "apk-analyzer",
+    "android-security",
+    "android-development",
+    "mobile",
+    "translation",
+    "strings-xml",
+    "multilingual"
+  ],
+  "author": "aihip",
+  "license": "MIT",
+  "homepage": "https://github.com/aihip/android-claude-code-skills#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aihip/android-claude-code-skills.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aihip/android-claude-code-skills/issues"
+  },
+  "files": [
+    "skills/",
+    "cursor-rules/",
+    "gemini-rules/",
+    ".claude-plugin/",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "GEMINI.md",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=16"
+  }
+}

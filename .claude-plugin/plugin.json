@@ -15,7 +15,24 @@
     "compose",
     "translation",
     "strings",
-    "multilingual"
+    "multilingual",
+    "claude-code",
+    "claude",
+    "codex",
+    "openai-codex",
+    "gemini",
+    "gemini-cli",
+    "cursor",
+    "ai",
+    "llm",
+    "skill",
+    "plugin",
+    "code-review",
+    "apk",
+    "apk-analyzer",
+    "security",
+    "android-development",
+    "mobile"
   ],
   "skills": ["./skills/"]
 }

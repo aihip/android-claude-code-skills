@@ -4,13 +4,13 @@
     "name": "aihip"
   },
   "metadata": {
-    "description": "Reusable Android development skills compatible with OpenAI Codex and Claude Code"
+    "description": "Reusable Android development skills for Claude Code, OpenAI Codex, Gemini CLI, and Cursor"
   },
   "plugins": [
     {
       "name": "android-claude-code-skills",
       "source": "./",
-      "description": "Reusable Android development skills for OpenAI Codex and Claude Code",
+      "description": "Reusable Android development skills for Claude Code, OpenAI Codex, Gemini CLI, and Cursor",
       "author": {
         "name": "aihip"
       },
@@ -21,14 +21,40 @@
         "android",
         "kotlin",
         "jetpack",
-        "compose"
+        "compose",
+        "claude-code",
+        "claude",
+        "codex",
+        "openai-codex",
+        "gemini",
+        "gemini-cli",
+        "cursor",
+        "ai",
+        "llm",
+        "skill",
+        "plugin",
+        "code-review",
+        "apk",
+        "apk-analyzer",
+        "security",
+        "android-development",
+        "mobile"
       ],
       "category": "mobile",
       "tags": [
         "android",
         "kotlin",
         "jetpack",
-        "compose"
+        "compose",
+        "claude-code",
+        "codex",
+        "gemini",
+        "cursor",
+        "ai",
+        "skill",
+        "apk",
+        "security",
+        "mobile"
       ]
     }
   ]

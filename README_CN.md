@@ -1,6 +1,6 @@
 # Android Claude Code Skills
 
-> 面向 Android 开发场景的可复用 Skills 仓库，兼容 OpenAI Codex 与 Claude Code。
+> 面向 Android 开发场景的可复用 Skills 仓库，兼容 **Claude Code**、**OpenAI Codex**、**Gemini CLI** 与 **Cursor**。
 
 ## 目录
 

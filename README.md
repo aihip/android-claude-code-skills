@@ -2,7 +2,15 @@
 
 **Languages:** English | [中文](README_CN.md) | [日本語](README_JP.md)
 
-> A repository of reusable Android development skills, compatible with OpenAI Codex and Claude Code.
+[![npm](https://img.shields.io/npm/v/android-claude-code-skills)](https://www.npmjs.com/package/android-claude-code-skills)
+[![Validate Skills](https://github.com/aihip/android-claude-code-skills/actions/workflows/validate-skills.yml/badge.svg)](https://github.com/aihip/android-claude-code-skills/actions/workflows/validate-skills.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Claude Code](https://img.shields.io/badge/Claude_Code-plugin-blue)](https://github.com/aihip/android-claude-code-skills)
+[![OpenAI Codex](https://img.shields.io/badge/OpenAI_Codex-compatible-green)](https://github.com/aihip/android-claude-code-skills)
+[![Gemini CLI](https://img.shields.io/badge/Gemini_CLI-compatible-orange)](https://github.com/aihip/android-claude-code-skills)
+[![Cursor](https://img.shields.io/badge/Cursor-rules-purple)](https://github.com/aihip/android-claude-code-skills)
+
+> A repository of reusable Android development skills, compatible with **Claude Code**, **OpenAI Codex**, **Gemini CLI**, and **Cursor**.
 
 ## Table of Contents
 
