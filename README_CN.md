@@ -16,6 +16,7 @@
 - [第三方技能](#第三方技能)
   - [review-loop — 自动化代码审查循环](#review-loop--自动化代码审查循环)
   - [claude-codex — 多 AI 编排流水线](#claude-codex--多-ai-编排流水线)
+  - [Android AI Skills — 生产级 Android 最佳实践](#android-ai-skills--生产级-android-最佳实践)
 - [在 Codex CLI 中使用技能](#在-codex-cli-中使用技能)
 - [在 Cursor 中使用技能](#在-cursor-中使用技能)
 - [在 Gemini CLI 中使用技能](#在-gemini-cli-中使用技能)
@@ -402,6 +403,50 @@ echo ".task" >> .gitignore
 | 自动重试次数 | 3 次 |
 
 **许可证：** GPL-3.0，需注明来源（作者：Z-M-Huang）。
+
+---
+
+### Android AI Skills — 生产级 Android 最佳实践
+
+> **来源**: [noloman/Android-AI-skills](https://github.com/noloman/Android-AI-skills)
+
+包含 **23 个生产级 AI Skill** 的完整集合，覆盖 Android、Kotlin Multiplatform (KMP) 和 Compose Multiplatform 项目。兼容 10 款 AI 工具：Claude Code、Codex、GitHub Copilot、Cursor、Windsurf、Cline、JetBrains AI、Amazon Q、Aider 和 OpenCode。
+
+**Skill 分类：**
+
+| 分类 | 技能 |
+|---|---|
+| 项目类型 | `compose-best-practices`、`kmp-architecture-best-practices`、`compose-multiplatform-best-practices` |
+| 代码质量 | `kotlin-coroutines-best-practices`、`android-testing-best-practices`、`android-accessibility-best-practices` |
+| 安全与隐私 | `android-security-best-practices`、`android-auth-identity` |
+| 性能与基础设施 | `android-performance-best-practices`、`android-build-infra`、`android-ci-cd` |
+| 架构 | `android-dependency-injection`、`android-navigation-best-practices`、`android-background-work` |
+| 数据与网络 | `android-networking`、`android-local-storage` |
+| 平台功能 | `android-media`、`android-maps-location`、`android-ml-ondevice` |
+| 变现 | `play-store-readiness`、`play-billing-best-practices`、`revenuecat-best-practices` |
+| 第三方服务 | `firebase-best-practices` |
+
+**企业模式**：检测到 `detekt.yml`、`lint.xml` 或 `ktlint`/`spotless` 配置时自动激活，强制零新增违规。
+
+**安装方式：**
+
+```bash
+# 全局安装（Codex + Claude Code + OpenCode）
+npx android-ai-skills@latest
+
+# 项目级安装（全部 10 款工具）
+npx android-ai-skills@latest init
+
+# 指定工具安装
+npx android-ai-skills@latest init --tools claude,codex
+npx android-ai-skills@latest init --tools cursor,copilot
+
+# 仅安装特定技能集
+npx android-ai-skills@latest --android-only
+npx android-ai-skills@latest --kmp-only
+```
+
+**许可证：** MIT
 
 ---
 

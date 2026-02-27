@@ -16,6 +16,7 @@
 - [サードパーティスキル](#サードパーティスキル)
   - [review-loop — 自動コードレビューループ](#review-loop--自動コードレビューループ)
   - [claude-codex — マルチ AI オーケストレーションパイプライン](#claude-codex--マルチ-ai-オーケストレーションパイプライン)
+  - [Android AI Skills — プロダクション品質の Android ベストプラクティス](#android-ai-skills--プロダクション品質の-android-ベストプラクティス)
 - [Codex CLI でのスキルの使用](#codex-cli-でのスキルの使用)
 - [Cursor でのスキルの使用](#cursor-でのスキルの使用)
 - [Gemini CLI でのスキルの使用](#gemini-cli-でのスキルの使用)
@@ -402,6 +403,50 @@ echo ".task" >> .gitignore
 | 自動リトライ回数 | 3 回 |
 
 **ライセンス:** GPL-3.0（帰属表示必須、著者：Z-M-Huang）。
+
+---
+
+### Android AI Skills — プロダクション品質の Android ベストプラクティス
+
+> **ソース**: [noloman/Android-AI-skills](https://github.com/noloman/Android-AI-skills)
+
+Android、Kotlin Multiplatform (KMP)、Compose Multiplatform プロジェクト向けの**23 個のプロダクション品質 AI スキル**を収録したコレクション。Claude Code、Codex、GitHub Copilot、Cursor、Windsurf、Cline、JetBrains AI、Amazon Q、Aider、OpenCode の 10 ツールに対応。
+
+**スキル一覧：**
+
+| カテゴリ | スキル |
+|---|---|
+| プロジェクトタイプ | `compose-best-practices`、`kmp-architecture-best-practices`、`compose-multiplatform-best-practices` |
+| コード品質 | `kotlin-coroutines-best-practices`、`android-testing-best-practices`、`android-accessibility-best-practices` |
+| セキュリティ | `android-security-best-practices`、`android-auth-identity` |
+| パフォーマンス・インフラ | `android-performance-best-practices`、`android-build-infra`、`android-ci-cd` |
+| アーキテクチャ | `android-dependency-injection`、`android-navigation-best-practices`、`android-background-work` |
+| データ・ネットワーク | `android-networking`、`android-local-storage` |
+| プラットフォーム機能 | `android-media`、`android-maps-location`、`android-ml-ondevice` |
+| マネタイズ | `play-store-readiness`、`play-billing-best-practices`、`revenuecat-best-practices` |
+| サードパーティ | `firebase-best-practices` |
+
+**エンタープライズモード**：`detekt.yml`、`lint.xml`、`ktlint`/`spotless` 設定を検出すると自動有効化し、新規違反ゼロを強制。
+
+**インストール：**
+
+```bash
+# グローバルインストール（Codex + Claude Code + OpenCode）
+npx android-ai-skills@latest
+
+# プロジェクトレベルインストール（全 10 ツール）
+npx android-ai-skills@latest init
+
+# 特定ツールを指定
+npx android-ai-skills@latest init --tools claude,codex
+npx android-ai-skills@latest init --tools cursor,copilot
+
+# 特定スキルセットのみインストール
+npx android-ai-skills@latest --android-only
+npx android-ai-skills@latest --kmp-only
+```
+
+**ライセンス:** MIT
 
 ---
 

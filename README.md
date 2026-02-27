@@ -26,6 +26,7 @@
 - [Third-Party Skills](#third-party-skills)
   - [review-loop — Automated Code Review Loop](#review-loop--automated-code-review-loop)
   - [claude-codex — Multi-AI Orchestration Pipeline](#claude-codex--multi-ai-orchestration-pipeline)
+  - [Android AI Skills — Production-Grade Android Best Practices](#android-ai-skills--production-grade-android-best-practices)
 - [Using Skills in Codex CLI](#using-skills-in-codex-cli)
 - [Using Skills in Cursor](#using-skills-in-cursor)
 - [Using Skills in Gemini CLI](#using-skills-in-gemini-cli)
@@ -413,6 +414,50 @@ echo ".task" >> .gitignore
 | Auto-resolve attempts | 3 retries |
 
 **License:** GPL-3.0 with attribution requirement (author: Z-M-Huang).
+
+---
+
+### Android AI Skills — Production-Grade Android Best Practices
+
+> **Source**: [noloman/Android-AI-skills](https://github.com/noloman/Android-AI-skills)
+
+A comprehensive collection of **23 opinionated, production-grade AI skills** for Android, Kotlin Multiplatform (KMP), and Compose Multiplatform projects. Compatible with 10 AI tools: Claude Code, Codex, GitHub Copilot, Cursor, Windsurf, Cline, JetBrains AI, Amazon Q, Aider, and OpenCode.
+
+**Skill categories:**
+
+| Category | Skills |
+|---|---|
+| Project type | `compose-best-practices`, `kmp-architecture-best-practices`, `compose-multiplatform-best-practices` |
+| Code quality | `kotlin-coroutines-best-practices`, `android-testing-best-practices`, `android-accessibility-best-practices` |
+| Security & privacy | `android-security-best-practices`, `android-auth-identity` |
+| Performance & infra | `android-performance-best-practices`, `android-build-infra`, `android-ci-cd` |
+| Architecture | `android-dependency-injection`, `android-navigation-best-practices`, `android-background-work` |
+| Data & network | `android-networking`, `android-local-storage` |
+| Platform features | `android-media`, `android-maps-location`, `android-ml-ondevice` |
+| Monetization | `play-store-readiness`, `play-billing-best-practices`, `revenuecat-best-practices` |
+| Third-party | `firebase-best-practices` |
+
+**Enterprise Mode** auto-activates when `detekt.yml`, `lint.xml`, or `ktlint` / `spotless` config is detected — enforcing zero new violations.
+
+**Installation:**
+
+```bash
+# Global install (Codex + Claude Code + OpenCode)
+npx android-ai-skills@latest
+
+# Project-level install (all 10 tools)
+npx android-ai-skills@latest init
+
+# Target specific tools
+npx android-ai-skills@latest init --tools claude,codex
+npx android-ai-skills@latest init --tools cursor,copilot
+
+# Install only specific skill sets
+npx android-ai-skills@latest --android-only
+npx android-ai-skills@latest --kmp-only
+```
+
+**License:** MIT
 
 ---
 
