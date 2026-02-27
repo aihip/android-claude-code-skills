@@ -16,6 +16,7 @@
 - [Third-Party Skills](#third-party-skills)
   - [review-loop — Automated Code Review Loop](#review-loop--automated-code-review-loop)
   - [claude-codex — Multi-AI Orchestration Pipeline](#claude-codex--multi-ai-orchestration-pipeline)
+- [Using Skills in Cursor](#using-skills-in-cursor)
 - [Adding Skills](#adding-skills)
 - [Validation](#validation)
 - [Project Structure](#project-structure)
@@ -334,6 +335,54 @@ echo ".task" >> .gitignore
 | Auto-resolve attempts | 3 retries |
 
 **License:** GPL-3.0 with attribution requirement (author: Z-M-Huang).
+
+---
+
+## Using Skills in Cursor
+
+The skills in this repository are natively designed for **Claude Code CLI**. For **Cursor** users, pre-converted `.mdc` rule files are provided in the [`cursor-rules/`](cursor-rules/) directory.
+
+### Available Cursor Rules
+
+| File | Skill |
+|---|---|
+| `cursor-rules/android-translation-sync.mdc` | Android Translation Sync |
+| `cursor-rules/android-change-review.mdc` | Android Change Review |
+
+### Installation
+
+Copy the `.mdc` files into your Android project's `.cursor/rules/` directory:
+
+```bash
+# In your Android project root
+mkdir -p .cursor/rules
+
+curl -o .cursor/rules/android-translation-sync.mdc \
+  https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/android-translation-sync.mdc
+
+curl -o .cursor/rules/android-change-review.mdc \
+  https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/android-change-review.mdc
+```
+
+Or clone this repo and copy manually:
+
+```bash
+cp android-claude-code-skills/cursor-rules/*.mdc your-android-project/.cursor/rules/
+```
+
+### Usage in Cursor
+
+Both rules are **Agent-requested** type — Cursor's AI automatically activates them when it detects a matching request. You can also trigger them explicitly:
+
+```text
+# Translation sync
+Sync translations from Excel: ./translations/strings.xlsx
+
+# Code review
+Review my staged changes for Android crash risks and boundary conditions.
+```
+
+> **Note:** Cursor rules are static prompt injection and do not support hooks, slash commands, or multi-agent orchestration. The workflow knowledge is fully preserved, but automated triggers (e.g. Stop Hook in `review-loop`) are not available.
 
 ---
 

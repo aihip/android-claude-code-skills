@@ -1,0 +1,159 @@
+---
+description: Review Android code changes after implementation to catch crash risks, boundary-condition bugs, and behavioral regressions before commit or merge. Apply when the user asks to review staged changes after git add, review current modified code, review a branch diff, review a specific commit-id, 检查当前修改代码, 边界条件检查, 崩溃风险检查, 内存泄漏检查, 回归检查, or code review after coding.
+globs: ["**/*.kt", "**/*.java", "**/*.xml"]
+alwaysApply: false
+---
+
+# Android Change Review
+
+Review Android code changes with a focus on runtime safety, lifecycle correctness, and regression risk. Prioritize crash paths over style-only comments.
+
+## Step 1 — Confirm Review Scope
+
+Choose the appropriate git command based on what the user provides:
+
+| Scope | Command |
+|-------|---------|
+| Staged changes (after `git add .`) | `git diff --cached --stat` then `git diff --cached` |
+| Unstaged working tree | `git diff --stat` then `git diff` |
+| Branch vs base (PR review) | `git diff main...HEAD --stat` then `git diff main...HEAD` |
+| Specific commit | `git show --stat --patch <commit-id>` |
+
+## Step 2 — Triage Large Diffs
+
+If diff exceeds **30 files or 600 lines**:
+- **Tier 1** (review first): lifecycle classes, ViewModel, data/repo layer, navigation
+- **Tier 2** (review second): adapters, custom views, service/worker classes
+- **Tier 3** (review last or skip): utility files, string resources, non-logic config
+- Explicitly state which files were skipped
+
+## Step 3 — Risk Checklist
+
+### Crash / Exception Risks
+
+- `!!` operator, platform types, nullable API response fields
+- Index/position access without bounds check (`list[index]`, adapter positions)
+- `FragmentManager` operations after state saved
+- Background thread touching UI (`View`, `Fragment`, `Activity`)
+- Coroutine/Flow callbacks firing after lifecycle end
+- Missing permission checks before protected API calls
+- `lateinit` accessed before initialization
+- `requireContext()` / `requireActivity()` without lifecycle safety
+- `by lazy` accessed from multiple threads without `SYNCHRONIZED`
+- `object` singleton holding `Activity`/`Context` reference
+- `sealed class` + `when` without `else` — new subclass silently falls through
+- Parsing failures (JSON/Enum/date) after format change — new Enum value not in client `when`
+
+### Boundary Conditions
+
+- Empty lists / empty strings / null server fields
+- Zero, negative, max, overflow-sized values
+- Duplicate taps / re-entrancy / repeated callbacks
+- Configuration changes (rotation) and process recreation
+- **Process death**: state must survive `onSaveInstanceState` → restore
+  - `ViewModel` used where needed? `SavedStateHandle` for transient UI state?
+- Feature flags off/on combinations
+- Not-logged-in / low-balance / permission denied / network unavailable
+
+### Regression Risks
+
+- Changed `if` conditions or early returns
+- Error handling removed or exceptions swallowed
+- Order-of-operations changes (init before validate, async timing)
+- Navigation route/argument changes without matching callers updated
+- UI visibility or button enabled-state logic drift
+
+## Step 4 — Android Component Hotspots
+
+### Activity / Fragment / DialogFragment
+- View binding used after `onDestroyView()`
+- Observers collecting with Fragment lifecycle instead of `viewLifecycleOwner`
+- `childFragmentManager` / navigation after state saved
+- `arguments` keys changed but callers still pass old names/types
+
+### ViewModel / LiveData / Flow / Coroutines
+- Work in `GlobalScope` or unmanaged scope
+- `viewModelScope`/`lifecycleScope` misuse
+- Duplicate collectors after repeated `onStart`/`onResume`
+- Exceptions in coroutine chains now uncaught after refactor
+
+### Jetpack Compose
+- `LaunchedEffect` / `DisposableEffect` keys changed and re-run incorrectly
+- One-shot events triggered on every recomposition
+- `remember` used where `rememberSaveable` required
+- Mutable state updated from background thread
+
+### RecyclerView / Adapter / Paging
+- `adapterPosition` used without `NO_POSITION` guard
+- List updates racing with click callbacks
+- DiffUtil identity/content rules changed
+
+### Navigation / Intent / Deep Link
+- Destination args changed but call sites not updated
+- Nullable extras now assumed non-null
+- Multiple rapid navigations causing duplicate destination pushes
+
+### Permissions / Privacy
+- Runtime permission checks removed or bypassed
+- "Don't ask again" permanently denied flow not handled
+- API-level-specific behavior not gated with `Build.VERSION.SDK_INT`
+
+### Services / WorkManager
+- Foreground service notification requirements broken
+- Duplicate scheduled work due to missing unique work policy
+
+### Room / Database
+- DAO query return type nullability changed
+- Migration path missing for schema change
+- Enum/string mapping changes breaking old persisted values
+
+### Memory & Resource Leaks
+- `Bitmap` not recycled; `Cursor` not closed in `finally`/`use`
+- `MediaPlayer`, `Camera`, `AudioTrack` not released in lifecycle callback
+- `BroadcastReceiver` registered but never unregistered
+- `Handler`/`HandlerThread` kept alive via anonymous `Runnable`
+- `AnimatorSet`/`ObjectAnimator` holding `View` after detach
+
+### ProGuard / R8
+- Classes used via reflection without `@Keep` or keep rule
+- `data class` used as JSON target with no `@SerializedName` → silent null fields in release
+- `Enum` values referenced by name in serialized data renamed by R8
+
+## Step 5 — Severity Framework
+
+| Severity | Criteria |
+|----------|----------|
+| **High** | Deterministic crash on any device or common user path; data corruption; auth/payment broken |
+| **High** | Silent data loss: state not saved, wrong data persisted |
+| **Medium** | Crash under race condition or edge-case input; wrong fallback visible to user |
+| **Medium** | Regression in business logic producing incorrect output without crash |
+| **Low** | Logic error with no immediate user-visible impact |
+| **Low** | Test coverage gap leaving crash path unverified |
+
+Escalate Low → Medium if finding is in payment, authentication, or data persistence path.
+
+## Step 6 — Optional Validation Commands
+
+```bash
+./gradlew :app:compileDebugKotlin
+./gradlew :app:lintDebug
+./gradlew :app:testDebugUnitTest
+```
+
+Report whether these were run or skipped.
+
+## Output Format
+
+1. **Findings** ordered by severity (High → Medium → Low)
+   - File + line reference
+   - What changed
+   - Why it can crash/regress
+   - Concrete trigger scenario
+   - Suggested fix direction
+
+2. **If no findings**: state "no major issues found" and list residual risks (no process-death simulation, no ProGuard verification, no device matrix test, etc.)
+
+## Fast Triage Patterns (for large diffs)
+
+Prioritize hunks containing:
+`!!` · `lateinit` · `requireContext(` · `requireActivity(` · `as ` · `launch {` · `async` · `collect` · `observe` · `Fragment` · `Activity` · `onCreate` · `onDestroyView` · `NavController` · `navigate(` · `adapterPosition` · `Permission` · `registerForActivityResult` · `WorkManager` · `Room` · `Migration` · `Parcelable` · `Bitmap` · `recycle` · `cursor` · `close(` · `release(` · `@Keep` · `@SerializedName` · `@Singleton` · `@InstallIn` · `by lazy` · `object companion`
