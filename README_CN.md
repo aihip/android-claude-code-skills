@@ -2,6 +2,21 @@
 
 > 面向 Android 开发场景的可复用 Skills 仓库，兼容 OpenAI Codex 与 Claude Code。
 
+## 目录
+
+- [仓库信息](#仓库信息)
+- [OpenAI Codex 兼容性](#openai-codex-兼容性)
+- [安装](#安装)
+- [更新插件](#更新插件)
+- [可用技能](#可用技能)
+  - [Android 多语言翻译同步](#android-多语言翻译同步)
+  - [Android 代码变更审查](#android-代码变更审查android-change-review)
+- [添加技能](#添加技能)
+- [校验](#校验)
+- [项目结构](#项目结构)
+- [贡献](#贡献)
+- [许可证](#许可证)
+
 ## 仓库信息
 
 - **GitHub**: https://github.com/aihip/android-claude-code-skills

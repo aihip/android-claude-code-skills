@@ -2,6 +2,21 @@
 
 > A repository of reusable Android development skills, compatible with OpenAI Codex and Claude Code.
 
+## Table of Contents
+
+- [Repository Information](#repository-information)
+- [OpenAI Codex Compatibility](#openai-codex-compatibility)
+- [Installation](#installation)
+- [Updating Plugin](#updating-plugin)
+- [Available Skills](#available-skills)
+  - [Android Translation Sync](#android-translation-sync)
+  - [Android Change Review](#android-change-review)
+- [Adding Skills](#adding-skills)
+- [Validation](#validation)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## Repository Information
 
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
