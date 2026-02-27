@@ -76,6 +76,10 @@ android-claude-code-skills/
 │       └── agents/openai.yaml
 ├── CLAUDE.md               # This file (English)
 ├── CLAUDE_CN.md            # 项目概述（中文）
+├── CLAUDE_JP.md            # プロジェクト概要（日本語）
 ├── README.md               # Documentation (English)
-└── README_CN.md            # 说明文档（中文）
+├── README_CN.md            # 说明文档（中文）
+├── README_JP.md            # ドキュメント（日本語）
+├── CHANGELOG.md            # Changelog (English)
+└── CHANGELOG_JP.md         # 変更履歴（日本語）
 ```
