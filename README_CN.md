@@ -11,6 +11,8 @@
 - [可用技能](#可用技能)
   - [Android 多语言翻译同步](#android-多语言翻译同步)
   - [Android 代码变更审查](#android-代码变更审查android-change-review)
+- [第三方技能](#第三方技能)
+  - [review-loop — 自动化代码审查循环](#review-loop--自动化代码审查循环)
 - [添加技能](#添加技能)
 - [校验](#校验)
 - [项目结构](#项目结构)
@@ -153,6 +155,79 @@ git add .
 - `检查当前修改代码`
 - `边界条件检查`
 - `崩溃风险检查`
+
+---
+
+## 第三方技能
+
+社区维护的插件，为 Claude Code 扩展额外的工作流能力。
+
+---
+
+### review-loop — 自动化代码审查循环
+
+> **来源**: [hamelsmu/claude-review-loop](https://github.com/hamelsmu/claude-review-loop)
+
+一个 Claude Code 插件，为每次任务引入自动化的两阶段代码审查循环。Claude 完成任务实现后，Stop Hook 会自动触发独立的 Codex 审查，并要求 Claude 处理反馈意见——让每次改动在接受前都获得第二视角的把关。
+
+**工作原理：**
+
+1. **任务阶段** — 你描述任务，Claude 实现代码。
+2. **审查阶段** — Claude 完成后，Stop Hook 自动运行 Codex（`codex exec`）进行独立审查，将发现的问题写入 `reviews/review-<id>.md`，再要求 Claude 逐条处理。
+3. Claude 处理认可的问题后正常退出。
+
+状态记录在 `.claude/review-loop.local.md`（建议加入 `.gitignore`）。
+
+**审查覆盖范围：**
+
+| 维度 | 检查内容 |
+|---|---|
+| 代码质量 | 结构组织、模块化、DRY 原则、命名规范 |
+| 测试覆盖 | 新增测试、边界用例、测试质量 |
+| 安全性 | 输入校验、注入漏洞、密钥泄露、OWASP Top 10 |
+| 文档与 Agent 规范 | AGENTS.md、CLAUDE.md 符号链接、遥测、类型系统 |
+| UX 与设计 | E2E 测试、视觉质量、无障碍访问（UI 项目适用） |
+
+**环境要求：**
+
+- Claude Code CLI
+- `jq` — `brew install jq`（macOS）/ `apt install jq`（Linux）
+- Codex CLI（推荐，未安装时自动回退到 Claude 自审）— `npm install -g @openai/codex`
+
+**安装方法：**
+
+```bash
+# 在 Claude Code 会话中执行
+/plugin marketplace add hamelsmu/claude-review-loop
+/plugin install review-loop@hamel-review
+```
+
+或直接通过 CLI 执行：
+
+```bash
+claude plugin marketplace add hamelsmu/claude-review-loop
+claude plugin install review-loop@hamel-review
+```
+
+**使用方法：**
+
+```text
+# 启动一个带审查循环的任务
+/review-loop 添加带测试覆盖的 JWT 用户认证功能
+
+# 取消正在进行的审查循环
+/cancel-review
+```
+
+**配置项：**
+
+| 环境变量 | 默认值 | 说明 |
+|---|---|---|
+| `REVIEW_LOOP_CODEX_FLAGS` | `--dangerously-bypass-approvals-and-sandbox` | 传给 `codex` 的参数。可改为 `--sandbox workspace-write` 以启用更安全的沙箱审查。 |
+
+Stop Hook 超时默认为 900 秒（15 分钟），可在 `hooks/hooks.json` 中调整。
+
+**日志：** 执行日志（含时间戳、Codex 退出码、耗时）写入 `.claude/review-loop.log`（已 gitignore）。
 
 ---
 
