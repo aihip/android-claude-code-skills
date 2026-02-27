@@ -1,7 +1,7 @@
 interface:
   display_name: "APK Analyzer"
-  short_description: "Analyze Android APK files: extract metadata, audit permissions, verify signatures, inspect components, detect libraries, and perform security assessments."
-  default_prompt: "Analyze the APK at $apk_path. Extract metadata, list permissions by risk level, verify the signature, identify exported components, detect native libraries and third-party SDKs, and produce a security audit report."
+  short_description: "Analyze APK: permissions, signatures, and security."
+  default_prompt: "Use $apk-analyzer to analyze the APK file. Extract metadata, list permissions by risk level, verify the signature, identify exported components, detect native libraries and third-party SDKs, and produce a security audit report."
 
 policy:
   allow_implicit_invocation: true
