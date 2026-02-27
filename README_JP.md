@@ -11,6 +11,7 @@
 - [利用可能なスキル](#利用可能なスキル)
   - [Android 多言語翻訳同期](#android-多言語翻訳同期)
   - [Android コード変更レビュー](#android-コード変更レビュー)
+  - [APK アナライザー](#apk-アナライザー)
 - [サードパーティスキル](#サードパーティスキル)
   - [review-loop — 自動コードレビューループ](#review-loop--自動コードレビューループ)
   - [claude-codex — マルチ AI オーケストレーションパイプライン](#claude-codex--マルチ-ai-オーケストレーションパイプライン)
@@ -28,7 +29,7 @@
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
 - **作者**: aihip
 - **ライセンス**: MIT
-- **現在のバージョン**: 1.5.0
+- **現在のバージョン**: 1.6.0
 - **変更履歴**: [CHANGELOG.md](CHANGELOG.md)
 
 ## OpenAI Codex 互換性
@@ -159,6 +160,39 @@ Please review commit abc1234 for crash risks and regressions.
 - `検査当前修改代码`
 - `边界条件检查`
 - `崩溃风险检查`
+
+---
+
+### APK アナライザー
+
+Android APK ファイルを解析します：メタデータ抽出、リスクレベル別の権限分類、署名検証、エクスポートされたコンポーネントの検査、ネイティブライブラリ・サードパーティ SDK の検出、セキュリティ監査レポートの生成。
+
+**使い方：**
+
+```
+このAPKを解析してください: /path/to/your.apk
+```
+
+**機能：**
+- `aapt` でパッケージ名・バージョンコード/名・Min/Target SDK を抽出
+- 全権限を危険・高リスク・通常の 3 段階に分類して注釈付きで一覧化
+- V1/V2/V3 署名スキームを検証し、証明書のサブジェクト・SHA-256 フィンガープリント・有効期限を表示；デバッグキーストアを自動検出
+- `apktool` で `AndroidManifest.xml` をデコードし、`android:permission` 保護のないエクスポートコンポーネントを特定
+- セキュリティフラグを確認：`debuggable`・`allowBackup`・平文トラフィック
+- ネイティブライブラリ ABI を列挙し、サードパーティ SDK（Firebase・Flutter・React Native 等）を検出
+- 文字列リソース内のハードコードされたシークレットをスキャン
+- 完全な `apk-analyze.sh` スクリプトと Python (androguard) 分析パスを同梱
+- CRITICAL / HIGH / MEDIUM / INFO 重大度の構造化セキュリティレポートを生成
+
+**トリガーフレーズ：**
+- `analyze apk`
+- `check apk permissions`
+- `verify apk signature`
+- `audit apk security`
+- `apk情報抽出`
+- `apk権限分析`
+- `apk署名確認`
+- `apkセキュリティ監査`
 
 ---
 
@@ -351,6 +385,7 @@ Codex は `.agents/skills/` ディレクトリからスキルを検出します�
 mkdir -p ~/.agents/skills
 cp -r skills/android-translation-sync ~/.agents/skills/
 cp -r skills/android-change-review ~/.agents/skills/
+cp -r skills/apk-analyzer ~/.agents/skills/
 ```
 
 ```bash
@@ -358,6 +393,7 @@ cp -r skills/android-change-review ~/.agents/skills/
 mkdir -p .agents/skills
 cp -r skills/android-translation-sync .agents/skills/
 cp -r skills/android-change-review .agents/skills/
+cp -r skills/apk-analyzer .agents/skills/
 ```
 
 リポジトリの更新に自動的に追従するシンボリックリンクを使用することもできます：
@@ -365,6 +401,7 @@ cp -r skills/android-change-review .agents/skills/
 ```bash
 ln -s "$(pwd)/skills/android-translation-sync" ~/.agents/skills/
 ln -s "$(pwd)/skills/android-change-review" ~/.agents/skills/
+ln -s "$(pwd)/skills/apk-analyzer" ~/.agents/skills/
 ```
 
 ### 使い方
@@ -375,6 +412,8 @@ ln -s "$(pwd)/skills/android-change-review" ~/.agents/skills/
 $android-translation-sync  ./translations/strings.xlsx
 
 $android-change-review  review my staged changes
+
+$apk-analyzer  ./build/outputs/apk/release/app-release.apk
 ```
 
 **暗黙的な呼び出し** —— Codex が説明に基づいてスキルを自動選択（`allow_implicit_invocation: true`）：
@@ -383,6 +422,8 @@ $android-change-review  review my staged changes
 翻訳を Excel から同期してください: ./translations/strings.xlsx
 
 ステージされた変更を Android のクラッシュリスクと境界条件の観点でレビューしてください。
+
+このAPKの権限とセキュリティ問題を分析してください: ./app-release.apk
 ```
 
 ### インストールの確認
@@ -390,7 +431,7 @@ $android-change-review  review my staged changes
 ```bash
 # Codex CLI セッション内で実行
 /skills
-# 以下が表示されるはずです: android-translation-sync, android-change-review
+# 以下が表示されるはずです: android-translation-sync, android-change-review, apk-analyzer
 ```
 
 ---
@@ -414,16 +455,20 @@ curl -o .cursor/rules/android-translation-sync.mdc \
   https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/android-translation-sync.mdc
 curl -o .cursor/rules/android-change-review.mdc \
   https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/android-change-review.mdc
+curl -o .cursor/rules/apk-analyzer.mdc \
+  https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/apk-analyzer.mdc
 ```
 
 ### 使い方
 
-両方のルールは **Agent-requested** タイプ —— Cursor AI がリクエストに基づいて自動的に適用します：
+すべてのルールは **Agent-requested** タイプ —— Cursor AI がリクエストに基づいて自動的に適用します：
 
 ```text
 翻訳を Excel から同期してください: ./translations/strings.xlsx
 
 ステージされた変更を Android のクラッシュリスクと境界条件の観点でレビューしてください。
+
+このAPKの権限とセキュリティ問題を分析してください: ./build/outputs/apk/release/app-release.apk
 ```
 
 ---
@@ -442,6 +487,7 @@ cp android-claude-code-skills/gemini-rules/*.md .gemini/skills/
 cat >> GEMINI.md << 'EOF'
 @.gemini/skills/android-translation-sync.md
 @.gemini/skills/android-change-review.md
+@.gemini/skills/apk-analyzer.md
 EOF
 ```
 
@@ -451,6 +497,8 @@ EOF
 翻訳を Excel から同期してください: ./translations/strings.xlsx
 
 ステージされた変更のクラッシュリスクをレビューしてください。
+
+このAPKを分析してください: ./build/outputs/apk/release/app-release.apk
 ```
 
 ### 方法 2 — カスタム Slash コマンド
@@ -464,6 +512,7 @@ cp android-claude-code-skills/gemini-rules/commands/*.toml ~/.gemini/commands/
 ```text
 /translation-sync ./translations/strings.xlsx
 /change-review staged
+/apk-analyzer ./build/outputs/apk/release/app-release.apk
 ```
 
 ### 4 プラットフォーム比較
@@ -539,6 +588,12 @@ android-claude-code-skills/
 │   └── marketplace.json    # マーケットプレイス設定
 ├── skills/                 # 利用可能なスキル
 │   ├── android-translation-sync/
+│   │   ├── SKILL.md
+│   │   └── agents/openai.yaml
+│   ├── android-change-review/
+│   │   ├── SKILL.md
+│   │   └── agents/openai.yaml
+│   ├── apk-analyzer/
 │   │   ├── SKILL.md
 │   │   └── agents/openai.yaml
 │   └── template/

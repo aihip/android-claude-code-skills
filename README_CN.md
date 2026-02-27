@@ -11,6 +11,7 @@
 - [可用技能](#可用技能)
   - [Android 多语言翻译同步](#android-多语言翻译同步)
   - [Android 代码变更审查](#android-代码变更审查android-change-review)
+  - [APK 分析器](#apk-分析器)
 - [第三方技能](#第三方技能)
   - [review-loop — 自动化代码审查循环](#review-loop--自动化代码审查循环)
   - [claude-codex — 多 AI 编排流水线](#claude-codex--多-ai-编排流水线)
@@ -28,7 +29,7 @@
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
 - **作者**: aihip
 - **许可证**: MIT
-- **当前版本**: 1.5.0
+- **当前版本**: 1.6.0
 - **更新日志**: [CHANGELOG.md](CHANGELOG.md)
 
 ## OpenAI Codex 兼容性
@@ -159,6 +160,39 @@ git add .
 - `检查当前修改代码`
 - `边界条件检查`
 - `崩溃风险检查`
+
+---
+
+### APK 分析器
+
+解析 Android APK 文件：提取元数据、按风险等级分类权限、验证签名、检查导出组件、检测原生库和第三方 SDK，并生成安全审计报告。
+
+**使用方法：**
+
+```
+请帮我分析这个 APK：/path/to/your.apk
+```
+
+**功能特性：**
+- 通过 `aapt` 提取包名、版本号/名称、Min/Target SDK
+- 将所有权限分为危险权限 / 高风险权限 / 普通权限三档并标注
+- 验证 V1/V2/V3 签名方案，输出证书主体、SHA-256 指纹和有效期；自动检测调试密钥库
+- 通过 `apktool` 解码 `AndroidManifest.xml`，识别缺少 `android:permission` 保护的导出组件
+- 检查安全标志：`debuggable`、`allowBackup`、明文流量
+- 列出原生库 ABI 并检测第三方 SDK（Firebase、Flutter、React Native 等）
+- 扫描字符串资源中的硬编码密钥
+- 提供完整的 `apk-analyze.sh` 脚本和 Python (androguard) 分析路径
+- 生成包含 CRITICAL / HIGH / MEDIUM / INFO 级别的结构化安全报告
+
+**触发词：**
+- `analyze apk`
+- `check apk permissions`
+- `verify apk signature`
+- `audit apk security`
+- `apk信息提取`
+- `apk权限分析`
+- `apk签名检查`
+- `apk安全审计`
 
 ---
 
@@ -351,6 +385,7 @@ Codex 从 `.agents/skills/` 目录发现技能，将技能复制到用户级或�
 mkdir -p ~/.agents/skills
 cp -r skills/android-translation-sync ~/.agents/skills/
 cp -r skills/android-change-review ~/.agents/skills/
+cp -r skills/apk-analyzer ~/.agents/skills/
 ```
 
 ```bash
@@ -358,6 +393,7 @@ cp -r skills/android-change-review ~/.agents/skills/
 mkdir -p .agents/skills
 cp -r skills/android-translation-sync .agents/skills/
 cp -r skills/android-change-review .agents/skills/
+cp -r skills/apk-analyzer .agents/skills/
 ```
 
 或使用符号链接，自动跟随仓库更新：
@@ -365,6 +401,7 @@ cp -r skills/android-change-review .agents/skills/
 ```bash
 ln -s "$(pwd)/skills/android-translation-sync" ~/.agents/skills/
 ln -s "$(pwd)/skills/android-change-review" ~/.agents/skills/
+ln -s "$(pwd)/skills/apk-analyzer" ~/.agents/skills/
 ```
 
 ### 使用方法
@@ -375,6 +412,8 @@ ln -s "$(pwd)/skills/android-change-review" ~/.agents/skills/
 $android-translation-sync  ./translations/strings.xlsx
 
 $android-change-review  review my staged changes
+
+$apk-analyzer  ./build/outputs/apk/release/app-release.apk
 ```
 
 **隐式调用** —— Codex 根据描述自动匹配技能（`allow_implicit_invocation: true`）：
@@ -383,6 +422,8 @@ $android-change-review  review my staged changes
 请帮我同步多语言翻译，Excel 文件是 ./translations/strings.xlsx
 
 帮我检查当前已暂存的代码，重点看 Android 崩溃风险和边界条件。
+
+帮我分析这个 APK 的权限和安全问题：./app-release.apk
 ```
 
 ### 验证安装
@@ -390,7 +431,7 @@ $android-change-review  review my staged changes
 ```bash
 # 在 Codex CLI 会话中执行
 /skills
-# 应看到：android-translation-sync、android-change-review
+# 应看到：android-translation-sync、android-change-review、apk-analyzer
 ```
 
 ---
@@ -414,16 +455,20 @@ curl -o .cursor/rules/android-translation-sync.mdc \
   https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/android-translation-sync.mdc
 curl -o .cursor/rules/android-change-review.mdc \
   https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/android-change-review.mdc
+curl -o .cursor/rules/apk-analyzer.mdc \
+  https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/apk-analyzer.mdc
 ```
 
 ### 使用方法
 
-两个规则均为 **Agent-requested** 类型，Cursor AI 会根据请求自动激活：
+所有规则均为 **Agent-requested** 类型，Cursor AI 会根据请求自动激活：
 
 ```text
 请帮我同步多语言翻译，Excel 文件是 ./translations/strings.xlsx
 
 帮我检查已暂存的代码，重点看 Android 崩溃风险和边界条件。
+
+帮我分析这个 APK 的权限和安全问题：./build/outputs/apk/release/app-release.apk
 ```
 
 ---
@@ -442,6 +487,7 @@ cp android-claude-code-skills/gemini-rules/*.md .gemini/skills/
 cat >> GEMINI.md << 'EOF'
 @.gemini/skills/android-translation-sync.md
 @.gemini/skills/android-change-review.md
+@.gemini/skills/apk-analyzer.md
 EOF
 ```
 
@@ -451,6 +497,8 @@ EOF
 请帮我同步多语言翻译，Excel 文件是 ./translations/strings.xlsx
 
 帮我检查已暂存代码的崩溃风险。
+
+帮我分析这个 APK：./build/outputs/apk/release/app-release.apk
 ```
 
 ### 方式二：自定义 Slash 命令
@@ -464,6 +512,7 @@ cp android-claude-code-skills/gemini-rules/commands/*.toml ~/.gemini/commands/
 ```text
 /translation-sync ./translations/strings.xlsx
 /change-review staged
+/apk-analyzer ./build/outputs/apk/release/app-release.apk
 ```
 
 ### 四端能力对比
@@ -539,6 +588,12 @@ android-claude-code-skills/
 │   └── marketplace.json    # 市场配置
 ├── skills/                 # 可用技能
 │   ├── android-translation-sync/
+│   │   ├── SKILL.md
+│   │   └── agents/openai.yaml
+│   ├── android-change-review/
+│   │   ├── SKILL.md
+│   │   └── agents/openai.yaml
+│   ├── apk-analyzer/
 │   │   ├── SKILL.md
 │   │   └── agents/openai.yaml
 │   └── template/
