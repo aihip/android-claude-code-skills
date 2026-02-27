@@ -1,5 +1,7 @@
 # Android Claude Code Skills
 
+**Languages:** English | [中文](README_CN.md) | [日本語](README_JP.md)
+
 > A repository of reusable Android development skills, compatible with OpenAI Codex and Claude Code.
 
 ## Table of Contents
