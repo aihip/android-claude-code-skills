@@ -1,0 +1,28 @@
+# Gemini CLI custom slash command: /translation-sync
+# Place this file in ~/.gemini/commands/ (global) or .gemini/commands/ (project)
+
+[command]
+name = "translation-sync"
+description = "Sync Android multilingual strings.xml from an Excel spreadsheet"
+
+[prompt]
+template = """
+Please sync Android translations from the Excel file.
+
+{{#if args}}
+Excel file path: {{args}}
+{{else}}
+Please tell me the path to the Excel file (e.g. ./translations/strings.xlsx).
+{{/if}}
+
+Follow the Android Translation Sync workflow:
+1. Read the Excel file (first col = key, second col = English, remaining = target languages)
+2. Generate unique keys (10-20 chars, lowercase_with_underscores) for any empty key cells
+3. Write generated keys back to the Excel first column
+4. Update all app/src/main/res/values-*/strings.xml files with PRECISE VALUE-ONLY replacement:
+   - Replace ONLY the text between <string> and </string> tags
+   - Do NOT add or remove any lines
+   - Do NOT modify comments, blank lines, or formatting
+   - Append new keys at the bottom if they don't exist yet
+5. Report a summary: rows processed, keys generated, keys preserved, files updated
+"""

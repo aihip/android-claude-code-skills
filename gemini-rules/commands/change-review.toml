@@ -1,0 +1,44 @@
+# Gemini CLI custom slash command: /change-review
+# Place this file in ~/.gemini/commands/ (global) or .gemini/commands/ (project)
+
+[command]
+name = "change-review"
+description = "Review Android code changes for crash risks, boundary conditions, and regressions"
+
+[prompt]
+template = """
+Please perform an Android-focused code review.
+
+{{#if args}}
+Review target: {{args}}
+{{else}}
+Review my staged changes (assuming git add . has been run).
+{{/if}}
+
+Follow the Android Change Review workflow:
+
+1. Determine review scope and run the appropriate git command:
+   - Staged changes: git diff --cached --stat && git diff --cached
+   - Specific commit: git show --stat --patch <commit-id>
+   - Branch diff: git diff main...HEAD --stat && git diff main...HEAD
+
+2. If diff > 30 files or > 600 lines, triage by risk tier:
+   Tier 1 (first): lifecycle classes, ViewModel, data/repo, navigation
+   Tier 2 (second): adapters, custom views, services/workers
+   Tier 3 (skip/last): utilities, resources, non-logic config
+
+3. Check for:
+   - Crash risks: !! operator, lateinit, requireContext/Activity, lifecycle races, threading, permissions
+   - Boundary conditions: empty/null/zero values, process death, config changes, duplicate taps
+   - Regressions: changed conditions, removed error handling, navigation arg mismatches
+   - Android hotspots: Fragment/Activity lifecycle, ViewModel/Flow, Compose recomposition,
+     RecyclerView adapter, Navigation, Permissions, Room, Memory leaks, ProGuard/R8
+
+4. Report findings ordered by severity:
+   - High: deterministic crash / data corruption / auth-payment broken
+   - Medium: race-condition crash / logic regression visible to user
+   - Low: maintainability gap / uncovered crash path
+   Each finding: file + line, what changed, why it crashes/regresses, trigger scenario, fix direction.
+
+5. If no findings, state clearly and list residual risks (no process-death test, no release-build ProGuard check, etc.)
+"""

@@ -17,6 +17,7 @@
   - [review-loop — Automated Code Review Loop](#review-loop--automated-code-review-loop)
   - [claude-codex — Multi-AI Orchestration Pipeline](#claude-codex--multi-ai-orchestration-pipeline)
 - [Using Skills in Cursor](#using-skills-in-cursor)
+- [Using Skills in Gemini CLI](#using-skills-in-gemini-cli)
 - [Adding Skills](#adding-skills)
 - [Validation](#validation)
 - [Project Structure](#project-structure)
@@ -383,6 +384,87 @@ Review my staged changes for Android crash risks and boundary conditions.
 ```
 
 > **Note:** Cursor rules are static prompt injection and do not support hooks, slash commands, or multi-agent orchestration. The workflow knowledge is fully preserved, but automated triggers (e.g. Stop Hook in `review-loop`) are not available.
+
+---
+
+## Using Skills in Gemini CLI
+
+Pre-converted files for [Gemini CLI](https://github.com/google-gemini/gemini-cli) are in the [`gemini-rules/`](gemini-rules/) directory. Two integration methods are available.
+
+### Method 1 — GEMINI.md (Recommended)
+
+Inject the skill content into your project's `GEMINI.md` using the `@import` syntax:
+
+```bash
+# In your Android project root
+mkdir -p .gemini
+
+# Append import references to your project GEMINI.md
+cat >> GEMINI.md << 'EOF'
+
+# Android Skills
+@/path/to/android-claude-code-skills/gemini-rules/android-translation-sync.md
+@/path/to/android-claude-code-skills/gemini-rules/android-change-review.md
+EOF
+```
+
+Or copy the files directly and reference them locally:
+
+```bash
+mkdir -p .gemini/skills
+cp android-claude-code-skills/gemini-rules/*.md .gemini/skills/
+
+# Then in GEMINI.md
+cat >> GEMINI.md << 'EOF'
+@.gemini/skills/android-translation-sync.md
+@.gemini/skills/android-change-review.md
+EOF
+```
+
+Once added, simply describe your task naturally:
+
+```text
+Sync translations from Excel: ./translations/strings.xlsx
+
+Review my staged changes for Android crash risks.
+```
+
+### Method 2 — Custom Slash Commands
+
+Install the `.toml` command files to get `/translation-sync` and `/change-review` slash commands:
+
+```bash
+# Global install (available in all projects)
+mkdir -p ~/.gemini/commands
+cp android-claude-code-skills/gemini-rules/commands/*.toml ~/.gemini/commands/
+
+# OR project-level install
+mkdir -p .gemini/commands
+cp android-claude-code-skills/gemini-rules/commands/*.toml .gemini/commands/
+```
+
+Then use directly in Gemini CLI:
+
+```text
+# Sync translations
+/translation-sync ./translations/strings.xlsx
+
+# Review staged changes
+/change-review staged
+
+# Review a specific commit
+/change-review abc1234
+```
+
+### Capability Comparison
+
+| Feature | Claude Code | Gemini CLI | Cursor |
+|---|---|---|---|
+| Workflow knowledge | ✅ Full | ✅ Full | ✅ Full |
+| Slash commands | ✅ Native | ✅ via `.toml` | ❌ |
+| Context hierarchy | ✅ CLAUDE.md | ✅ GEMINI.md (3-tier) | ✅ `.cursor/rules/` |
+| Stop Hook / auto-trigger | ✅ | ❌ | ❌ |
+| Multi-agent orchestration | ✅ | ❌ | ❌ |
 
 ---
 
