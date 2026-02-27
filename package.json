@@ -34,7 +34,7 @@
   "homepage": "https://github.com/aihip/android-claude-code-skills#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aihip/android-claude-code-skills.git"
+    "url": "git+https://github.com/aihip/android-claude-code-skills.git"
   },
   "bugs": {
     "url": "https://github.com/aihip/android-claude-code-skills/issues"
