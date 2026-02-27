@@ -5,3 +5,10 @@ interface:
 
 policy:
   allow_implicit_invocation: true
+
+# Trigger examples (for implicit invocation matching):
+# - "review staged changes"
+# - "review commit abc1234"
+# - "code review after coding"
+# - "检查当前修改代码"
+# - "边界条件检查 / 崩溃风险检查"

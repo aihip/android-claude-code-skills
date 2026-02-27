@@ -16,6 +16,7 @@
 - [Third-Party Skills](#third-party-skills)
   - [review-loop — Automated Code Review Loop](#review-loop--automated-code-review-loop)
   - [claude-codex — Multi-AI Orchestration Pipeline](#claude-codex--multi-ai-orchestration-pipeline)
+- [Using Skills in Codex CLI](#using-skills-in-codex-cli)
 - [Using Skills in Cursor](#using-skills-in-cursor)
 - [Using Skills in Gemini CLI](#using-skills-in-gemini-cli)
 - [Adding Skills](#adding-skills)
@@ -339,6 +340,63 @@ echo ".task" >> .gitignore
 
 ---
 
+## Using Skills in Codex CLI
+
+The skills in this repository are **natively compatible with OpenAI Codex CLI** — the `SKILL.md` files already include the required YAML frontmatter (`name`, `description`) and each skill has an `agents/openai.yaml` for UI metadata.
+
+### Installation
+
+Codex discovers skills from `.agents/skills/` directories. Copy the skills to either user-level or project-level:
+
+```bash
+# User-level — available in ALL your projects (recommended)
+mkdir -p ~/.agents/skills
+cp -r skills/android-translation-sync ~/.agents/skills/
+cp -r skills/android-change-review ~/.agents/skills/
+```
+
+```bash
+# Project-level — this project only
+mkdir -p .agents/skills
+cp -r skills/android-translation-sync .agents/skills/
+cp -r skills/android-change-review .agents/skills/
+```
+
+Or use symlinks to always stay in sync with repo updates:
+
+```bash
+ln -s "$(pwd)/skills/android-translation-sync" ~/.agents/skills/
+ln -s "$(pwd)/skills/android-change-review" ~/.agents/skills/
+```
+
+### Usage
+
+**Explicit invocation** (type `$` to open the skill selector):
+
+```text
+$android-translation-sync  ./translations/strings.xlsx
+
+$android-change-review  review my staged changes
+```
+
+**Implicit invocation** — Codex auto-selects the skill based on your description (`allow_implicit_invocation: true`):
+
+```text
+Sync translations from Excel: ./translations/strings.xlsx
+
+Review my staged changes for Android crash risks and boundary conditions.
+```
+
+### Verify Installation
+
+```bash
+# In a Codex CLI session
+/skills
+# Should list: android-translation-sync, android-change-review
+```
+
+---
+
 ## Using Skills in Cursor
 
 The skills in this repository are natively designed for **Claude Code CLI**. For **Cursor** users, pre-converted `.mdc` rule files are provided in the [`cursor-rules/`](cursor-rules/) directory.
@@ -458,13 +516,15 @@ Then use directly in Gemini CLI:
 
 ### Capability Comparison
 
-| Feature | Claude Code | Gemini CLI | Cursor |
-|---|---|---|---|
-| Workflow knowledge | ✅ Full | ✅ Full | ✅ Full |
-| Slash commands | ✅ Native | ✅ via `.toml` | ❌ |
-| Context hierarchy | ✅ CLAUDE.md | ✅ GEMINI.md (3-tier) | ✅ `.cursor/rules/` |
-| Stop Hook / auto-trigger | ✅ | ❌ | ❌ |
-| Multi-agent orchestration | ✅ | ❌ | ❌ |
+| Feature | Claude Code | Codex CLI | Gemini CLI | Cursor |
+|---|---|---|---|---|
+| Workflow knowledge | ✅ Full | ✅ Full | ✅ Full | ✅ Full |
+| Skill format | SKILL.md | SKILL.md (native) | GEMINI.md / `.md` | `.mdc` rules |
+| Skill trigger | `/plugin` + slash | `$skill-name` or auto | natural language | natural language |
+| Auto-detect from description | ✅ | ✅ (`allow_implicit_invocation`) | ✅ | ✅ |
+| Context file | CLAUDE.md | AGENTS.md | GEMINI.md | `.cursor/rules/` |
+| Stop Hook / lifecycle hooks | ✅ | ❌ | ❌ | ❌ |
+| Multi-agent orchestration | ✅ | ❌ | ❌ | ❌ |
 
 ---
 

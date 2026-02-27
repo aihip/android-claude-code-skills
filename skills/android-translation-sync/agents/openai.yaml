@@ -5,3 +5,10 @@ interface:
 
 policy:
   allow_implicit_invocation: true
+
+# Trigger examples (for implicit invocation matching):
+# - "sync translations from excel"
+# - "update android strings from excel"
+# - "please sync: ./translations/strings.xlsx"
+# - "多语言翻译同步"
+# - "更新strings.xml"
