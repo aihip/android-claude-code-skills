@@ -13,6 +13,7 @@
   - [Android 代码变更审查](#android-代码变更审查android-change-review)
 - [第三方技能](#第三方技能)
   - [review-loop — 自动化代码审查循环](#review-loop--自动化代码审查循环)
+  - [claude-codex — 多 AI 编排流水线](#claude-codex--多-ai-编排流水线)
 - [添加技能](#添加技能)
 - [校验](#校验)
 - [项目结构](#项目结构)
@@ -228,6 +229,109 @@ claude plugin install review-loop@hamel-review
 Stop Hook 超时默认为 900 秒（15 分钟），可在 `hooks/hooks.json` 中调整。
 
 **日志：** 执行日志（含时间戳、Codex 退出码、耗时）写入 `.claude/review-loop.log`（已 gitignore）。
+
+---
+
+### claude-codex — 多 AI 编排流水线
+
+> **来源**: [Z-M-Huang/claude-codex](https://github.com/Z-M-Huang/claude-codex)
+> **注意**: 本项目已迁移至 [Z-M-Huang/vcp](https://github.com/Z-M-Huang/vcp/plugins/dev-buddy)，后续开发在新仓库继续。
+
+一个 Claude Code 插件，提供**多 AI 编排流水线**，让代码在被接受前经过三个独立审查者——Claude Sonnet、Claude Opus 和 Codex——的逐层把关。基于"没有代码应该只经过一个人审查就上线"的专业开发原则。
+
+**为什么需要多 AI 审查？**
+
+| 审查者 | 擅长发现 |
+|---|---|
+| Claude Sonnet | 明显 Bug、基础安全问题、代码风格 |
+| Claude Opus | 架构问题、隐性 Bug、边界用例 |
+| Codex | 来自不同 AI 模型的全新视角 |
+
+每位审查者都会检查 OWASP Top 10 漏洞、错误处理规范和代码质量。循环审查机制确保代码在三个审查者全部通过前不会进入下一阶段。
+
+**可用技能：**
+
+| 技能 | 用途 |
+|---|---|
+| `multi-ai` | 完整功能开发流水线（需求 → 规划 → 实现 → 审查） |
+| `bug-fix` | Bug 修复流水线（双路根因分析 + Codex 验证 + 精准修复） |
+
+**内置自定义 Agent：**
+
+| Agent | 模型 | 职责 |
+|---|---|---|
+| `requirements-gatherer` | Opus | 业务分析师 + PM 混合角色 |
+| `planner` | Opus | 架构师 + 全栈混合角色 |
+| `plan-reviewer` | Sonnet + Opus | 架构、安全与 QA 验证 |
+| `implementer` | Sonnet | 全栈 + TDD + 质量实现 |
+| `code-reviewer` | Sonnet + Opus | 安全、性能与 QA 验证 |
+| `root-cause-analyst` | Sonnet + Opus | 并行 Bug 根因分析（bug-fix 流水线） |
+
+**环境要求：**
+
+- Claude Code CLI
+- Codex CLI — `npm install -g @openai/codex`
+- Bun（用于跨平台 JSON 处理，替代 `jq`）
+
+**安装方法：**
+
+```bash
+# 第一步：添加市场
+/plugin marketplace add Z-M-Huang/claude-codex
+
+# 第二步：安装插件（user 范围——所有项目均可用，推荐）
+/plugin install claude-codex@claude-codex --scope user
+
+# 第三步：将 .task 加入 .gitignore
+echo ".task" >> .gitignore
+```
+
+**使用方法：**
+
+```text
+# 功能开发流水线
+/claude-codex:multi-ai 添加带 JWT 令牌的用户认证功能
+
+# Bug 修复流水线
+/claude-codex:bug-fix 登录时 session token 过期后静默失败
+```
+
+> 从外部项目调用时，必须使用完整命名空间 `claude-codex:<skill>`。也可以自然语言描述任务，Claude 会自动调用对应技能。
+
+**`/multi-ai` 流水线流程：**
+
+1. **需求收集** — 多个专家 Agent 并行探索，`requirements-gatherer` 汇总整合
+2. **规划** — `planner` Agent 制定实现方案
+3. **方案审查** — `plan-reviewer`（Sonnet + Opus）+ Codex 闸门
+4. **实现** — `implementer` 循环迭代直到测试通过
+5. **代码审查** — `code-reviewer`（Sonnet + Opus）+ Codex 最终闸门
+6. **完成** — 输出报告
+
+**`/bug-fix` 流水线流程：**
+
+1. **双路根因分析** — 两个 `root-cause-analyst`（Sonnet + Opus）并行分析
+2. **整合** — Orchestrator 综合两份分析，制定修复方案
+3. **Codex 验证** — Codex 审查整合后的根因分析与修复方案
+4. **实现** — 针对根因的最小化精准修复
+5. **代码审查** — `code-reviewer`（Sonnet + Opus）+ Codex 闸门
+
+**流水线任务依赖强制执行：**
+
+```
+1. 实现  →  2. 审查（Sonnet）  →  3. 审查（Opus）  →  4. 审查（Codex）
+                  ↓ needs_changes?
+             创建修复任务 → 同一审查者重新验证 → 继续
+```
+
+**默认限制：**
+
+| 配置项 | 默认值 |
+|---|---|
+| 方案审查循环上限 | 10 次 |
+| 代码审查循环上限 | 15 次 |
+| 自动重试次数 | 3 次 |
+
+**许可证：** GPL-3.0，需注明来源（作者：Z-M-Huang）。
 
 ---
 

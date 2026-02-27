@@ -15,6 +15,7 @@
   - [Android Change Review](#android-change-review)
 - [Third-Party Skills](#third-party-skills)
   - [review-loop — Automated Code Review Loop](#review-loop--automated-code-review-loop)
+  - [claude-codex — Multi-AI Orchestration Pipeline](#claude-codex--multi-ai-orchestration-pipeline)
 - [Adding Skills](#adding-skills)
 - [Validation](#validation)
 - [Project Structure](#project-structure)
@@ -230,6 +231,109 @@ claude plugin install review-loop@hamel-review
 The stop hook timeout is 900 seconds (15 min) by default — adjust in `hooks/hooks.json` if your reviews take longer.
 
 **Logs:** Execution logs with timestamps, codex exit codes, and elapsed times are written to `.claude/review-loop.log` (gitignored).
+
+---
+
+### claude-codex — Multi-AI Orchestration Pipeline
+
+> **Source**: [Z-M-Huang/claude-codex](https://github.com/Z-M-Huang/claude-codex)
+> **Note**: This project has moved to [Z-M-Huang/vcp](https://github.com/Z-M-Huang/vcp/plugins/dev-buddy). Future development continues there.
+
+A Claude Code plugin providing a **multi-AI orchestration pipeline** that runs your code through three independent reviewers — Claude Sonnet, Claude Opus, and Codex — before accepting any change. Based on the professional principle that no code should be deployed after only one reviewer.
+
+**Why multi-AI review?**
+
+| Reviewer | What It Catches |
+|---|---|
+| Claude Sonnet | Obvious bugs, security basics, code style |
+| Claude Opus | Architectural issues, subtle bugs, edge cases |
+| Codex | Fresh perspective from a different AI model |
+
+Each reviewer checks for OWASP Top 10 vulnerabilities, proper error handling, and code quality. The loop-until-approved model means code doesn't proceed until all three reviewers give the green light.
+
+**Available skills:**
+
+| Skill | Purpose |
+|---|---|
+| `multi-ai` | Full feature development pipeline (requirements → plan → implement → review) |
+| `bug-fix` | Bug-fix pipeline with dual root-cause analysis + Codex validation |
+
+**Custom agents used internally:**
+
+| Agent | Model | Role |
+|---|---|---|
+| `requirements-gatherer` | Opus | Business Analyst + PM hybrid |
+| `planner` | Opus | Architect + Fullstack hybrid |
+| `plan-reviewer` | Sonnet + Opus | Architecture, Security & QA validation |
+| `implementer` | Sonnet | Fullstack + TDD + quality implementation |
+| `code-reviewer` | Sonnet + Opus | Security, Performance & QA validation |
+| `root-cause-analyst` | Sonnet + Opus | Parallel bug diagnosis (bug-fix pipeline) |
+
+**Requirements:**
+
+- Claude Code CLI
+- Codex CLI — `npm install -g @openai/codex`
+- Bun (used for cross-platform JSON processing, replaces `jq`)
+
+**Installation:**
+
+```bash
+# Step 1: Add marketplace
+/plugin marketplace add Z-M-Huang/claude-codex
+
+# Step 2: Install plugin (user scope — available in all projects, recommended)
+/plugin install claude-codex@claude-codex --scope user
+
+# Step 3: Add .task to .gitignore
+echo ".task" >> .gitignore
+```
+
+**Usage:**
+
+```text
+# Feature development pipeline
+/claude-codex:multi-ai Add user authentication with JWT tokens
+
+# Bug-fix pipeline
+/claude-codex:bug-fix Login fails silently when session token expires
+```
+
+> Always use the full namespace `claude-codex:<skill>` when invoking from external projects. Or describe the task naturally and Claude will invoke the right skill.
+
+**Pipeline flow (`/multi-ai`):**
+
+1. **Requirements** — Specialist agents explore in parallel; `requirements-gatherer` synthesizes
+2. **Planning** — `planner` agent creates implementation plan
+3. **Plan Reviews** — `plan-reviewer` (Sonnet + Opus) + Codex gate
+4. **Implementation** — `implementer` iterates until tests pass
+5. **Code Reviews** — `code-reviewer` (Sonnet + Opus) + Codex final gate
+6. **Complete** — Reports results
+
+**Pipeline flow (`/bug-fix`):**
+
+1. **Dual RCA** — Two `root-cause-analyst` agents (Sonnet + Opus) analyze in parallel
+2. **Consolidation** — Orchestrator synthesizes both analyses into a fix plan
+3. **Codex Validation** — Codex reviews the consolidated RCA and fix plan
+4. **Implementation** — Minimal fix targeting the root cause
+5. **Code Reviews** — `code-reviewer` (Sonnet + Opus) + Codex gate
+
+**Pipeline enforcement (task dependencies):**
+
+```
+1. Implement  →  2. Review (Sonnet)  →  3. Review (Opus)  →  4. Review (Codex)
+                      ↓ needs_changes?
+                 Create fix task → same reviewer re-validates → continue
+```
+
+**Default limits:**
+
+| Setting | Default |
+|---|---|
+| Plan review loop limit | 10 iterations |
+| Code review loop limit | 15 iterations |
+| Auto-resolve attempts | 3 retries |
+
+**License:** GPL-3.0 with attribution requirement (author: Z-M-Huang).
 
 ---
 

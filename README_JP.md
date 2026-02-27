@@ -13,6 +13,7 @@
   - [Android コード変更レビュー](#android-コード変更レビュー)
 - [サードパーティスキル](#サードパーティスキル)
   - [review-loop — 自動コードレビューループ](#review-loop--自動コードレビューループ)
+  - [claude-codex — マルチ AI オーケストレーションパイプライン](#claude-codex--マルチ-ai-オーケストレーションパイプライン)
 - [スキルの追加](#スキルの追加)
 - [バリデーション](#バリデーション)
 - [プロジェクト構成](#プロジェクト構成)
@@ -228,6 +229,109 @@ claude plugin install review-loop@hamel-review
 Stop Hook のタイムアウトはデフォルト 900 秒（15 分）です。レビューに時間がかかる場合は `hooks/hooks.json` で調整してください。
 
 **ログ:** タイムスタンプ、Codex 終了コード、経過時間を含む実行ログは `.claude/review-loop.log` に書き込まれます（gitignore 済み）。
+
+---
+
+### claude-codex — マルチ AI オーケストレーションパイプライン
+
+> **ソース**: [Z-M-Huang/claude-codex](https://github.com/Z-M-Huang/claude-codex)
+> **注意**: このプロジェクトは [Z-M-Huang/vcp](https://github.com/Z-M-Huang/vcp/plugins/dev-buddy) に移行しました。今後の開発は新リポジトリで継続されます。
+
+Claude Sonnet、Claude Opus、Codex の**3 つの独立したレビュアー**がコードを順番にチェックする、**マルチ AI オーケストレーションパイプライン**を提供する Claude Code プラグイン。「1 人しかレビューしていないコードをデプロイすべきではない」というプロフェッショナルな開発原則に基づいています。
+
+**なぜマルチ AI レビューなのか？**
+
+| レビュアー | 発見できる問題 |
+|---|---|
+| Claude Sonnet | 明らかなバグ、基本的なセキュリティ問題、コードスタイル |
+| Claude Opus | アーキテクチャの問題、潜在的なバグ、エッジケース |
+| Codex | 異なる AI モデルによる新鮮な視点 |
+
+各レビュアーは OWASP Top 10 の脆弱性、適切なエラー処理、コード品質をチェックします。承認されるまでループするモデルにより、3 つすべてのレビュアーが承認するまでコードは次のフェーズに進みません。
+
+**利用可能なスキル：**
+
+| スキル | 用途 |
+|---|---|
+| `multi-ai` | 完全な機能開発パイプライン（要件 → 計画 → 実装 → レビュー） |
+| `bug-fix` | バグ修正パイプライン（デュアル根本原因分析 + Codex 検証 + 的を絞った修正） |
+
+**内蔵カスタムエージェント：**
+
+| エージェント | モデル | 役割 |
+|---|---|---|
+| `requirements-gatherer` | Opus | ビジネスアナリスト + PM ハイブリッド |
+| `planner` | Opus | アーキテクト + フルスタックハイブリッド |
+| `plan-reviewer` | Sonnet + Opus | アーキテクチャ・セキュリティ・QA 検証 |
+| `implementer` | Sonnet | フルスタック + TDD + 品質実装 |
+| `code-reviewer` | Sonnet + Opus | セキュリティ・パフォーマンス・QA 検証 |
+| `root-cause-analyst` | Sonnet + Opus | 並列バグ診断（bug-fix パイプライン） |
+
+**必要条件：**
+
+- Claude Code CLI
+- Codex CLI — `npm install -g @openai/codex`
+- Bun（クロスプラットフォームの JSON 処理に使用、`jq` の代替）
+
+**インストール：**
+
+```bash
+# ステップ 1: マーケットプレイスを追加
+/plugin marketplace add Z-M-Huang/claude-codex
+
+# ステップ 2: プラグインをインストール（user スコープ — 全プロジェクトで利用可、推奨）
+/plugin install claude-codex@claude-codex --scope user
+
+# ステップ 3: .task を .gitignore に追加
+echo ".task" >> .gitignore
+```
+
+**使い方：**
+
+```text
+# 機能開発パイプライン
+/claude-codex:multi-ai JWT トークンを使ったユーザー認証を追加する
+
+# バグ修正パイプライン
+/claude-codex:bug-fix セッショントークン失効時にログインが無音で失敗する
+```
+
+> 外部プロジェクトから呼び出す場合は、必ずフルネームスペース `claude-codex:<skill>` を使用してください。自然言語でタスクを説明するだけで、Claude が適切なスキルを呼び出すことも可能です。
+
+**`/multi-ai` パイプラインの流れ：**
+
+1. **要件収集** — 専門エージェントが並列で調査し、`requirements-gatherer` が統合
+2. **計画** — `planner` エージェントが実装計画を作成
+3. **計画レビュー** — `plan-reviewer`（Sonnet + Opus）+ Codex ゲート
+4. **実装** — `implementer` がテストに通るまで反復
+5. **コードレビュー** — `code-reviewer`（Sonnet + Opus）+ Codex 最終ゲート
+6. **完了** — 結果を報告
+
+**`/bug-fix` パイプラインの流れ：**
+
+1. **デュアル根本原因分析** — 2 つの `root-cause-analyst`（Sonnet + Opus）が並列分析
+2. **統合** — オーケストレーターが両分析を統合し修正計画を作成
+3. **Codex 検証** — Codex が統合された根本原因分析と修正計画をレビュー
+4. **実装** — 根本原因を狙った最小限の修正
+5. **コードレビュー** — `code-reviewer`（Sonnet + Opus）+ Codex ゲート
+
+**パイプラインのタスク依存関係による強制実行：**
+
+```
+1. 実装  →  2. レビュー（Sonnet）  →  3. レビュー（Opus）  →  4. レビュー（Codex）
+                  ↓ needs_changes?
+             修正タスク作成 → 同じレビュアーが再検証 → 継続
+```
+
+**デフォルト設定：**
+
+| 設定項目 | デフォルト値 |
+|---|---|
+| 計画レビューループ上限 | 10 回 |
+| コードレビューループ上限 | 15 回 |
+| 自動リトライ回数 | 3 回 |
+
+**ライセンス:** GPL-3.0（帰属表示必須、著者：Z-M-Huang）。
 
 ---
 
