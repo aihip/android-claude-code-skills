@@ -40,7 +40,7 @@
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
 - **Author**: aihip
 - **License**: MIT
-- **Current Version**: 1.6.0
+- **Current Version**: 1.7.0
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 
 ## OpenAI Codex Compatibility
@@ -91,7 +91,7 @@ After updating, check the version:
 /plugin list
 
 # You should see:
-# android-claude-code-skills  v1.4.0
+# android-claude-code-skills  v1.7.0
 ```
 
 Compare with the latest version on GitHub: https://github.com/aihip/android-claude-code-skills/blob/main/.claude-plugin/plugin.json
@@ -427,6 +427,7 @@ Codex discovers skills from `.agents/skills/` directories. Copy the skills to ei
 ```bash
 # User-level — available in ALL your projects (recommended)
 mkdir -p ~/.agents/skills
+cp -r skills/android-project-analyzer ~/.agents/skills/
 cp -r skills/android-translation-sync ~/.agents/skills/
 cp -r skills/android-change-review ~/.agents/skills/
 cp -r skills/apk-analyzer ~/.agents/skills/
@@ -435,6 +436,7 @@ cp -r skills/apk-analyzer ~/.agents/skills/
 ```bash
 # Project-level — this project only
 mkdir -p .agents/skills
+cp -r skills/android-project-analyzer .agents/skills/
 cp -r skills/android-translation-sync .agents/skills/
 cp -r skills/android-change-review .agents/skills/
 cp -r skills/apk-analyzer .agents/skills/
@@ -443,6 +445,7 @@ cp -r skills/apk-analyzer .agents/skills/
 Or use symlinks to always stay in sync with repo updates:
 
 ```bash
+ln -s "$(pwd)/skills/android-project-analyzer" ~/.agents/skills/
 ln -s "$(pwd)/skills/android-translation-sync" ~/.agents/skills/
 ln -s "$(pwd)/skills/android-change-review" ~/.agents/skills/
 ln -s "$(pwd)/skills/apk-analyzer" ~/.agents/skills/
@@ -453,6 +456,8 @@ ln -s "$(pwd)/skills/apk-analyzer" ~/.agents/skills/
 **Explicit invocation** (type `$` to open the skill selector):
 
 ```text
+$android-project-analyzer  analyze the current project
+
 $android-translation-sync  ./translations/strings.xlsx
 
 $android-change-review  review my staged changes
@@ -463,6 +468,8 @@ $apk-analyzer  ./build/outputs/apk/release/app-release.apk
 **Implicit invocation** — Codex auto-selects the skill based on your description (`allow_implicit_invocation: true`):
 
 ```text
+Analyze the Android project architecture and dependencies.
+
 Sync translations from Excel: ./translations/strings.xlsx
 
 Review my staged changes for Android crash risks and boundary conditions.
@@ -475,7 +482,7 @@ Analyze this APK for permissions and security issues: ./app-release.apk
 ```bash
 # In a Codex CLI session
 /skills
-# Should list: android-translation-sync, android-change-review, apk-analyzer
+# Should list: android-project-analyzer, android-translation-sync, android-change-review, apk-analyzer
 ```
 
 ---
@@ -488,6 +495,7 @@ The skills in this repository are natively designed for **Claude Code CLI**. For
 
 | File | Skill |
 |---|---|
+| `cursor-rules/android-project-analyzer.mdc` | Android Project Analyzer |
 | `cursor-rules/android-translation-sync.mdc` | Android Translation Sync |
 | `cursor-rules/android-change-review.mdc` | Android Change Review |
 | `cursor-rules/apk-analyzer.mdc` | APK Analyzer |
@@ -499,6 +507,9 @@ Copy the `.mdc` files into your Android project's `.cursor/rules/` directory:
 ```bash
 # In your Android project root
 mkdir -p .cursor/rules
+
+curl -o .cursor/rules/android-project-analyzer.mdc \
+  https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/android-project-analyzer.mdc
 
 curl -o .cursor/rules/android-translation-sync.mdc \
   https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/android-translation-sync.mdc
@@ -521,6 +532,9 @@ cp android-claude-code-skills/cursor-rules/*.mdc your-android-project/.cursor/ru
 All rules are **Agent-requested** type — Cursor's AI automatically activates them when it detects a matching request. You can also trigger them explicitly:
 
 ```text
+# Project analysis
+Analyze the Android project architecture and dependencies.
+
 # Translation sync
 Sync translations from Excel: ./translations/strings.xlsx
 
@@ -551,6 +565,7 @@ mkdir -p .gemini
 cat >> GEMINI.md << 'EOF'
 
 # Android Skills
+@/path/to/android-claude-code-skills/gemini-rules/android-project-analyzer.md
 @/path/to/android-claude-code-skills/gemini-rules/android-translation-sync.md
 @/path/to/android-claude-code-skills/gemini-rules/android-change-review.md
 @/path/to/android-claude-code-skills/gemini-rules/apk-analyzer.md
@@ -565,6 +580,7 @@ cp android-claude-code-skills/gemini-rules/*.md .gemini/skills/
 
 # Then in GEMINI.md
 cat >> GEMINI.md << 'EOF'
+@.gemini/skills/android-project-analyzer.md
 @.gemini/skills/android-translation-sync.md
 @.gemini/skills/android-change-review.md
 @.gemini/skills/apk-analyzer.md
@@ -583,7 +599,7 @@ Analyze this APK: ./build/outputs/apk/release/app-release.apk
 
 ### Method 2 — Custom Slash Commands
 
-Install the `.toml` command files to get `/translation-sync`, `/change-review`, and `/apk-analyzer` slash commands:
+Install the `.toml` command files to get `/project-analyzer`, `/translation-sync`, `/change-review`, and `/apk-analyzer` slash commands:
 
 ```bash
 # Global install (available in all projects)
@@ -598,6 +614,9 @@ cp android-claude-code-skills/gemini-rules/commands/*.toml .gemini/commands/
 Then use directly in Gemini CLI:
 
 ```text
+# Analyze project
+/project-analyzer
+
 # Sync translations
 /translation-sync ./translations/strings.xlsx
 
@@ -682,7 +701,14 @@ android-claude-code-skills/
 ├── .claude-plugin/
 │   ├── plugin.json         # Plugin manifest
 │   └── marketplace.json    # Marketplace configuration
+├── .github/
+│   └── workflows/
+│       ├── validate-skills.yml   # CI: validate all skills on push
+│       └── publish-npm.yml       # CI: publish to npm on version tag
 ├── skills/                 # Available skills
+│   ├── android-project-analyzer/
+│   │   ├── SKILL.md
+│   │   └── agents/openai.yaml
 │   ├── android-translation-sync/
 │   │   ├── SKILL.md
 │   │   └── agents/openai.yaml
@@ -695,6 +721,24 @@ android-claude-code-skills/
 │   └── template/
 │       ├── SKILL.md        # Codex-compatible skill template
 │       └── agents/openai.yaml
+├── cursor-rules/           # Cursor IDE rules (.mdc)
+│   ├── android-project-analyzer.mdc
+│   ├── android-translation-sync.mdc
+│   ├── android-change-review.mdc
+│   └── apk-analyzer.mdc
+├── gemini-rules/           # Gemini CLI rules
+│   ├── android-project-analyzer.md
+│   ├── android-translation-sync.md
+│   ├── android-change-review.md
+│   ├── apk-analyzer.md
+│   └── commands/           # Gemini slash commands (.toml)
+│       ├── project-analyzer.toml
+│       ├── translation-sync.toml
+│       ├── change-review.toml
+│       └── apk-analyzer.toml
+├── llms.txt                # AI crawler discoverability
+├── package.json            # npm registry metadata
+├── AGENTS.md               # Agent instructions (OpenAI Codex)
 ├── CLAUDE.md               # Project overview (English)
 ├── CLAUDE_CN.md            # 项目概述（中文）
 ├── CLAUDE_JP.md            # プロジェクト概要（日本語）

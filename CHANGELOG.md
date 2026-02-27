@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.7.0] - 2026-02-27
+
+### Added
+- **Android Project Analyzer** skill (`skills/android-project-analyzer/`)
+  - Add `SKILL.md` and `agents/openai.yaml`
+  - Analyze project structure and Gradle modules from `settings.gradle[.kts]`
+  - Extract app metadata from `AndroidManifest.xml`: applicationId, SDK versions, permissions (Dangerous / Normal / Signature), exported components, security flags
+  - Parse all dependencies with versions from `gradle/libs.versions.toml` and `build.gradle[.kts]`, grouped by category (UI / Network / DI / Database / Testing / Other)
+  - Detect architecture pattern (MVVM / MVI / Clean Architecture / MVP), DI framework (Hilt / Koin / Dagger), navigation setup, Compose vs View system, async approach
+  - Build feature inventory from modules, feature packages, Activity/Screen entry points, and deep link declarations
+  - Measure code quality: unit/instrumented test file counts, TODO/FIXME markers, `!!` force-unwrap count, files exceeding 500 lines, top-5 largest files
+  - Scan for potential issues: hardcoded secrets, cleartext HTTP, sensitive log output, WebView misconfigurations, main-thread blocking, static Context leaks, outdated/legacy libraries
+  - Produce structured report: 📱 Overview / 🏗️ Architecture / ✨ Features / 📦 Dependencies / 📊 Code Quality / ⚠️ Issues / 💡 Recommendations
+- **npm package** (`package.json`) — publish to npm registry for broader discoverability
+- **`llms.txt`** — AI crawler discoverability file (robots.txt equivalent for LLMs)
+- **GitHub Actions** — `.github/workflows/publish-npm.yml` auto-publishes to npm on version tag push
+
+### Changed
+- **Cursor support** — Add `cursor-rules/android-project-analyzer.mdc`
+- **Gemini CLI support** — Add `gemini-rules/android-project-analyzer.md` and `gemini-rules/commands/project-analyzer.toml`
+- **`plugin.json`** — Bump version to `1.7.0`; expand keywords with `claude-code`, `gemini`, `cursor`, `codex`, `ai`, `llm`, `apk-analyzer`, `security`, etc.
+- **`marketplace.json`** — Sync expanded keywords and tags; update description to mention all 4 platforms
+- **Documentation (EN)**
+  - Add `Android Project Analyzer` to TOC and Available Skills section
+  - Add platform badges (npm, CI, Claude Code, Codex, Gemini CLI, Cursor) to README header
+  - Update Codex CLI install commands, explicit/implicit usage examples, and `/skills` verify list
+  - Update Cursor rules table and curl install commands
+  - Update Gemini CLI `@import` examples and slash commands list
+  - Expand Project Structure listing to include new files
+
+### Validation
+- `scripts/validate_skills.py` passes for all 5 skills
+
 ## [1.6.0] - 2026-02-27
 
 ### Added
