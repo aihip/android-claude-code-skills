@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8.0] - 2026-04-07
+
+### Added
+- **Figma to Android** skill (`skills/figma-to-android/`)
+  - Add `SKILL.md` and `agents/openai.yaml`
+  - Convert Figma design data (node JSON, layer descriptions, annotations, screenshots) to production-ready Android native XML + Kotlin code
+  - 1:1 visual fidelity reproduction with ConstraintLayout-first approach
+  - Strict output order: page structure analysis → directory structure → XML layouts → RecyclerView items → drawables → resource values → Kotlin code → risk notes
+  - All colors, dimensions, shapes extracted to resource files (no inline hardcoding)
+  - ViewBinding-based Kotlin code (Activity/Fragment, Adapter/ViewHolder, data classes)
+  - Reusable module extraction via `<include>` sub-layouts
+  - Naming conventions enforced: `tv_title`, `color_primary`, `dp_4`, `bg_card_white_radius_12`
+  - Supplementary rules for list pages (NestedScrollView, form inputs, reusable bars)
+  - Jetpack Compose strictly forbidden — only native View/XML output
+
+### Changed
+- **Cursor support** — Add `cursor-rules/figma-to-android.mdc`
+- **Gemini CLI support** — Add `gemini-rules/figma-to-android.md` and `gemini-rules/commands/figma-to-android.toml`
+- **`AGENTS.md`** — Add `$figma-to-android` skill entry with trigger phrases and capability description; update skill directory listing and install commands
+- **`plugin.json`** — Add `figma`, `figma-to-android`, `design-to-code`, `xml-layout` keywords
+- **`llms.txt`** — Add Figma to Android skill entry
+- **Documentation (EN/CN/JP)**
+  - Add `Figma to Android` to TOC and Available Skills section in all three README files
+  - Update Codex CLI install commands, explicit/implicit usage examples, and `/skills` verify list
+  - Update Cursor rules table and curl install commands
+  - Update Gemini CLI `@import` examples and slash commands list
+  - Expand Project Structure listing to include new files
+- **`CLAUDE.md` / `CLAUDE_CN.md` / `CLAUDE_JP.md`** — Add `figma-to-android/` to project structure
+
+### Validation
+- `scripts/validate_skills.py` passes for all 6 skills
+
 ## [1.7.0] - 2026-02-27
 
 ### Added

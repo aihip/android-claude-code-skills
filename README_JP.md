@@ -13,6 +13,7 @@
   - [Android 多言語翻訳同期](#android-多言語翻訳同期)
   - [Android コード変更レビュー](#android-コード変更レビュー)
   - [APK アナライザー](#apk-アナライザー)
+  - [Figma から Android コード生成](#figma-から-android-コード生成)
 - [サードパーティスキル](#サードパーティスキル)
   - [review-loop — 自動コードレビューループ](#review-loop--自動コードレビューループ)
   - [claude-codex — マルチ AI オーケストレーションパイプライン](#claude-codex--マルチ-ai-オーケストレーションパイプライン)
@@ -31,7 +32,7 @@
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
 - **作者**: aihip
 - **ライセンス**: MIT
-- **現在のバージョン**: 1.7.0
+- **現在のバージョン**: 1.8.0
 - **変更履歴**: [CHANGELOG.md](CHANGELOG.md)
 
 ## OpenAI Codex 互換性
@@ -82,7 +83,7 @@
 /plugin list
 
 # 以下のように表示されるはずです：
-# android-claude-code-skills  v1.7.0
+# android-claude-code-skills  v1.8.0
 ```
 
 GitHub 上の最新バージョンと比較: https://github.com/aihip/android-claude-code-skills/blob/main/.claude-plugin/plugin.json
@@ -227,6 +228,38 @@ Android APK ファイルを解析します：メタデータ抽出、リスク�
 - `apk権限分析`
 - `apk署名確認`
 - `apkセキュリティ監査`
+
+---
+
+### Figma から Android コード生成
+
+Figma デザインデータ（ノード JSON、レイヤー説明、アノテーション、スクリーンショット説明）を、1:1 のビジュアル再現度でプロダクション品質の Android ネイティブ XML + Kotlin コードに変換します。
+
+**使い方：**
+
+```
+以下の Figma デザインデータを Android ネイティブコードに変換してください：
+【Figma ノード JSON / レイヤー説明 / アノテーションデータを貼り付け】
+```
+
+**機能：**
+- ページ構造分析とコンポーネント階層の識別
+- ConstraintLayout 優先の XML レイアウト（制約ベースの配置）
+- リスト/繰り返しコンテンツには RecyclerView + 個別 item レイアウトを使用
+- すべての色・寸法・シェイプをリソースファイルに抽出（インラインハードコード禁止）
+- ViewBinding ベースの Kotlin コード（Activity/Fragment、Adapter/ViewHolder、データクラス）
+- 再利用可能なモジュールを `<include>` サブレイアウトで分割
+- デザインデータから完全に推測できないビジュアル効果をリスクとして注記
+- Jetpack Compose は厳禁 — ネイティブ View/XML のみ出力
+
+**トリガーフレーズ：**
+- `figma to android`
+- `convert figma design`
+- `design to android code`
+- `figma 転 android`
+- `figma 生成代码`
+- `設計稿転代碼`
+- `Figma デザインを変換`
 
 ---
 
@@ -465,6 +498,7 @@ cp -r skills/android-project-analyzer ~/.agents/skills/
 cp -r skills/android-translation-sync ~/.agents/skills/
 cp -r skills/android-change-review ~/.agents/skills/
 cp -r skills/apk-analyzer ~/.agents/skills/
+cp -r skills/figma-to-android ~/.agents/skills/
 ```
 
 ```bash
@@ -474,6 +508,7 @@ cp -r skills/android-project-analyzer .agents/skills/
 cp -r skills/android-translation-sync .agents/skills/
 cp -r skills/android-change-review .agents/skills/
 cp -r skills/apk-analyzer .agents/skills/
+cp -r skills/figma-to-android .agents/skills/
 ```
 
 リポジトリの更新に自動的に追従するシンボリックリンクを使用することもできます：
@@ -483,6 +518,7 @@ ln -s "$(pwd)/skills/android-project-analyzer" ~/.agents/skills/
 ln -s "$(pwd)/skills/android-translation-sync" ~/.agents/skills/
 ln -s "$(pwd)/skills/android-change-review" ~/.agents/skills/
 ln -s "$(pwd)/skills/apk-analyzer" ~/.agents/skills/
+ln -s "$(pwd)/skills/figma-to-android" ~/.agents/skills/
 ```
 
 ### 使い方
@@ -497,6 +533,8 @@ $android-translation-sync  ./translations/strings.xlsx
 $android-change-review  review my staged changes
 
 $apk-analyzer  ./build/outputs/apk/release/app-release.apk
+
+$figma-to-android  以下の Figma デザインデータを Android ネイティブコードに変換してください
 ```
 
 **暗黙的な呼び出し** —— Codex が説明に基づいてスキルを自動選択（`allow_implicit_invocation: true`）：
@@ -509,6 +547,8 @@ $apk-analyzer  ./build/outputs/apk/release/app-release.apk
 ステージされた変更を Android のクラッシュリスクと境界条件の観点でレビューしてください。
 
 このAPKの権限とセキュリティ問題を分析してください: ./app-release.apk
+
+この Figma デザインを Android ネイティブコードに変換してください：【デザインデータを貼り付け】
 ```
 
 ### インストールの確認
@@ -516,7 +556,7 @@ $apk-analyzer  ./build/outputs/apk/release/app-release.apk
 ```bash
 # Codex CLI セッション内で実行
 /skills
-# 以下が表示されるはずです: android-project-analyzer, android-translation-sync, android-change-review, apk-analyzer
+# 以下が表示されるはずです: android-project-analyzer, android-translation-sync, android-change-review, apk-analyzer, figma-to-android
 ```
 
 ---
@@ -533,6 +573,7 @@ $apk-analyzer  ./build/outputs/apk/release/app-release.apk
 | `cursor-rules/android-translation-sync.mdc` | Android 多言語翻訳同期 |
 | `cursor-rules/android-change-review.mdc` | Android コード変更レビュー |
 | `cursor-rules/apk-analyzer.mdc` | APK アナライザー |
+| `cursor-rules/figma-to-android.mdc` | Figma から Android コード生成 |
 
 ### インストール
 
@@ -553,6 +594,8 @@ curl -o .cursor/rules/android-change-review.mdc \
   https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/android-change-review.mdc
 curl -o .cursor/rules/apk-analyzer.mdc \
   https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/apk-analyzer.mdc
+curl -o .cursor/rules/figma-to-android.mdc \
+  https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/figma-to-android.mdc
 ```
 
 ### 使い方
@@ -567,6 +610,8 @@ curl -o .cursor/rules/apk-analyzer.mdc \
 ステージされた変更を Android のクラッシュリスクと境界条件の観点でレビューしてください。
 
 このAPKの権限とセキュリティ問題を分析してください: ./build/outputs/apk/release/app-release.apk
+
+この Figma デザインを Android ネイティブコードに変換してください：【デザインデータを貼り付け】
 ```
 
 ---
@@ -587,6 +632,7 @@ cat >> GEMINI.md << 'EOF'
 @.gemini/skills/android-translation-sync.md
 @.gemini/skills/android-change-review.md
 @.gemini/skills/apk-analyzer.md
+@.gemini/skills/figma-to-android.md
 EOF
 ```
 
@@ -598,6 +644,8 @@ EOF
 ステージされた変更のクラッシュリスクをレビューしてください。
 
 このAPKを分析してください: ./build/outputs/apk/release/app-release.apk
+
+この Figma デザインを Android ネイティブコードに変換してください：【デザインデータを貼り付け】
 ```
 
 ### 方法 2 — カスタム Slash コマンド
@@ -613,6 +661,7 @@ cp android-claude-code-skills/gemini-rules/commands/*.toml ~/.gemini/commands/
 /translation-sync ./translations/strings.xlsx
 /change-review staged
 /apk-analyzer ./build/outputs/apk/release/app-release.apk
+/figma-to-android 【Figma ノード JSON またはデザイン説明を貼り付け】
 ```
 
 ### 4 プラットフォーム比較
@@ -703,6 +752,9 @@ android-claude-code-skills/
 │   ├── apk-analyzer/
 │   │   ├── SKILL.md
 │   │   └── agents/openai.yaml
+│   ├── figma-to-android/
+│   │   ├── SKILL.md
+│   │   └── agents/openai.yaml
 │   └── template/
 │       ├── SKILL.md        # Codex 互換スキルテンプレート
 │       └── agents/openai.yaml
@@ -710,17 +762,20 @@ android-claude-code-skills/
 │   ├── android-project-analyzer.mdc
 │   ├── android-translation-sync.mdc
 │   ├── android-change-review.mdc
-│   └── apk-analyzer.mdc
+│   ├── apk-analyzer.mdc
+│   └── figma-to-android.mdc
 ├── gemini-rules/           # Gemini CLI ルール
 │   ├── android-project-analyzer.md
 │   ├── android-translation-sync.md
 │   ├── android-change-review.md
 │   ├── apk-analyzer.md
+│   ├── figma-to-android.md
 │   └── commands/           # Gemini スラッシュコマンド（.toml）
 │       ├── project-analyzer.toml
 │       ├── translation-sync.toml
 │       ├── change-review.toml
-│       └── apk-analyzer.toml
+│       ├── apk-analyzer.toml
+│       └── figma-to-android.toml
 ├── llms.txt                # AI クローラー向け発見性ファイル
 ├── package.json            # npm レジストリメタデータ
 ├── AGENTS.md               # エージェント指示（OpenAI Codex）

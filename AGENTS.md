@@ -53,6 +53,25 @@ Analyze an Android APK file to extract metadata, audit permissions, verify signa
 7. Scans for hardcoded secrets in string resources
 8. Produces a structured security report with CRITICAL / HIGH / MEDIUM / INFO findings
 
+### $figma-to-android
+
+Convert Figma design data (node JSON, layer descriptions, annotations, screenshots) into production-ready Android native XML + Kotlin code with 1:1 visual fidelity.
+
+**Use when:**
+- User provides Figma node JSON, layer descriptions, annotation data, or screenshot descriptions and wants Android code
+- User asks to convert Figma design to Android native code
+- Trigger phrases: "figma to android", "convert figma design", "design to android code", "figma 转 android", "figma 生成代码", "设计稿转代码", "还原设计稿"
+
+**What it does:**
+1. Analyzes page structure and component hierarchy from Figma data
+2. Outputs directory structure of all files to generate
+3. Generates XML layouts (ConstraintLayout preferred), RecyclerView items, sub-layouts
+4. Generates drawable XML (shapes, selectors, gradients)
+5. Extracts colors/dimensions/strings to resource files
+6. Generates Kotlin code with ViewBinding (Activity/Fragment, Adapter/ViewHolder, data classes)
+7. Lists reproduction risks and missing asset notes
+8. Strictly forbids Jetpack Compose — only native View/XML output
+
 ## Skill Files
 
 Skills are located in `skills/` and follow the standard SKILL.md format:
@@ -65,7 +84,10 @@ skills/
 ├── android-change-review/
 │   ├── SKILL.md
 │   └── agents/openai.yaml
-└── apk-analyzer/
+├── apk-analyzer/
+│   ├── SKILL.md
+│   └── agents/openai.yaml
+└── figma-to-android/
     ├── SKILL.md
     └── agents/openai.yaml
 ```
@@ -78,12 +100,14 @@ mkdir -p ~/.agents/skills
 cp -r skills/android-translation-sync ~/.agents/skills/
 cp -r skills/android-change-review ~/.agents/skills/
 cp -r skills/apk-analyzer ~/.agents/skills/
+cp -r skills/figma-to-android ~/.agents/skills/
 
 # Project-level — this project only
 mkdir -p .agents/skills
 cp -r skills/android-translation-sync .agents/skills/
 cp -r skills/android-change-review .agents/skills/
 cp -r skills/apk-analyzer .agents/skills/
+cp -r skills/figma-to-android .agents/skills/
 ```
 
-After installing, invoke explicitly with `$android-translation-sync`, `$android-change-review`, or `$apk-analyzer`, or let Codex auto-select based on your task description.
+After installing, invoke explicitly with `$android-translation-sync`, `$android-change-review`, `$apk-analyzer`, or `$figma-to-android`, or let Codex auto-select based on your task description.

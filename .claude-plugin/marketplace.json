@@ -38,7 +38,11 @@
         "apk-analyzer",
         "security",
         "android-development",
-        "mobile"
+        "mobile",
+        "figma",
+        "figma-to-android",
+        "design-to-code",
+        "xml-layout"
       ],
       "category": "mobile",
       "tags": [
@@ -54,7 +58,9 @@
         "skill",
         "apk",
         "security",
-        "mobile"
+        "mobile",
+        "figma",
+        "design-to-code"
       ]
     }
   ]

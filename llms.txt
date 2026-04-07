@@ -8,6 +8,7 @@
 - [Android Translation Sync](skills/android-translation-sync/SKILL.md): Sync Android strings.xml translations from Excel spreadsheets across all language variants.
 - [Android Change Review](skills/android-change-review/SKILL.md): Review staged git changes or commits for Android crash risks, boundary conditions, and regressions.
 - [APK Analyzer](skills/apk-analyzer/SKILL.md): Parse and audit Android APK files — extract metadata, classify permissions by risk, verify signatures, detect SDKs, produce security report.
+- [Figma to Android](skills/figma-to-android/SKILL.md): Convert Figma design data (node JSON, layers, annotations, screenshots) to production-ready Android native XML + Kotlin code with 1:1 visual fidelity.
 
 ## Platform Integration
 

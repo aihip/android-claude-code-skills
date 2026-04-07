@@ -1,0 +1,50 @@
+# Gemini CLI custom slash command: /figma-to-android
+# Place this file in ~/.gemini/commands/ (global) or .gemini/commands/ (project)
+
+[command]
+name = "figma-to-android"
+description = "Convert Figma design data to production-ready Android native XML + Kotlin code"
+
+[prompt]
+template = """
+Please convert the following Figma design data into production-ready Android native code.
+
+{{#if args}}
+Design data / description: {{args}}
+{{else}}
+Please provide the Figma design data (node JSON, layer description, annotation data, or screenshot description).
+{{/if}}
+
+Follow the Figma to Android workflow:
+
+HARD CONSTRAINTS:
+- Android native View system ONLY (XML + Kotlin + ViewBinding)
+- Jetpack Compose is strictly FORBIDDEN
+- No pseudo-code — output complete, runnable code
+
+OUTPUT ORDER (strict):
+1. Page structure analysis
+2. Directory structure of files to generate
+3. Main page XML layout (root: ConstraintLayout preferred)
+4. RecyclerView item XML (if lists exist)
+5. Sub-layout XML for reusable <include> modules
+6. Drawable XML (shapes, selectors, backgrounds, gradients)
+7. Resource values: colors.xml, dimens.xml, strings.xml additions
+8. Kotlin code: Activity/Fragment (ViewBinding), Adapter/ViewHolder, data classes
+9. Risk notes: visual effects not fully inferred, missing assets, adaptation concerns
+
+LAYOUT RULES:
+- Units: dp/sp only, never px
+- All colors/dimensions extracted to resource files, no inline hardcoding
+- Lists use RecyclerView with separate item_xxx.xml
+- Correctly handle ScrollView/NestedScrollView/RecyclerView responsibilities
+
+NAMING:
+- IDs: tv_title, iv_avatar, btn_submit, rv_list
+- Colors: color_primary, color_text_main
+- Dimensions: dp_4, text_14sp, radius_8
+- Drawables: bg_card_white_radius_12, shape_btn_primary
+
+Every code block must include its file path as header comment.
+All imports must be included. Never write "remaining code omitted".
+"""

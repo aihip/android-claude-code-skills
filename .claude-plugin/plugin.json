@@ -1,6 +1,6 @@
 {
   "name": "android-claude-code-skills",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Reusable Android development skills for Claude Code, OpenAI Codex, Gemini CLI, and Cursor",
   "author": {
     "name": "aihip"
@@ -32,7 +32,11 @@
     "apk-analyzer",
     "security",
     "android-development",
-    "mobile"
+    "mobile",
+    "figma",
+    "figma-to-android",
+    "design-to-code",
+    "xml-layout"
   ],
   "skills": ["./skills/"]
 }

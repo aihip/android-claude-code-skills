@@ -23,6 +23,7 @@
   - [Android Translation Sync](#android-translation-sync)
   - [Android Change Review](#android-change-review)
   - [APK Analyzer](#apk-analyzer)
+  - [Figma to Android](#figma-to-android)
 - [Third-Party Skills](#third-party-skills)
   - [review-loop — Automated Code Review Loop](#review-loop--automated-code-review-loop)
   - [claude-codex — Multi-AI Orchestration Pipeline](#claude-codex--multi-ai-orchestration-pipeline)
@@ -41,7 +42,7 @@
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
 - **Author**: aihip
 - **License**: MIT
-- **Current Version**: 1.7.0
+- **Current Version**: 1.8.0
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 
 ## OpenAI Codex Compatibility
@@ -92,7 +93,7 @@ After updating, check the version:
 /plugin list
 
 # You should see:
-# android-claude-code-skills  v1.7.0
+# android-claude-code-skills  v1.8.0
 ```
 
 Compare with the latest version on GitHub: https://github.com/aihip/android-claude-code-skills/blob/main/.claude-plugin/plugin.json
@@ -238,6 +239,39 @@ Analyze this APK: /path/to/your.apk
 - `apk权限分析`
 - `apk签名检查`
 - `apk安全审计`
+
+---
+
+### Figma to Android
+
+Convert Figma design data (node JSON, layer descriptions, annotations, or screenshot descriptions) into production-ready Android native XML + Kotlin code with 1:1 visual fidelity.
+
+**Usage:**
+
+```
+Convert this Figma design to Android native code:
+[paste Figma node JSON / layer description / annotation data]
+```
+
+**Features:**
+- Page structure analysis and component hierarchy identification
+- ConstraintLayout-first XML layouts with proper constraint-based positioning
+- RecyclerView for all list/repeating content with separate item layouts
+- All colors, dimensions, shapes extracted to resource files (no inline hardcoding)
+- ViewBinding-based Kotlin code (Activity/Fragment, Adapter/ViewHolder, data classes)
+- Reusable module extraction via `<include>` sub-layouts
+- Risk notes for visual effects that cannot be fully inferred
+- Strictly forbids Jetpack Compose — only native View/XML output
+
+**Trigger phrases:**
+- `figma to android`
+- `convert figma design`
+- `design to android code`
+- `figma node json`
+- `figma 转 android`
+- `figma 生成代码`
+- `设计稿转代码`
+- `还原设计稿`
 
 ---
 
@@ -476,6 +510,7 @@ cp -r skills/android-project-analyzer ~/.agents/skills/
 cp -r skills/android-translation-sync ~/.agents/skills/
 cp -r skills/android-change-review ~/.agents/skills/
 cp -r skills/apk-analyzer ~/.agents/skills/
+cp -r skills/figma-to-android ~/.agents/skills/
 ```
 
 ```bash
@@ -485,6 +520,7 @@ cp -r skills/android-project-analyzer .agents/skills/
 cp -r skills/android-translation-sync .agents/skills/
 cp -r skills/android-change-review .agents/skills/
 cp -r skills/apk-analyzer .agents/skills/
+cp -r skills/figma-to-android .agents/skills/
 ```
 
 Or use symlinks to always stay in sync with repo updates:
@@ -494,6 +530,7 @@ ln -s "$(pwd)/skills/android-project-analyzer" ~/.agents/skills/
 ln -s "$(pwd)/skills/android-translation-sync" ~/.agents/skills/
 ln -s "$(pwd)/skills/android-change-review" ~/.agents/skills/
 ln -s "$(pwd)/skills/apk-analyzer" ~/.agents/skills/
+ln -s "$(pwd)/skills/figma-to-android" ~/.agents/skills/
 ```
 
 ### Usage
@@ -508,6 +545,8 @@ $android-translation-sync  ./translations/strings.xlsx
 $android-change-review  review my staged changes
 
 $apk-analyzer  ./build/outputs/apk/release/app-release.apk
+
+$figma-to-android  convert the following Figma node JSON to Android native code
 ```
 
 **Implicit invocation** — Codex auto-selects the skill based on your description (`allow_implicit_invocation: true`):
@@ -520,6 +559,8 @@ Sync translations from Excel: ./translations/strings.xlsx
 Review my staged changes for Android crash risks and boundary conditions.
 
 Analyze this APK for permissions and security issues: ./app-release.apk
+
+Convert this Figma design to Android native code: [paste design data]
 ```
 
 ### Verify Installation
@@ -527,7 +568,7 @@ Analyze this APK for permissions and security issues: ./app-release.apk
 ```bash
 # In a Codex CLI session
 /skills
-# Should list: android-project-analyzer, android-translation-sync, android-change-review, apk-analyzer
+# Should list: android-project-analyzer, android-translation-sync, android-change-review, apk-analyzer, figma-to-android
 ```
 
 ---
@@ -544,6 +585,7 @@ The skills in this repository are natively designed for **Claude Code CLI**. For
 | `cursor-rules/android-translation-sync.mdc` | Android Translation Sync |
 | `cursor-rules/android-change-review.mdc` | Android Change Review |
 | `cursor-rules/apk-analyzer.mdc` | APK Analyzer |
+| `cursor-rules/figma-to-android.mdc` | Figma to Android |
 
 ### Installation
 
@@ -564,6 +606,9 @@ curl -o .cursor/rules/android-change-review.mdc \
 
 curl -o .cursor/rules/apk-analyzer.mdc \
   https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/apk-analyzer.mdc
+
+curl -o .cursor/rules/figma-to-android.mdc \
+  https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/figma-to-android.mdc
 ```
 
 Or clone this repo and copy manually:
@@ -588,6 +633,8 @@ Review my staged changes for Android crash risks and boundary conditions.
 
 # APK analysis
 Analyze this APK for permissions and security issues: ./build/outputs/apk/release/app-release.apk
+
+Convert this Figma design to Android native code: [paste design data]
 ```
 
 > **Note:** Cursor rules are static prompt injection and do not support hooks, slash commands, or multi-agent orchestration. The workflow knowledge is fully preserved, but automated triggers (e.g. Stop Hook in `review-loop`) are not available.
@@ -614,6 +661,7 @@ cat >> GEMINI.md << 'EOF'
 @/path/to/android-claude-code-skills/gemini-rules/android-translation-sync.md
 @/path/to/android-claude-code-skills/gemini-rules/android-change-review.md
 @/path/to/android-claude-code-skills/gemini-rules/apk-analyzer.md
+@/path/to/android-claude-code-skills/gemini-rules/figma-to-android.md
 EOF
 ```
 
@@ -629,6 +677,7 @@ cat >> GEMINI.md << 'EOF'
 @.gemini/skills/android-translation-sync.md
 @.gemini/skills/android-change-review.md
 @.gemini/skills/apk-analyzer.md
+@.gemini/skills/figma-to-android.md
 EOF
 ```
 
@@ -640,6 +689,8 @@ Sync translations from Excel: ./translations/strings.xlsx
 Review my staged changes for Android crash risks.
 
 Analyze this APK: ./build/outputs/apk/release/app-release.apk
+
+Convert this Figma design to Android native code: [paste design data]
 ```
 
 ### Method 2 — Custom Slash Commands
@@ -673,6 +724,9 @@ Then use directly in Gemini CLI:
 
 # Analyze an APK
 /apk-analyzer ./build/outputs/apk/release/app-release.apk
+
+# Convert Figma design
+/figma-to-android [paste Figma node JSON or design description]
 ```
 
 ### Capability Comparison
@@ -763,6 +817,9 @@ android-claude-code-skills/
 │   ├── apk-analyzer/
 │   │   ├── SKILL.md
 │   │   └── agents/openai.yaml
+│   ├── figma-to-android/
+│   │   ├── SKILL.md
+│   │   └── agents/openai.yaml
 │   └── template/
 │       ├── SKILL.md        # Codex-compatible skill template
 │       └── agents/openai.yaml
@@ -770,17 +827,20 @@ android-claude-code-skills/
 │   ├── android-project-analyzer.mdc
 │   ├── android-translation-sync.mdc
 │   ├── android-change-review.mdc
-│   └── apk-analyzer.mdc
+│   ├── apk-analyzer.mdc
+│   └── figma-to-android.mdc
 ├── gemini-rules/           # Gemini CLI rules
 │   ├── android-project-analyzer.md
 │   ├── android-translation-sync.md
 │   ├── android-change-review.md
 │   ├── apk-analyzer.md
+│   ├── figma-to-android.md
 │   └── commands/           # Gemini slash commands (.toml)
 │       ├── project-analyzer.toml
 │       ├── translation-sync.toml
 │       ├── change-review.toml
-│       └── apk-analyzer.toml
+│       ├── apk-analyzer.toml
+│       └── figma-to-android.toml
 ├── llms.txt                # AI crawler discoverability
 ├── package.json            # npm registry metadata
 ├── AGENTS.md               # Agent instructions (OpenAI Codex)

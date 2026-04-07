@@ -71,6 +71,9 @@ android-claude-code-skills/
 │   ├── plugin.json         # 插件清单
 │   └── marketplace.json    # 市场配置
 ├── skills/                 # 技能目录
+│   ├── figma-to-android/
+│   │   ├── SKILL.md
+│   │   └── agents/openai.yaml
 │   └── template/
 │       ├── SKILL.md        # 兼容 Codex 的技能模板
 │       └── agents/openai.yaml

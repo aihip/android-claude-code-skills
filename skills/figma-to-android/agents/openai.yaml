@@ -1,0 +1,7 @@
+interface:
+  display_name: "Figma to Android Native Code"
+  short_description: "Convert Figma designs to Android XML + Kotlin."
+  default_prompt: "Use $figma-to-android to convert the provided Figma design data (node JSON, layer descriptions, annotations, or screenshot descriptions) into production-ready Android native XML layouts and Kotlin code with ViewBinding. Output complete, runnable code following the strict output order defined in the skill."
+
+policy:
+  allow_implicit_invocation: true

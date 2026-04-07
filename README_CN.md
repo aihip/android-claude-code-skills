@@ -13,6 +13,7 @@
   - [Android 多语言翻译同步](#android-多语言翻译同步)
   - [Android 代码变更审查](#android-代码变更审查android-change-review)
   - [APK 分析器](#apk-分析器)
+  - [Figma 转 Android 代码](#figma-转-android-代码)
 - [第三方技能](#第三方技能)
   - [review-loop — 自动化代码审查循环](#review-loop--自动化代码审查循环)
   - [claude-codex — 多 AI 编排流水线](#claude-codex--多-ai-编排流水线)
@@ -31,7 +32,7 @@
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
 - **作者**: aihip
 - **许可证**: MIT
-- **当前版本**: 1.7.0
+- **当前版本**: 1.8.0
 - **更新日志**: [CHANGELOG.md](CHANGELOG.md)
 
 ## OpenAI Codex 兼容性
@@ -82,7 +83,7 @@
 /plugin list
 
 # 您应该看到：
-# android-claude-code-skills  v1.7.0
+# android-claude-code-skills  v1.8.0
 ```
 
 与 GitHub 上的最新版本对比：https://github.com/aihip/android-claude-code-skills/blob/main/.claude-plugin/plugin.json
@@ -227,6 +228,38 @@ git add .
 - `apk权限分析`
 - `apk签名检查`
 - `apk安全审计`
+
+---
+
+### Figma 转 Android 代码
+
+将 Figma 设计数据（节点 JSON、图层说明、标注数据或截图描述）转换为可直接使用的 Android 原生 XML + Kotlin 代码，1:1 还原设计稿视觉效果。
+
+**使用方法：**
+
+```
+请将以下 Figma 设计数据转换为 Android 原生代码：
+【粘贴 Figma 节点 JSON / 图层说明 / 标注信息】
+```
+
+**功能特性：**
+- 页面结构分析与组件层级识别
+- 以 ConstraintLayout 为首选的 XML 布局，使用约束定位
+- 列表/重复内容统一使用 RecyclerView + 独立 item 布局
+- 所有颜色、尺寸、形状抽取到资源文件（禁止内联硬编码）
+- 基于 ViewBinding 的 Kotlin 代码（Activity/Fragment、Adapter/ViewHolder、数据类）
+- 可复用模块通过 `<include>` 子布局拆分
+- 无法完全推断的视觉效果标注为风险点
+- 严禁 Jetpack Compose — 仅输出原生 View/XML 实现
+
+**触发词：**
+- `figma to android`
+- `convert figma design`
+- `design to android code`
+- `figma 转 android`
+- `figma 生成代码`
+- `设计稿转代码`
+- `还原设计稿`
 
 ---
 
@@ -465,6 +498,7 @@ cp -r skills/android-project-analyzer ~/.agents/skills/
 cp -r skills/android-translation-sync ~/.agents/skills/
 cp -r skills/android-change-review ~/.agents/skills/
 cp -r skills/apk-analyzer ~/.agents/skills/
+cp -r skills/figma-to-android ~/.agents/skills/
 ```
 
 ```bash
@@ -474,6 +508,7 @@ cp -r skills/android-project-analyzer .agents/skills/
 cp -r skills/android-translation-sync .agents/skills/
 cp -r skills/android-change-review .agents/skills/
 cp -r skills/apk-analyzer .agents/skills/
+cp -r skills/figma-to-android .agents/skills/
 ```
 
 或使用符号链接，自动跟随仓库更新：
@@ -483,6 +518,7 @@ ln -s "$(pwd)/skills/android-project-analyzer" ~/.agents/skills/
 ln -s "$(pwd)/skills/android-translation-sync" ~/.agents/skills/
 ln -s "$(pwd)/skills/android-change-review" ~/.agents/skills/
 ln -s "$(pwd)/skills/apk-analyzer" ~/.agents/skills/
+ln -s "$(pwd)/skills/figma-to-android" ~/.agents/skills/
 ```
 
 ### 使用方法
@@ -497,6 +533,8 @@ $android-translation-sync  ./translations/strings.xlsx
 $android-change-review  review my staged changes
 
 $apk-analyzer  ./build/outputs/apk/release/app-release.apk
+
+$figma-to-android  请将以下 Figma 设计数据转换为 Android 原生代码
 ```
 
 **隐式调用** —— Codex 根据描述自动匹配技能（`allow_implicit_invocation: true`）：
@@ -509,6 +547,8 @@ $apk-analyzer  ./build/outputs/apk/release/app-release.apk
 帮我检查当前已暂存的代码，重点看 Android 崩溃风险和边界条件。
 
 帮我分析这个 APK 的权限和安全问题：./app-release.apk
+
+请将这个 Figma 设计转换为 Android 原生代码：【粘贴设计数据】
 ```
 
 ### 验证安装
@@ -516,7 +556,7 @@ $apk-analyzer  ./build/outputs/apk/release/app-release.apk
 ```bash
 # 在 Codex CLI 会话中执行
 /skills
-# 应看到：android-project-analyzer、android-translation-sync、android-change-review、apk-analyzer
+# 应看到：android-project-analyzer、android-translation-sync、android-change-review、apk-analyzer、figma-to-android
 ```
 
 ---
@@ -533,6 +573,7 @@ $apk-analyzer  ./build/outputs/apk/release/app-release.apk
 | `cursor-rules/android-translation-sync.mdc` | Android 多语言翻译同步 |
 | `cursor-rules/android-change-review.mdc` | Android 代码变更审查 |
 | `cursor-rules/apk-analyzer.mdc` | APK 分析器 |
+| `cursor-rules/figma-to-android.mdc` | Figma 转 Android 代码 |
 
 ### 安装
 
@@ -553,6 +594,8 @@ curl -o .cursor/rules/android-change-review.mdc \
   https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/android-change-review.mdc
 curl -o .cursor/rules/apk-analyzer.mdc \
   https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/apk-analyzer.mdc
+curl -o .cursor/rules/figma-to-android.mdc \
+  https://raw.githubusercontent.com/aihip/android-claude-code-skills/main/cursor-rules/figma-to-android.mdc
 ```
 
 ### 使用方法
@@ -567,6 +610,8 @@ curl -o .cursor/rules/apk-analyzer.mdc \
 帮我检查已暂存的代码，重点看 Android 崩溃风险和边界条件。
 
 帮我分析这个 APK 的权限和安全问题：./build/outputs/apk/release/app-release.apk
+
+请将这个 Figma 设计转换为 Android 原生代码：【粘贴设计数据】
 ```
 
 ---
@@ -587,6 +632,7 @@ cat >> GEMINI.md << 'EOF'
 @.gemini/skills/android-translation-sync.md
 @.gemini/skills/android-change-review.md
 @.gemini/skills/apk-analyzer.md
+@.gemini/skills/figma-to-android.md
 EOF
 ```
 
@@ -598,6 +644,8 @@ EOF
 帮我检查已暂存代码的崩溃风险。
 
 帮我分析这个 APK：./build/outputs/apk/release/app-release.apk
+
+请将这个 Figma 设计转换为 Android 原生代码：【粘贴设计数据】
 ```
 
 ### 方式二：自定义 Slash 命令
@@ -613,6 +661,7 @@ cp android-claude-code-skills/gemini-rules/commands/*.toml ~/.gemini/commands/
 /translation-sync ./translations/strings.xlsx
 /change-review staged
 /apk-analyzer ./build/outputs/apk/release/app-release.apk
+/figma-to-android 【粘贴 Figma 节点 JSON 或设计描述】
 ```
 
 ### 四端能力对比
@@ -703,6 +752,9 @@ android-claude-code-skills/
 │   ├── apk-analyzer/
 │   │   ├── SKILL.md
 │   │   └── agents/openai.yaml
+│   ├── figma-to-android/
+│   │   ├── SKILL.md
+│   │   └── agents/openai.yaml
 │   └── template/
 │       ├── SKILL.md        # 兼容 Codex 的技能模板
 │       └── agents/openai.yaml
@@ -710,17 +762,20 @@ android-claude-code-skills/
 │   ├── android-project-analyzer.mdc
 │   ├── android-translation-sync.mdc
 │   ├── android-change-review.mdc
-│   └── apk-analyzer.mdc
+│   ├── apk-analyzer.mdc
+│   └── figma-to-android.mdc
 ├── gemini-rules/           # Gemini CLI 规则
 │   ├── android-project-analyzer.md
 │   ├── android-translation-sync.md
 │   ├── android-change-review.md
 │   ├── apk-analyzer.md
+│   ├── figma-to-android.md
 │   └── commands/           # Gemini slash 命令（.toml）
 │       ├── project-analyzer.toml
 │       ├── translation-sync.toml
 │       ├── change-review.toml
-│       └── apk-analyzer.toml
+│       ├── apk-analyzer.toml
+│       └── figma-to-android.toml
 ├── llms.txt                # AI 爬虫可发现性文件
 ├── package.json            # npm 注册表元数据
 ├── AGENTS.md               # Agent 指令（OpenAI Codex）

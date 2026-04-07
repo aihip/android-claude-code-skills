@@ -1,0 +1,88 @@
+---
+description: Convert Figma design data (node JSON, layer descriptions, annotations, screenshots) into production-ready Android native XML + Kotlin code with 1:1 visual fidelity. Apply when the user asks to convert Figma to Android, generate Android code from design, figma 转 android, figma 生成代码, 设计稿转代码, 还原设计稿, or design to android code.
+globs: []
+alwaysApply: false
+---
+
+# Figma to Android Native Code
+
+Convert Figma design information into production-ready Android native XML + Kotlin code with 1:1 visual fidelity.
+
+## Hard Constraints
+
+1. **Android native View system ONLY** — XML layouts + Kotlin + ViewBinding.
+2. **Jetpack Compose is strictly forbidden** — no `@Composable`, `Modifier`, `Material3 Compose`, or `Preview`.
+3. **No pseudo-code** — output must be complete, runnable, and maintainable.
+
+## Conversion Workflow
+
+### Step 1 — Page Structure Analysis
+
+Identify:
+- Page type (list, detail, form, dashboard, etc.)
+- Component hierarchy and nesting
+- Scrollable vs fixed regions
+- Repeating items → RecyclerView
+- Reusable modules → `<include>` sub-layouts
+
+### Step 2 — Output Directory Structure
+
+List all files to generate:
+```
+res/layout/activity_xxx.xml
+res/layout/item_xxx.xml
+res/layout/layout_xxx_header.xml
+res/drawable/bg_xxx.xml / shape_xxx.xml
+res/values/colors.xml (additions)
+res/values/dimens.xml (additions)
+res/values/strings.xml (additions)
+XxxActivity.kt / XxxFragment.kt
+XxxAdapter.kt
+```
+
+### Step 3 — Generate Code (Strict Order)
+
+1. XML layout — main page
+2. RecyclerView item XML (if lists exist)
+3. Sub-layout XML — reusable `<include>` modules
+4. Drawable XML — shapes, selectors, backgrounds, gradients
+5. Resource values — colors.xml, dimens.xml, strings.xml additions
+6. Kotlin code — Activity/Fragment, Adapter/ViewHolder, data classes
+
+Every code block MUST include file path header.
+
+### Step 4 — Risk Notes
+
+Output "还原风险点与注意事项" listing:
+- Effects not fully inferred from design data
+- Missing font/icon/image assets
+- Interactions requiring additional business logic
+- Screen adaptation considerations
+
+## Layout Rules
+
+| Rule | Detail |
+|------|--------|
+| Root layout | Prefer `ConstraintLayout` |
+| Positioning | Constraints, margins, padding, gravity, `layout_weight`, guideline, barrier — never absolute coordinates |
+| Units | `dp` for dimensions, `sp` for text — never raw `px` |
+| Resources | All colors → `colors.xml`, dimensions → `dimens.xml`, shapes → `drawable/` |
+| Lists | Always `RecyclerView` + separate `item_xxx.xml` |
+| Scrolling | Correctly distinguish `ScrollView` / `NestedScrollView` / `RecyclerView` |
+| Complex interactions | CoordinatorLayout, AppBarLayout, TabLayout for sticky/collapsing/tab patterns |
+
+## Naming Conventions
+
+| Category | Pattern | Examples |
+|----------|---------|----------|
+| View IDs | lowercase_underscore | `tv_title`, `iv_avatar`, `btn_submit` |
+| Colors | `color_` prefix | `color_primary`, `color_text_main` |
+| Dimensions | `dp_` / `text_` / `radius_` | `dp_4`, `text_14sp`, `radius_8` |
+| Drawables | descriptive | `bg_card_white_radius_12`, `shape_btn_primary` |
+
+## Code Style
+
+- Kotlin first, ViewBinding only (no DataBinding, no Compose)
+- All imports included, no code omitted
+- Shallow nesting via ConstraintLayout
+- Comments only for complex constraints

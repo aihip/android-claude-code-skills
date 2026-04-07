@@ -1,7 +1,7 @@
 {
   "name": "android-claude-code-skills",
-  "version": "1.7.0",
-  "description": "Reusable Android development skills for Claude Code, OpenAI Codex, Gemini CLI, and Cursor — translation sync, code review, APK analyzer",
+  "version": "1.8.0",
+  "description": "Reusable Android development skills for Claude Code, OpenAI Codex, Gemini CLI, and Cursor — translation sync, code review, APK analyzer, Figma to Android",
   "keywords": [
     "android",
     "kotlin",
@@ -27,7 +27,11 @@
     "mobile",
     "translation",
     "strings-xml",
-    "multilingual"
+    "multilingual",
+    "figma",
+    "figma-to-android",
+    "design-to-code",
+    "xml-layout"
   ],
   "author": "aihip",
   "license": "MIT",
