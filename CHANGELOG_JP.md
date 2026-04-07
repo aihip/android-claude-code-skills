@@ -2,6 +2,76 @@
 
 このプロジェクトの注目すべき変更はすべてこのファイルに記録されます。
 
+## [1.9.0] - 2026-04-07
+
+### 追加
+- **発見性の向上** — SEO とプロジェクトの可視性を強化
+  - すべての README ファイル（EN/CN/JP）に Star/Fork/ダウンロードバッジを追加
+  - 「課題とソリューション」の比較テーブルを含む「なぜこのツールを使うのか？」セクションを追加
+  - すべてのプラットフォームのインストール例を含む「クイックスタート」セクションを追加
+  - Claude Code、Codex、Gemini CLI、Cursor、コミュニティプロジェクトへのリンクを含む「関連プロジェクト」セクションを追加
+  - 検索可視性を向上させるための「Star 履歴」チャートと「キーワード」セクションを追加
+  - `package.json` のキーワードを 24 から 40+ 以上に拡張（java、mvvm、mvi、clean-architecture、cursor-ide、google-gemini、code-generation など）
+- **多言語コントリビューションガイド** — 3 つの言語（EN/CN/JP）すべてで `CONTRIBUTING.md` を追加
+  - バグ報告ガイドライン
+  - 新スキル提案プロセス
+  - コードコントリビューションワークフロー
+  - スキル構造テンプレート（SKILL.md + agents/openai.yaml）
+  - プラットフォームファイル要件（Cursor/Gemini/Codex）
+- **ソーシャルプレビュー画像** — より良い GitHub シェアリングのための `.github/social-preview.svg` を追加
+
+### 変更
+- **ドキュメント（EN/CN/JP）** — 発見性の完全な見直し
+  - 一貫した構造とバッジですべての 3 つの README ファイルを更新
+  - SEO と明確性のために説明を改善
+  - より目立つコールトゥアクションボタンとリンクを追加
+  - すべての言語バージョン間でコンテンツを同期
+- **`package.json`** — npm の発見性を向上させるために説明を改善しキーワードを拡張
+- **`llms.txt`** — 強化された説明とクイックインストールガイドで AI クローラー発見ファイルを更新
+- **`.claude-plugin/plugin.json` & `marketplace.json`** — キーワードを拡張し説明を改善
+
+### 改善されたキーワードカバレッジ
+- **Android**: kotlin、java、jetpack、compose、mvvm、mvi、clean-architecture、android-studio、gradle
+- **AI プラットフォーム**: claude-code、claude、anthropic、openai-codex、codex、gemini、gemini-cli、google-gemini、cursor、cursor-ide
+- **機能**: code-review、apk-analyzer、android-security、translation、i18n、figma-to-android、design-to-code、code-generation
+- **ツール**: skill、plugin、extension、android-automation、developer-tools、productivity
+
+### バリデーション
+- `scripts/validate_skills.py` がすべての 6 つのスキルで通過
+- 一貫した構造ですべての README ファイル（EN/CN/JP）を更新
+
+## [1.8.0] - 2026-04-07
+
+### 追加
+- **Figma to Android** スキル（`skills/figma-to-android/`）
+  - `SKILL.md` と `agents/openai.yaml` を追加
+  - Figma デザインデータ（ノード JSON、レイヤー説明、アノテーション、スクリーンショット）を本番対応の Android ネイティブ XML + Kotlin コードに変換
+  - ConstraintLayout ファーストアプローチによる 1:1 の視覚的再現
+  - 厳密な出力順序：ページ構造分析 → ディレクトリ構造 → XML レイアウト → RecyclerView アイテム → ドロアブル → リソース値 → Kotlin コード → リスクノート
+  - すべての色、寸法、シェイプをリソースファイルに抽出（インラインハードコーディングなし）
+  - ViewBinding ベースの Kotlin コード（Activity/Fragment、Adapter/ViewHolder、データクラス）
+  - `<include>` サブレイアウトによる再利用可能なモジュール抽出
+  - 命名規則の強制：`tv_title`、`color_primary`、`dp_4`、`bg_card_white_radius_12`
+  - リストページの補足ルール（NestedScrollView、フォーム入力、再利用可能なバー）
+  - Jetpack Compose は厳密に禁止 — ネイティブ View/XML 出力のみ
+
+### 変更
+- **Cursor サポート** — `cursor-rules/figma-to-android.mdc` を追加
+- **Gemini CLI サポート** — `gemini-rules/figma-to-android.md` と `gemini-rules/commands/figma-to-android.toml` を追加
+- **`AGENTS.md`** — `$figma-to-android` スキルエントリをトリガーフレーズと機能説明で追加。スキルディレクトリリストとインストールコマンドを更新
+- **`plugin.json`** — `figma`、`figma-to-android`、`design-to-code`、`xml-layout` キーワードを追加
+- **`llms.txt`** — Figma to Android スキルエントリを追加
+- **ドキュメント（EN/CN/JP）**
+  - 3 つの README すべてに `Figma to Android` を目次と利用可能なスキルセクションに追加
+  - Codex CLI インストールコマンド、明示的/暗黙的使用例、`/skills` 検証リストを更新
+  - Cursor ルールテーブルと curl インストールコマンドを更新
+  - Gemini CLI `@import` 例とスラッシュコマンドリストを更新
+  - 新しいファイルを含めるようにプロジェクト構成一覧を拡張
+- **`CLAUDE.md` / `CLAUDE_CN.md` / `CLAUDE_JP.md`** — プロジェクト構造に `figma-to-android/` を追加
+
+### バリデーション
+- `scripts/validate_skills.py` がすべての 6 つのスキルで通過
+
 ## [1.5.0] - 2026-02-27
 
 ### 追加

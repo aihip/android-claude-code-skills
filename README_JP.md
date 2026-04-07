@@ -1,6 +1,19 @@
 # Android Claude Code Skills
 
-> **Claude Code**、**OpenAI Codex**、**Gemini CLI**、**Cursor** に対応した、再利用可能な Android 開発スキルのリポジトリ。
+[![GitHub Star](https://img.shields.io/github/stars/aihip/android-claude-code-skills?style=social)](https://github.com/aihip/android-claude-code-skills/stargazers)
+[![GitHub Fork](https://img.shields.io/github/forks/aihip/android-claude-code-skills?style=social)](https://github.com/aihip/android-claude-code-skills/network/members)
+[![npm](https://img.shields.io/npm/v/android-claude-code-skills)](https://www.npmjs.com/package/android-claude-code-skills)
+[![npm ダウンロード](https://img.shields.io/npm/dm/android-claude-code-skills)](https://www.npmjs.com/package/android-claude-code-skills)
+[![スキル検証](https://github.com/aihip/android-claude-code-skills/actions/workflows/validate-skills.yml/badge.svg)](https://github.com/aihip/android-claude-code-skills/actions/workflows/validate-skills.yml)
+[![ライセンス: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Claude Code](https://img.shields.io/badge/Claude_Code-プラグイン-blue)](https://github.com/aihip/android-claude-code-skills)
+[![OpenAI Codex](https://img.shields.io/badge/OpenAI_Codex-互換-green)](https://github.com/aihip/android-claude-code-skills)
+[![Gemini CLI](https://img.shields.io/badge/Gemini_CLI-互換-orange)](https://github.com/aihip/android-claude-code-skills)
+[![Cursor](https://img.shields.io/badge/Cursor-ルール-purple)](https://github.com/aihip/android-claude-code-skills)
+
+**言語:** [English](README.md) | [中文](README_CN.md) | 日本語
+
+> 🤖 **AI による Android 開発** — Claude Code、OpenAI Codex、Gemini CLI、Cursor に対応した再利用可能なスキルコレクション。コードレビュー、APK 分析、Figma から Android コード生成、翻訳同期、プロジェクト分析を自動化。
 
 ## 目次
 
@@ -30,10 +43,45 @@
 ## リポジトリ情報
 
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
+- **npm**: https://www.npmjs.com/package/android-claude-code-skills
 - **作者**: aihip
 - **ライセンス**: MIT
-- **現在のバージョン**: 1.8.0
+- **現在のバージョン**: 1.9.0
 - **変更履歴**: [CHANGELOG.md](CHANGELOG.md)
+
+## なぜこのツールを使うのか？
+
+🚀 **AI スキルで Android 開発生産性を向上**
+
+| 課題 | ソリューション |
+|------|----------|
+| 📱 複雑な Android プロジェクトの分析 | `android-project-analyzer` — アーキテクチャ、依存関係、コード品質の包括的なレポート |
+| 🔍 コミット前にクラッシュリスクを発見 | `android-change-review` — Android 特化コードレビュー（ライフサイクル、スレッド、境界条件） |
+| 📦 APK セキュリティと権限の監査 | `apk-analyzer` — 権限分類、署名検証、コンポーネント分析 |
+| 🌐 多言語翻訳の管理 | `android-translation-sync` — Excel → strings.xml 同期、自動キー生成 |
+| 🎨 Figma を Android コードに変換 | `figma-to-android` — デザイン → 本番品質 XML + Kotlin、1:1 再現 |
+
+**1 つのスキルセット、4 つの AI プラットフォーム：**
+
+```bash
+# Claude Code          /plugin install android-claude-code-skills
+# OpenAI Codex         $android-project-analyzer
+# Gemini CLI           /project-analyzer
+# Cursor IDE           .cursor/rules/ 自動アクティベーション
+```
+
+## クイックスタート
+
+```bash
+# Claude Code 経由でインストール
+/plugin marketplace add aihip/android-claude-code-skills
+/plugin install android-claude-code-skills@android-claude-code-skills
+
+# または npm でグローバルインストール
+npm install -g android-claude-code-skills
+
+# または Codex/Cursor/Gemini CLI 用にスキルファイルをコピー（以下のプラットフォームセクション参照）
+```
 
 ## OpenAI Codex 互換性
 
@@ -791,7 +839,26 @@ android-claude-code-skills/
 
 ## コントリビューション
 
-コントリビューションを歓迎します！お気軽に Pull Request をお送りください。
+コントリビューションを歓迎します！お気軽に Pull Request をお送りください。詳しくは [CONTRIBUTING.md](CONTRIBUTING.md) をご覧ください。
+
+## 関連プロジェクト
+
+| プロジェクト | 説明 | リンク |
+|------|------|------|
+| **Claude Code** | Anthropic 公式 AI コーディング CLI | [github.com/anthropics/claude-code](https://github.com/anthropics/claude-code) |
+| **OpenAI Codex** | OpenAI コード生成 AI CLI | [npmjs.com/@openai/codex](https://www.npmjs.com/package/@openai/codex) |
+| **Gemini CLI** | Google Gemini AI CLI | [github.com/google-gemini/gemini-cli](https://github.com/google-gemini/gemini-cli) |
+| **Cursor** | AI ファーストコードエディタ | [cursor.sh](https://cursor.sh) |
+| **Android AI Skills** | 23 個のプロダクション品質 Android スキル | [github.com/noloman/Android-AI-skills](https://github.com/noloman/Android-AI-skills) |
+| **claude-review-loop** | Claude Code 自動コードレビューループ | [github.com/hamelsmu/claude-review-loop](https://github.com/hamelsmu/claude-review-loop) |
+
+## Star 履歴
+
+[![Star History Chart](https://api.star-history.com/svg?repos=aihip/android-claude-code-skills&type=Date)](https://star-history.com/#aihip/android-claude-code-skills&Date)
+
+## キーワード
+
+android, kotlin, java, jetpack, compose, mvvm, mvi, clean-architecture, android-development, mobile, android-studio, gradle, ai, llm, claude, anthropic, openai-codex, codex, gemini, google-gemini, cursor, cursor-ide, figma, design-to-code, code-generation, code-review, apk-analyzer, android-security, translation, i18n, strings-xml, xml-layout, viewbinding, skills, plugin, extension
 
 ## ライセンス
 

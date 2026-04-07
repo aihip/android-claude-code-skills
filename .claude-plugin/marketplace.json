@@ -4,13 +4,13 @@
     "name": "aihip"
   },
   "metadata": {
-    "description": "Reusable Android development skills for Claude Code, OpenAI Codex, Gemini CLI, and Cursor"
+    "description": "🤖 AI-powered Android development skills for Claude Code, OpenAI Codex, Gemini CLI, and Cursor. Automate code review, APK analysis, Figma-to-Android code generation, translation sync, and project architecture analysis."
   },
   "plugins": [
     {
       "name": "android-claude-code-skills",
       "source": "./",
-      "description": "Reusable Android development skills for Claude Code, OpenAI Codex, Gemini CLI, and Cursor",
+      "description": "🤖 AI-powered Android development skills for Claude Code, OpenAI Codex, Gemini CLI, and Cursor. Automate code review, APK analysis, Figma-to-Android code generation, translation sync, and project architecture analysis.",
       "author": {
         "name": "aihip"
       },
@@ -20,29 +20,47 @@
       "keywords": [
         "android",
         "kotlin",
+        "java",
         "jetpack",
         "compose",
+        "mvvm",
+        "mvi",
+        "clean-architecture",
+        "android-studio",
+        "gradle",
         "claude-code",
         "claude",
+        "anthropic",
         "codex",
         "openai-codex",
         "gemini",
         "gemini-cli",
+        "google-gemini",
         "cursor",
+        "cursor-ide",
         "ai",
         "llm",
+        "ai-agent",
         "skill",
         "plugin",
+        "extension",
         "code-review",
         "apk",
         "apk-analyzer",
-        "security",
+        "android-security",
+        "security-audit",
         "android-development",
         "mobile",
+        "mobile-development",
         "figma",
         "figma-to-android",
         "design-to-code",
-        "xml-layout"
+        "code-generation",
+        "xml-layout",
+        "viewbinding",
+        "android-automation",
+        "developer-tools",
+        "productivity"
       ],
       "category": "mobile",
       "tags": [

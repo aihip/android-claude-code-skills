@@ -1,6 +1,19 @@
 # Android Claude Code Skills
 
-> 面向 Android 开发场景的可复用 Skills 仓库，兼容 **Claude Code**、**OpenAI Codex**、**Gemini CLI** 与 **Cursor**。
+[![GitHub Star](https://img.shields.io/github/stars/aihip/android-claude-code-skills?style=social)](https://github.com/aihip/android-claude-code-skills/stargazers)
+[![GitHub Fork](https://img.shields.io/github/forks/aihip/android-claude-code-skills?style=social)](https://github.com/aihip/android-claude-code-skills/network/members)
+[![npm](https://img.shields.io/npm/v/android-claude-code-skills)](https://www.npmjs.com/package/android-claude-code-skills)
+[![npm 下载量](https://img.shields.io/npm/dm/android-claude-code-skills)](https://www.npmjs.com/package/android-claude-code-skills)
+[![验证技能](https://github.com/aihip/android-claude-code-skills/actions/workflows/validate-skills.yml/badge.svg)](https://github.com/aihip/android-claude-code-skills/actions/workflows/validate-skills.yml)
+[![许可证: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Claude Code](https://img.shields.io/badge/Claude_Code-插件-blue)](https://github.com/aihip/android-claude-code-skills)
+[![OpenAI Codex](https://img.shields.io/badge/OpenAI_Codex-兼容-green)](https://github.com/aihip/android-claude-code-skills)
+[![Gemini CLI](https://img.shields.io/badge/Gemini_CLI-兼容-orange)](https://github.com/aihip/android-claude-code-skills)
+[![Cursor](https://img.shields.io/badge/Cursor-规则-purple)](https://github.com/aihip/android-claude-code-skills)
+
+**语言:** [English](README.md) | 中文 | [日本語](README_JP.md)
+
+> 🤖 **AI 驱动的 Android 开发** — 适用于 Claude Code、OpenAI Codex、Gemini CLI 和 Cursor 的可复用技能集合。自动化代码审查、APK 分析、项目架构审计、翻译同步和 Figma 转 Android 代码生成。
 
 ## 目录
 
@@ -30,10 +43,45 @@
 ## 仓库信息
 
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
+- **npm**: https://www.npmjs.com/package/android-claude-code-skills
 - **作者**: aihip
 - **许可证**: MIT
-- **当前版本**: 1.8.0
+- **当前版本**: 1.9.0
 - **更新日志**: [CHANGELOG.md](CHANGELOG.md)
+
+## 为什么使用本工具？
+
+🚀 **用 AI 技能提升 Android 开发效率**
+
+| 挑战 | 解决方案 |
+|------|----------|
+| 📱 分析复杂的 Android 项目 | `android-project-analyzer` — 完整的架构、依赖和代码质量报告 |
+| 🔍 在提交前发现崩溃风险 | `android-change-review` — Android 专用代码审查（生命周期、线程、边界条件） |
+| 📦 审计 APK 安全和权限 | `apk-analyzer` — 权限分类、签名验证、组件分析 |
+| 🌐 管理多语言翻译 | `android-translation-sync` — Excel → strings.xml 同步，自动生成键名 |
+| 🎨 将 Figma 转换为 Android 代码 | `figma-to-android` — 设计稿 → 生产级 XML + Kotlin，1:1 还原 |
+
+**一套技能，四个 AI 平台：**
+
+```bash
+# Claude Code          /plugin install android-claude-code-skills
+# OpenAI Codex         $android-project-analyzer
+# Gemini CLI           /project-analyzer
+# Cursor IDE           .cursor/rules/ 自动激活
+```
+
+## 快速开始
+
+```bash
+# 通过 Claude Code 安装
+/plugin marketplace add aihip/android-claude-code-skills
+/plugin install android-claude-code-skills@android-claude-code-skills
+
+# 或通过 npm 全局安装
+npm install -g android-claude-code-skills
+
+# 或为 Codex/Cursor/Gemini CLI 复制技能文件（见下方平台章节）
+```
 
 ## OpenAI Codex 兼容性
 
@@ -791,7 +839,26 @@ android-claude-code-skills/
 
 ## 贡献
 
-欢迎贡献！请随时提交 Pull Request。
+欢迎贡献！请随时提交 Pull Request。详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+## 相关项目
+
+| 项目 | 描述 | 链接 |
+|------|------|------|
+| **Claude Code** | Anthropic 官方 AI 编码 CLI | [github.com/anthropics/claude-code](https://github.com/anthropics/claude-code) |
+| **OpenAI Codex** | OpenAI 代码生成 AI CLI | [npmjs.com/@openai/codex](https://www.npmjs.com/package/@openai/codex) |
+| **Gemini CLI** | Google Gemini AI CLI | [github.com/google-gemini/gemini-cli](https://github.com/google-gemini/gemini-cli) |
+| **Cursor** | AI 优先代码编辑器 | [cursor.sh](https://cursor.sh) |
+| **Android AI Skills** | 23 个生产级 Android 技能 | [github.com/noloman/Android-AI-skills](https://github.com/noloman/Android-AI-skills) |
+| **claude-review-loop** | Claude Code 自动代码审查循环 | [github.com/hamelsmu/claude-review-loop](https://github.com/hamelsmu/claude-review-loop) |
+
+## Star 历史
+
+[![Star History Chart](https://api.star-history.com/svg?repos=aihip/android-claude-code-skills&type=Date)](https://star-history.com/#aihip/android-claude-code-skills&Date)
+
+## 关键词
+
+android, kotlin, java, jetpack, compose, mvvm, mvi, clean-architecture, android-development, mobile, android-studio, gradle, ai, llm, claude, anthropic, openai-codex, codex, gemini, google-gemini, cursor, cursor-ide, figma, design-to-code, code-generation, code-review, apk-analyzer, android-security, translation, i18n, strings-xml, xml-layout, viewbinding, skills, plugin, extension
 
 ## 许可证
 

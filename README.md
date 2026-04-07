@@ -1,8 +1,9 @@
 # Android Claude Code Skills
 
-**Languages:** English | [中文](README_CN.md) | [日本語](README_JP.md)
-
+[![Star on GitHub](https://img.shields.io/github/stars/aihip/android-claude-code-skills?style=social)](https://github.com/aihip/android-claude-code-skills/stargazers)
+[![Fork on GitHub](https://img.shields.io/github/forks/aihip/android-claude-code-skills?style=social)](https://github.com/aihip/android-claude-code-skills/network/members)
 [![npm](https://img.shields.io/npm/v/android-claude-code-skills)](https://www.npmjs.com/package/android-claude-code-skills)
+[![npm downloads](https://img.shields.io/npm/dm/android-claude-code-skills)](https://www.npmjs.com/package/android-claude-code-skills)
 [![Validate Skills](https://github.com/aihip/android-claude-code-skills/actions/workflows/validate-skills.yml/badge.svg)](https://github.com/aihip/android-claude-code-skills/actions/workflows/validate-skills.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-plugin-blue)](https://github.com/aihip/android-claude-code-skills)
@@ -10,7 +11,9 @@
 [![Gemini CLI](https://img.shields.io/badge/Gemini_CLI-compatible-orange)](https://github.com/aihip/android-claude-code-skills)
 [![Cursor](https://img.shields.io/badge/Cursor-rules-purple)](https://github.com/aihip/android-claude-code-skills)
 
-> A repository of reusable Android development skills, compatible with **Claude Code**, **OpenAI Codex**, **Gemini CLI**, and **Cursor**.
+**Languages:** English | [中文](README_CN.md) | [日本語](README_JP.md)
+
+> 🤖 **AI-Powered Android Development** — A collection of reusable skills for Claude Code, OpenAI Codex, Gemini CLI, and Cursor. Automate code review, APK analysis, project architecture audits, translation sync, and Figma-to-Android code generation.
 
 ## Table of Contents
 
@@ -40,10 +43,45 @@
 ## Repository Information
 
 - **GitHub**: https://github.com/aihip/android-claude-code-skills
+- **npm**: https://www.npmjs.com/package/android-claude-code-skills
 - **Author**: aihip
 - **License**: MIT
-- **Current Version**: 1.8.0
+- **Current Version**: 1.9.0
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
+
+## Why Use This?
+
+🚀 **Boost Your Android Development Productivity with AI Skills**
+
+| Challenge | Solution |
+|-----------|----------|
+| 📱 Analyzing complex Android projects | `android-project-analyzer` — Full architecture, dependency & code quality report |
+| 🔍 Catching crash risks before commit | `android-change-review` — Android-focused code review (lifecycle, threading, boundaries) |
+| 📦 Auditing APK security & permissions | `apk-analyzer` — Permission classification, signature verification, component analysis |
+| 🌐 Managing multi-language translations | `android-translation-sync` — Excel → strings.xml sync with key generation |
+| 🎨 Converting Figma to Android code | `figma-to-android` — Design → production-ready XML + Kotlin with 1:1 fidelity |
+
+**One Skill Set, Four AI Platforms:**
+
+```bash
+# Claude Code          /plugin install android-claude-code-skills
+# OpenAI Codex         $android-project-analyzer
+# Gemini CLI           /project-analyzer
+# Cursor IDE           .cursor/rules/ auto-activation
+```
+
+## Quick Start
+
+```bash
+# Install via Claude Code
+/plugin marketplace add aihip/android-claude-code-skills
+/plugin install android-claude-code-skills@android-claude-code-skills
+
+# Or install via npm (global)
+npm install -g android-claude-code-skills
+
+# Or copy skills for Codex/Cursor/Gemini CLI (see platform sections below)
+```
 
 ## OpenAI Codex Compatibility
 
@@ -857,6 +895,25 @@ android-claude-code-skills/
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Related Projects
+
+| Project | Description | Link |
+|---------|-------------|------|
+| **Claude Code** | Anthropic's official AI coding CLI | [github.com/anthropics/claude-code](https://github.com/anthropics/claude-code) |
+| **OpenAI Codex** | OpenAI's code-generation AI CLI | [npmjs.com/@openai/codex](https://www.npmjs.com/package/@openai/codex) |
+| **Gemini CLI** | Google's Gemini AI CLI | [github.com/google-gemini/gemini-cli](https://github.com/google-gemini/gemini-cli) |
+| **Cursor** | AI-first code editor | [cursor.sh](https://cursor.sh) |
+| **Android AI Skills** | 23 production-grade Android skills | [github.com/noloman/Android-AI-skills](https://github.com/noloman/Android-AI-skills) |
+| **claude-review-loop** | Automated code review loop for Claude Code | [github.com/hamelsmu/claude-review-loop](https://github.com/hamelsmu/claude-review-loop) |
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=aihip/android-claude-code-skills&type=Date)](https://star-history.com/#aihip/android-claude-code-skills&Date)
+
+## Keywords
+
+android, kotlin, java, jetpack, compose, mvvm, mvi, clean-architecture, android-development, mobile, android-studio, gradle, ai, llm, claude, anthropic, openai-codex, codex, gemini, google-gemini, cursor, cursor-ide, figma, design-to-code, code-generation, code-review, apk-analyzer, android-security, translation, i18n, strings-xml, xml-layout, viewbinding, skills, plugin, extension
 
 ## License
 

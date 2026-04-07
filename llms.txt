@@ -1,24 +1,43 @@
 # Android Claude Code Skills
 
-> Reusable Android development skills for AI coding assistants.
-> Compatible with Claude Code, OpenAI Codex, Gemini CLI, and Cursor.
+> 🤖 AI-Powered Android Development — Reusable skills for Claude Code, OpenAI Codex, Gemini CLI, and Cursor.
+> Automate project analysis, code review, APK audit, translation sync, and Figma-to-Android code generation.
 
 ## Skills
 
-- [Android Translation Sync](skills/android-translation-sync/SKILL.md): Sync Android strings.xml translations from Excel spreadsheets across all language variants.
-- [Android Change Review](skills/android-change-review/SKILL.md): Review staged git changes or commits for Android crash risks, boundary conditions, and regressions.
+- [Android Project Analyzer](skills/android-project-analyzer/SKILL.md): Analyze Android project architecture, dependencies, code quality, and potential issues. Generate comprehensive technical reports.
+- [Android Translation Sync](skills/android-translation-sync/SKILL.md): Sync Android strings.xml translations from Excel spreadsheets across all language variants with automatic key generation.
+- [Android Change Review](skills/android-change-review/SKILL.md): Review staged git changes or commits for Android crash risks, boundary conditions, lifecycle issues, and regressions.
 - [APK Analyzer](skills/apk-analyzer/SKILL.md): Parse and audit Android APK files — extract metadata, classify permissions by risk, verify signatures, detect SDKs, produce security report.
 - [Figma to Android](skills/figma-to-android/SKILL.md): Convert Figma design data (node JSON, layers, annotations, screenshots) to production-ready Android native XML + Kotlin code with 1:1 visual fidelity.
 
 ## Platform Integration
 
-- [Claude Code](CLAUDE.md): Install via `/plugin marketplace add aihip/android-claude-code-skills`
-- [OpenAI Codex](AGENTS.md): Copy skills to `~/.agents/skills/` or `.agents/skills/`
-- [Gemini CLI](GEMINI.md): Import via `@path/to/gemini-rules/*.md` in `GEMINI.md`
-- [Cursor](cursor-rules/): Copy `.mdc` files to `.cursor/rules/`
+- **Claude Code**: `/plugin marketplace add aihip/android-claude-code-skills` → `/plugin install android-claude-code-skills@android-claude-code-skills`
+- **OpenAI Codex**: Copy skills to `~/.agents/skills/` or `.agents/skills/` → Trigger with `$skill-name` or natural language
+- **Gemini CLI**: Import via `@path/to/gemini-rules/*.md` in `GEMINI.md` or use slash commands (`/project-analyzer`, `/translation-sync`, `/change-review`, `/apk-analyzer`, `/figma-to-android`)
+- **Cursor**: Copy `.mdc` files to `.cursor/rules/` for auto-activation on matching requests
+
+## Quick Install
+
+```bash
+# Claude Code
+/plugin marketplace add aihip/android-claude-code-skills
+/plugin install android-claude-code-skills@android-claude-code-skills
+
+# npm (global)
+npm install -g android-claude-code-skills
+
+# Codex/Cursor/Gemini CLI — see platform sections in README
+```
 
 ## Repository
 
-- GitHub: https://github.com/aihip/android-claude-code-skills
-- License: MIT
-- Author: aihip
+- **GitHub**: https://github.com/aihip/android-claude-code-skills
+- **npm**: https://www.npmjs.com/package/android-claude-code-skills
+- **License**: MIT
+- **Author**: aihip
+
+## Keywords
+
+android, kotlin, java, jetpack, compose, mvvm, mvi, claude-code, openai-codex, gemini-cli, cursor, figma, code-review, apk-analyzer, translation-sync, design-to-code, ai, llm, automation

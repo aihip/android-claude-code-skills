@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.0] - 2026-04-07
+
+### Added
+- **Discoverability improvements** — Enhanced SEO and project visibility
+  - Add Star/Fork/download badges to all README files (EN/CN/JP)
+  - Add "Why Use This?" comparison table with challenges and solutions
+  - Add "Quick Start" section with installation examples for all platforms
+  - Add "Related Projects" section with links to Claude Code, Codex, Gemini CLI, Cursor, and community projects
+  - Add "Star History" chart and "Keywords" section for better search visibility
+  - Expand keywords in `package.json` from 24 to 40+ terms (include: java, mvvm, mvi, clean-architecture, cursor-ide, google-gemini, code-generation, etc.)
+- **Multilingual contributing guides** — Add `CONTRIBUTING.md` in all three languages (EN/CN/JP)
+  - Bug reporting guidelines
+  - New skill proposal process
+  - Code contribution workflow
+  - Skill structure templates (SKILL.md + agents/openai.yaml)
+  - Platform file requirements (Cursor/Gemini/Codex)
+- **Social preview image** — Add `.github/social-preview.svg` for better GitHub social sharing
+
+### Changed
+- **Documentation (EN/CN/JP)** — Complete discoverability overhaul
+  - Update all three README files with consistent structure and badges
+  - Improve descriptions for SEO and clarity
+  - Add more prominent call-to-action buttons and links
+  - Synchronize content across all language versions
+- **`package.json`** — Improve description and expand keywords for npm discoverability
+- **`llms.txt`** — Update AI crawler discovery file with enhanced descriptions and quick install guide
+- **`.claude-plugin/plugin.json` & `marketplace.json`** — Expand keywords and improve descriptions
+
+### Improved Keywords Coverage
+- **Android**: kotlin, java, jetpack, compose, mvvm, mvi, clean-architecture, android-studio, gradle
+- **AI Platforms**: claude-code, claude, anthropic, openai-codex, codex, gemini, gemini-cli, google-gemini, cursor, cursor-ide
+- **Features**: code-review, apk-analyzer, android-security, translation, i18n, figma-to-android, design-to-code, code-generation
+- **Tools**: skill, plugin, extension, android-automation, developer-tools, productivity
+
+### Validation
+- `scripts/validate_skills.py` passes for all 6 skills
+- All README files (EN/CN/JP) updated with consistent structure
+
 ## [1.8.0] - 2026-04-07
 
 ### Added
